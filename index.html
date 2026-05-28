@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Omoluabi Rebirth Movement (ORM) | Rebuilding a Generation</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Omoluabi Rebirth Movement (ORM) is a youth-focused cultural and behavioral reform movement restoring integrity, purpose, and positive identity among youths in Nigeria and Africa.">
+  <meta name="keywords" content="Omoluabi, youth empowerment, anti-cultism, anti-fraud, digital skills Nigeria, social reform NGO, character development">
+  <meta name="author" content="Omoluabi Rebirth Movement">
+  
+  <!-- Styling and Fonts -->
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Floating WhatsApp Contact Button -->
+  <a href="https://wa.me/2349049656467" class="whatsapp-float" target="_blank" aria-label="WhatsApp Support">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+
+  <!-- Floating Chatbot Assistant Trigger -->
+  <button id="chatbot-trigger" class="chatbot-toggle" aria-label="Chatbot Support">
+    <i class="fas fa-comment-medical"></i>
+  </button>
+
+  <!-- Interactive AI Chatbot Drawer -->
+  <div id="chatbot-widget" class="chatbot-container">
+    <div class="chatbot-header">
+      <div class="chatbot-title">
+        <div class="chatbot-avatar">ORM</div>
+        <div>
+          <div style="font-size:0.95rem; font-weight:700;">Omoluabi Guide</div>
+          <div style="font-size:0.7rem; opacity:0.8;">Cultural Counseling AI</div>
+        </div>
+      </div>
+      <button id="chatbot-close-btn" class="chatbot-close"><i class="fas fa-times"></i></button>
+    </div>
+    <div id="chatbot-messages-feed" class="chatbot-messages">
+      <!-- Chat bubbles loaded dynamically -->
+    </div>
+    <div class="chatbot-input-area">
+      <input type="text" id="chatbot-input-field" class="chatbot-input" placeholder="Ask about fraud, skills, counseling...">
+      <button id="chatbot-send-btn" class="chatbot-send"><i class="fas fa-paper-plane"></i></button>
+    </div>
+  </div>
+
+  <!-- Header Section with Language and Theme Toggles -->
+  <header>
+    <div class="container navbar">
+      <a href="#home" class="logo" id="main-logo-link">
+        <img src="images/logo.png" alt="ORM Logo" style="height: 48px; width: auto; object-fit: contain;">
+        <div class="logo-text">
+          <div class="logo-title">ORM</div>
+          <div class="logo-tagline" data-translate="tagline">“Rebuilding a Generation.”</div>
+        </div>
+      </a>
+      
+      <!-- Primary Multi-Page Navigation Links -->
+      <nav class="nav-links">
+        <a href="#home" class="active" data-translate="nav-home">Home</a>
+        <a href="#about" data-translate="nav-about">About ORM</a>
+        <a href="#join" data-translate="nav-join">Join</a>
+        <a href="#stories" data-translate="nav-stories">Stories</a>
+        <a href="#events" data-translate="nav-events">Outreach & Events</a>
+        <a href="#media" data-translate="nav-media">Media</a>
+        <a href="#blog" data-translate="nav-blog">Blog</a>
+        <a href="#booking" data-translate="nav-booking">Book Interview</a>
+        <a href="#counsel" data-translate="nav-counsel">Counseling & Report</a>
+        <a href="#partners" data-translate="nav-partners">Partnerships</a>
+        <a href="#contact" data-translate="nav-contact">Contact</a>
+        <a href="#admin" data-translate="nav-admin" style="border: 1px solid var(--accent); color: var(--accent);">Admin</a>
+      </nav>
+      
+      <!-- Utility Controllers -->
+      <div class="nav-controls">
+        <button id="lang-toggle" class="btn-control lang-btn" aria-label="Change Language">
+          <i class="fas fa-globe"></i> Yoruba
+        </button>
+        <button id="theme-toggle" class="btn-control" aria-label="Change Theme">
+          <i class="fas fa-moon"></i> Dark Mode
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================================================== -->
+  <!-- 1. HOME PAGE VIEW                                    -->
+  <!-- ==================================================== -->
+  <section id="home-view" class="view-section active">
+    <!-- Cinematic Hero Section -->
+    <div class="hero">
+      <div class="hero-background-pattern"></div>
+      <div class="container">
+        <div class="hero-content">
+          <span class="hero-badge" data-translate="hero-badge-txt">A Social & Cultural Reform Movement</span>
+          <h1 class="hero-title" data-translate="hero-title-txt">Rebuilding a Generation of Integrity and Purpose</h1>
+          <p class="hero-description" data-translate="hero-desc-txt">A youth-focused initiative restoring honor, discipline, positive identity, and legitimate leadership among teenagers and youths across Nigeria and Africa.</p>
+          <div class="hero-buttons">
+            <button class="btn btn-primary" data-route="join-view" data-translate="cta-join">Join ORM</button>
+            <button class="btn btn-accent" data-route="stories-view" data-translate="cta-stories">Watch Stories</button>
+            <button class="btn btn-light" data-route="join-view" data-translate="cta-ambassador">Become Ambassador</button>
+          </div>
+        </div>
+        
+        <!-- Premium Visual Banner Cover -->
+        <div class="hero-media">
+          <div class="hero-image-wrapper">
+            <img src="images/e0bbb8c9-c1e0-442b-9800-93153d6ffa2bwf.png" alt="Omoluabi Rebirth Movement Banner" class="hero-media-cover" style="width: 100%; height: auto; border-radius: var(--border-radius); object-fit: cover; border: 2px solid var(--accent);">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Movement Statistics Counters -->
+    <div class="stats-bar">
+      <div class="container stats-grid">
+        <div class="stat-item">
+          <h3 id="stat-count-vols">4,850+</h3>
+          <p data-translate="stats-members">Active Members</p>
+        </div>
+        <div class="stat-item">
+          <h3 id="stat-count-schools">120+</h3>
+          <p data-translate="stats-schools">Schools Reached</p>
+        </div>
+        <div class="stat-item">
+          <h3 id="stat-count-reformed">350+</h3>
+          <p data-translate="stats-reformed">Reformed Youths</p>
+        </div>
+        <div class="stat-item">
+          <h3 id="stat-count-sponsors">15+</h3>
+          <p data-translate="stats-partners">Sponsor Partners</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Core Movement Pillars Grid -->
+    <div class="section-padding">
+      <div class="container text-center">
+        <h2 class="section-title" data-translate="pillars-title">Core Pillars of the Rebirth</h2>
+        <p class="section-subtitle" data-translate="pillars-subtitle">Our strategic approach to social transformation and behavioral reform.</p>
+        
+        <div class="pillars-grid">
+          <div class="pillar-card">
+            <div class="pillar-icon"><i class="fas fa-landmark"></i></div>
+            <h3 data-translate="pillar1-title">Cultural Orientation</h3>
+            <p data-translate="pillar1-desc">Restoring the core values of Omoluabi (character, respect, integrity, truth, and community pride).</p>
+          </div>
+          
+          <div class="pillar-card">
+            <div class="pillar-icon"><i class="fas fa-laptop-code"></i></div>
+            <h3 data-translate="pillar2-title">Legitimate Skillsets</h3>
+            <p data-translate="pillar2-desc">Guiding youths away from cybercrime by teaching digital skills, coding, enterprise, and copywriting.</p>
+          </div>
+          
+          <div class="pillar-card">
+            <div class="pillar-icon"><i class="fas fa-users-rays"></i></div>
+            <h3 data-translate="pillar3-title">Peer Restructuring</h3>
+            <p data-translate="pillar3-desc">Forming secure Omoluabi Clubs in high schools to dismantle cultism, drug distribution, and vices.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Transformational Testimonials Slider -->
+    <div class="section-padding testimonial-section">
+      <div class="container">
+        <div class="text-center">
+          <h2 class="section-title">Rebuilt Hearts, Rebuilt Lives</h2>
+          <p class="section-subtitle">Real experiences shared by youths and community families across Nigeria.</p>
+        </div>
+        
+        <div class="slider-container">
+          <div class="slider-wrapper">
+            <div class="slide">
+              <div class="testimonial-card">
+                <p class="testimonial-text">"Before ORM reached my school in Lagos, cybercrime was seen as the only ticket to survival. Today, I am proud to earn legitimately as a web programmer. Character is indeed wealth."</p>
+                <div class="testimonial-author">Adefemi A.</div>
+                <div class="testimonial-role">Reformed Software Engineer</div>
+              </div>
+            </div>
+            <div class="slide">
+              <div class="testimonial-card">
+                <p class="testimonial-text">"As a mother, the unexplained assets my secondary school boy started bringing home was breaking my heart. The ORM counseling team saved my family. They gave my son back his purpose."</p>
+                <div class="testimonial-author">Mrs. Funmilayo Bello</div>
+                <div class="testimonial-role">Parent, Ibadan</div>
+              </div>
+            </div>
+            <div class="slide">
+              <div class="testimonial-card">
+                <p class="testimonial-text">"We stand together under the Omoluabi creed to reject secondary school cult activities. Our class clubs have created safe spaces for students to support one another legally."</p>
+                <div class="testimonial-author">Olumide S.</div>
+                <div class="testimonial-role">ORM High School Ambassador</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="slider-nav">
+            <button class="slider-dot active" aria-label="Slide 1"></button>
+            <button class="slider-dot" aria-label="Slide 2"></button>
+            <button class="slider-dot" aria-label="Slide 3"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- public Quick Join Action Banner -->
+    <div class="section-padding">
+      <div class="container form-card text-center" style="max-width: 800px; background: linear-gradient(135deg, var(--primary), var(--primary-hover)); color: white;">
+        <h2 style="font-size:2.2rem; margin-bottom:15px; font-family:var(--font-heading)">Join the Generation Rebuilder</h2>
+        <p style="margin-bottom:30px; font-size:1.05rem; opacity:0.9">Become a volunteer, coordinate an outreach, or register your community school for character summits.</p>
+        <button class="btn btn-accent btn-lg" data-route="join-view">Launch Application Form</button>
+      </div>
+    </div>
+
+    <!-- Newsletter Sign-up Section -->
+    <div class="section-padding" style="background-color: var(--bg-secondary); border-top: 1px solid var(--border)">
+      <div class="container text-center" style="max-width: 600px;">
+        <h3>Subscribe to Rebirth Updates</h3>
+        <p class="text-secondary" style="margin-bottom:20px;">Receive notifications about school tours, digital training camps, and news reports.</p>
+        <form class="newsletter-form-el" style="display:flex; gap:10px;">
+          <input type="email" placeholder="Your Email Address" required style="flex-grow:1;">
+          <button type="submit" class="btn btn-primary">Subscribe</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================== -->
+  <!-- 2. ABOUT PAGE VIEW                                   -->
+  <!-- ==================================================== -->
+  <section id="about-view" class="view-section">
+    <div class="about-hero">
+      <div class="container">
+        <h1 data-translate="about-title">About Omoluabi Rebirth Movement</h1>
+        <p data-translate="about-subtitle">A structured response to character decay and the illusions of fast money.</p>
+      </div>
+    </div>
+    
+    <div class="container">
+      <!-- Movement Manifesto Card -->
+      <div class="manifesto-section">
+        <h2 class="manifesto-title" data-translate="manifesto-title">The Omoluabi Manifesto</h2>
+        <p class="manifesto-body text-center" data-translate="manifesto-txt">
+          We believe that character is wealth (Iwa l'ewa). We declare that honor is far greater than fast money acquired through deception. We reject cultism, ritualism, and drugs. We embrace intellectual diligence, digital creativity, and respect for humanity. We are builders of the future. We are Omoluabis.
+        </p>
+      </div>
+
+      <!-- Mission and Vision splits -->
+      <div class="section-padding split-layout">
+        <div class="form-card">
+          <h3 style="margin-bottom:15px; color:var(--primary)" data-translate="mission-title">Our Mission</h3>
+          <p class="text-secondary" data-translate="mission-desc">To reconstruct the moral fabric of African youths by restoring integrity, discipline, entrepreneurship, and leadership, while directly combating internet fraud, cultism, and drug abuse.</p>
+        </div>
+        <div class="form-card">
+          <h3 style="margin-bottom:15px; color:var(--accent)" data-translate="vision-title">Our Vision</h3>
+          <p class="text-secondary" data-translate="vision-desc">A new generation of proud African teenagers and youths recognized globally for their high integrity, creative genius, robust leadership, and legal prosperity.</p>
+        </div>
+      </div>
+
+      <!-- Core Values Grid -->
+      <div class="section-padding text-center">
+        <h2>Core Values Grid</h2>
+        <p class="section-subtitle">The standard definitions governing members, leaders, and ambassadors.</p>
+        <div class="values-grid">
+          <div class="value-item">
+            <div class="value-icon"><i class="fas fa-shield-alt"></i></div>
+            <h4 data-translate="form-lbl-skills">Integrity</h4>
+            <p class="text-secondary" style="font-size:0.85rem">Holding absolute honor in words and deeds.</p>
+          </div>
+          <div class="value-item">
+            <div class="value-icon"><i class="fas fa-hand-holding-heart"></i></div>
+            <h4>Discipline</h4>
+            <p class="text-secondary" style="font-size:0.85rem">Exercising self-control over destructive temptations.</p>
+          </div>
+          <div class="value-item">
+            <div class="value-icon"><i class="fas fa-crown"></i></div>
+            <h4>Leadership</h4>
+            <p class="text-secondary" style="font-size:0.85rem">Steering communities towards positive development.</p>
+          </div>
+          <div class="value-item">
+            <div class="value-icon"><i class="fas fa-people-arrows"></i></div>
+            <h4>Respect</h4>
+            <p class="text-secondary" style="font-size:0.85rem">Honoring parents, community guidelines, and peers.</p>
+          </div>
+          <div class="value-item">
+            <div class="value-icon"><i class="fas fa-bullseye"></i></div>
+            <h4>Purpose</h4>
+            <p class="text-secondary" style="font-size:0.85rem">Chasing meaningful long-term goals instead of shortcuts.</p>
+          </div>
+          <div class="value-item">
+            <div class="value-icon"><i class="fas fa-lightbulb"></i></div>
+            <h4>Creativity</h4>
+            <p class="text-secondary" style="font-size:0.85rem">Utilizing intellect to construct legitimate tools.</p>
+          </div>
+          <div class="value-item">
+            <div class="value-icon"><i class="fas fa-star"></i></div>
+            <h4>Excellence</h4>
+            <p class="text-secondary" style="font-size:0.85rem">Executing tasks and legitimate skills flawlessly.</p>
+          </div>
+          <div class="value-item">
+            <div class="value-icon"><i class="fas fa-scale-balanced"></i></div>
+            <h4>Character Code</h4>
+            <p class="text-secondary" style="font-size:0.85rem">Upholding the Omoluabi creed at all times.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Messages from Founder/Leaders -->
+      <div class="section-padding founder-msg-container">
+        <div class="founder-photo">
+          <svg viewBox="0 0 300 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="300" height="400" fill="#062E22" />
+            <!-- Symbolic leadership silhouette -->
+            <circle cx="150" cy="150" r="50" fill="#C59B27" />
+            <path d="M70 300 C70 230, 230 230, 230 300 L230 400 L70 400 Z" fill="#C59B27" fill-opacity="0.8" />
+            <text x="45" y="380" fill="#FFFFFF" font-family="Montserrat" font-size="20" font-weight="bold">DR. AKIN BABALOLA</text>
+          </svg>
+        </div>
+        <div>
+          <h3 style="margin-bottom:15px; color:var(--primary)" data-translate="founder-title">Founder's Message</h3>
+          <p class="text-secondary" style="font-size:1.05rem; line-height:1.7; margin-bottom:20px;" data-translate="founder-txt">
+            Our continent's future depends entirely on the character of our youth. The Omoluabi Rebirth Movement was founded not just to say 'No' to internet fraud and social vices, but to provide a cinematic, emotional, and robust alternative. We give youths a positive identity, teach them high-income legitimate skills, and support them when they choose to step away from dark lifestyles. Join us in rebuilding the foundations.
+          </p>
+          <div style="font-weight:700; color:var(--primary);">Dr. Akin Babalola</div>
+          <div style="font-size:0.85rem; color:var(--accent); font-weight:600;">Executive Director, ORM Rebirth</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================== -->
+  <!-- 3. JOIN THE MOVEMENT PAGE VIEW                       -->
+  <!-- ==================================================== -->
+  <section id="join-view" class="view-section">
+    <div class="section-padding container" style="max-width: 900px;">
+      <div class="text-center">
+        <h1 data-translate="join-title">Join the Movement</h1>
+        <p class="section-subtitle" data-translate="join-subtitle">Become an active builder. Choose your role and register below.</p>
+      </div>
+
+      <div class="form-card">
+        <form id="volunteer-registration-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="vol-name" data-translate="form-lbl-name">Full Name</label>
+              <input type="text" id="vol-name" required placeholder="Adejoke Alao">
+            </div>
+            <div class="form-group">
+              <label for="vol-age" data-translate="form-lbl-age">Age</label>
+              <input type="number" id="vol-age" required min="12" max="45" placeholder="21">
+            </div>
+            <div class="form-group">
+              <label for="vol-state" data-translate="form-lbl-state">State of Residence</label>
+              <select id="vol-state" required>
+                <option value="Lagos">Lagos</option>
+                <option value="Oyo">Oyo</option>
+                <option value="Ogun">Ogun</option>
+                <option value="Osun">Osun</option>
+                <option value="Ondo">Ondo</option>
+                <option value="Ekiti">Ekiti</option>
+                <option value="Abuja">FCT Abuja</option>
+                <option value="Kwara">Kwara</option>
+                <option value="Enugu">Enugu</option>
+                <option value="Rivers">Rivers</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="vol-school" data-translate="form-lbl-school">School / Institution</label>
+              <input type="text" id="vol-school" required placeholder="University of Ibadan">
+            </div>
+            <div class="form-group">
+              <label for="vol-phone" data-translate="form-lbl-phone">Phone Number</label>
+              <input type="tel" id="vol-phone" required placeholder="08034567890">
+            </div>
+            <div class="form-group">
+              <label for="vol-whatsapp" data-translate="form-lbl-whatsapp">WhatsApp Number</label>
+              <input type="tel" id="vol-whatsapp" required placeholder="09049656467">
+            </div>
+            <div class="form-group">
+              <label for="vol-role" data-translate="form-lbl-role">I want to join as</label>
+              <select id="vol-role" required>
+                <option value="volunteer">Volunteer (Advocacy)</option>
+                <option value="ambassador">Ambassador (Campus Coordinator)</option>
+                <option value="mentor">Mentorship Guide</option>
+                <option value="counselor">Counseling Advocate</option>
+                <option value="content-creator">Content Creator (Videos/Graphics)</option>
+                <option value="school-coordinator">School Tour Assistant</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="vol-socials" data-translate="form-lbl-socials">Social Media Handles</label>
+              <input type="text" id="vol-socials" placeholder="@username (Twitter/IG)">
+            </div>
+            <div class="form-group full-width">
+              <label for="vol-skills" data-translate="form-lbl-skills">Your Key Skills</label>
+              <input type="text" id="vol-skills" required placeholder="Coding, copywriting, graphic designs, active listening...">
+            </div>
+            <div class="form-group full-width">
+              <label for="vol-reason" data-translate="form-lbl-reason">Why do you want to join ORM?</label>
+              <textarea id="vol-reason" required placeholder="Write a brief statement about your desire to help rebuild this generation..."></textarea>
+            </div>
+          </div>
+          
+          <button type="submit" class="btn btn-primary" style="width:100%; margin-top:20px;" data-translate="btn-submit-join">Submit Application</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================== -->
+  <!-- 4. STORIES OF TRANSFORMATION VIEW                    -->
+  <!-- ==================================================== -->
+  <section id="stories-view" class="view-section">
+    <div class="section-padding container">
+      <div class="text-center">
+        <h1 data-translate="stories-title">Stories of Transformation</h1>
+        <p class="section-subtitle" data-translate="stories-subtitle">Real journeys of repentance, resilience, and legitimate digital success.</p>
+      </div>
+
+      <!-- Categories Filter Bar -->
+      <div class="stories-filter-bar">
+        <button class="filter-btn active">All Transformations</button>
+        <button class="filter-btn">Repentance Testimonies</button>
+        <button class="filter-btn">Entrepreneurship Success</button>
+        <button class="filter-btn">School Summit Leaders</button>
+      </div>
+
+      <!-- Grid containing pre-populated stories and user posts -->
+      <div class="stories-grid" id="stories-grid-container">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <!-- Form: Submit transformation story anonymously -->
+      <div class="section-padding" style="max-width: 800px; margin: 50px auto 0 auto;">
+        <div class="form-card">
+          <h3 class="text-center" style="margin-bottom:25px;" data-translate="btn-submit-story">Submit Your Story Anonymously</h3>
+          <form id="anonymous-story-form">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="story-author-name">Nickname / Name (Optional)</label>
+                <input type="text" id="story-author-name" placeholder="Leave empty for Anonymous">
+              </div>
+              <div class="form-group">
+                <label for="story-type-select">Story Category</label>
+                <select id="story-type-select" required>
+                  <option value="repentance">Ex-Fraudster Repentance</option>
+                  <option value="entrepreneurship">Entrepreneur Success</option>
+                  <option value="youth">Youth Leadership Triumphs</option>
+                </select>
+              </div>
+              <div class="form-group full-width">
+                <label for="story-title-input">Headline of your Story</label>
+                <input type="text" id="story-title-input" required placeholder="From dark nights to peaceful legitimate coding...">
+              </div>
+              <div class="form-group">
+                <label for="story-before-input">Short Summary of 'Before' State</label>
+                <input type="text" id="story-before-input" required placeholder="Struggling, peer pressure, constant fear">
+              </div>
+              <div class="form-group">
+                <label for="story-after-input">Short Summary of 'After' State</label>
+                <input type="text" id="story-after-input" required placeholder="Productive, peaceful, earning legitimately">
+              </div>
+              <div class="form-group full-width">
+                <label for="story-excerpt-input">Brief Catchy Abstract</label>
+                <input type="text" id="story-excerpt-input" required placeholder="A quick summary of the turning point...">
+              </div>
+              <div class="form-group full-width">
+                <label for="story-content-input">The Full Story</label>
+                <textarea id="story-content-input" required placeholder="Share details of your turnaround, who helped you, how it felt, and advice to other Nigerian youths..."></textarea>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-accent" style="width:100%; margin-top:20px;">Publish Anonymously</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================== -->
+  <!-- 5. EVENTS & SCHOOL OUTREACH VIEW                     -->
+  <!-- ==================================================== -->
+  <section id="events-view" class="view-section">
+    <div class="section-padding container">
+      <div class="text-center">
+        <h1 data-translate="nav-events">Outreach & Events</h1>
+        <p class="section-subtitle" data-translate="booking-subtitle">Book a safe mentorship space, request school tour visits, or schedule a transformation testimony interview.</p>
+      </div>
+
+      <div class="event-section-grid">
+        <!-- Event Lists container -->
+        <div>
+          <h2 style="margin-bottom:20px; font-family:var(--font-heading)">Upcoming Outreach Tour Calendar</h2>
+          <div class="event-list" id="events-list-container">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- School Summit request form -->
+        <div class="form-card">
+          <h3 style="margin-bottom:20px; color:var(--primary)">Request School Visit / Summit</h3>
+          <p class="text-secondary" style="font-size:0.9rem; margin-bottom:20px;">Are you a school principal, teacher, or student leader? Invite our moral counseling tour to your campus.</p>
+          
+          <form id="school-summit-request-form" onsubmit="event.preventDefault(); window.showToast('School Tour request sent. Our logistics coordinator will reach out.'); this.reset();">
+            <div class="form-group">
+              <label for="sch-name">School / Institution Name</label>
+              <input type="text" id="sch-name" required placeholder="Model High School, Ibadan">
+            </div>
+            <div class="form-group">
+              <label for="sch-state">Location (State)</label>
+              <input type="text" id="sch-state" required placeholder="Oyo State">
+            </div>
+            <div class="form-group">
+              <label for="sch-contact">Coordinator / Principal Name</label>
+              <input type="text" id="sch-contact" required placeholder="Mrs. Bola Ajayi">
+            </div>
+            <div class="form-group">
+              <label for="sch-phone">Phone / WhatsApp</label>
+              <input type="tel" id="sch-phone" required placeholder="08012345678">
+            </div>
+            <div class="form-group">
+              <label for="sch-size">Approx. Number of Students</label>
+              <input type="number" id="sch-size" required placeholder="500">
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:100%; margin-top:10px;">Submit Tour Invitation</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================== -->
+  <!-- 6. MEDIA & VIDEOS VIEW                               -->
+  <!-- ==================================================== -->
+  <section id="media-view" class="view-section">
+    <div class="section-padding container">
+      <div class="text-center">
+        <h1 data-translate="nav-media">Fidio & Midia</h1>
+        <p class="section-subtitle">Watch motivating clips, ex-fraudster podcasts, anti-vice truth campaigns, and digital masterclasses.</p>
+      </div>
+
+      <!-- Video Category selectors -->
+      <div class="stories-filter-bar">
+        <button class="filter-btn active">All Media</button>
+        <button class="filter-btn">Truth About Fraud</button>
+        <button class="filter-btn">Motivation</button>
+        <button class="filter-btn">Digital Skills</button>
+        <button class="filter-btn">Podcasts</button>
+      </div>
+
+      <!-- Cinematic grid of media playbacks -->
+      <div class="media-grid">
+        <div class="media-card">
+          <div class="media-player-placeholder" onclick="window.showToast('Loading Video Streaming Source...');">
+            <i class="fas fa-play-circle"></i>
+          </div>
+          <div class="media-details">
+            <span class="media-tag">Truth About Fraud</span>
+            <h3 style="font-size:1.1rem; margin-top:5px;">The Reality of Cybercrime: Adefemi's Live Podcast</h3>
+            <p class="text-secondary" style="font-size:0.85rem; margin-top:8px;">Deep and emotional analysis of how internet fraud erodes psychological and legal peace.</p>
+          </div>
+        </div>
+
+        <div class="media-card">
+          <div class="media-player-placeholder" onclick="window.showToast('Loading Video Streaming Source...');">
+            <i class="fas fa-play-circle"></i>
+          </div>
+          <div class="media-details">
+            <span class="media-tag">Motivation</span>
+            <h3 style="font-size:1.1rem; margin-top:5px;">What is an Omoluabi? Restoring Generational Pride</h3>
+            <p class="text-secondary" style="font-size:0.85rem; margin-top:8px;">Reviving Yoruba core principles of character, respect, truth, and diligent honest work.</p>
+          </div>
+        </div>
+
+        <div class="media-card">
+          <div class="media-player-placeholder" onclick="window.showToast('Loading Video Streaming Source...');">
+            <i class="fas fa-play-circle"></i>
+          </div>
+          <div class="media-details">
+            <span class="media-tag">Digital Skills</span>
+            <h3 style="font-size:1.1rem; margin-top:5px;">Digital Pathways: Legitimate Income Streams Explained</h3>
+            <p class="text-secondary" style="font-size:0.85rem; margin-top:8px;">How to start legal freelance careers: software design, graphics, coding, and remote writing.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================== -->
+  <!-- 7. BLOG / ARTICLES VIEW                              -->
+  <!-- ==================================================== -->
+  <section id="blog-view" class="view-section">
+    <div class="section-padding container">
+      <div class="text-center">
+        <h1 data-translate="nav-blog">Bulọọgi</h1>
+        <p class="section-subtitle">Educational materials, parent manuals, and digital skills frameworks compiled by counselors and experts.</p>
+      </div>
+
+      <div class="blog-view-wrapper">
+        <!-- Main blog listings -->
+        <div class="blog-grid" id="blogs-grid-container">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <!-- Sidebar Widgets -->
+        <div>
+          <!-- Categories list -->
+          <div class="blog-sidebar-widget">
+            <h4>Article Categories</h4>
+            <ul class="footer-links">
+              <li><a href="#blog" onclick="window.showToast('Filtering for Youth development...');"><i class="fas fa-chevron-right highlight-gold" style="font-size:0.8rem; margin-right:8px;"></i> Youth Development</a></li>
+              <li><a href="#blog" onclick="window.showToast('Filtering for Integrity...');"><i class="fas fa-chevron-right highlight-gold" style="font-size:0.8rem; margin-right:8px;"></i> Integrity & Honor</a></li>
+              <li><a href="#blog" onclick="window.showToast('Filtering for Technology...');"><i class="fas fa-chevron-right highlight-gold" style="font-size:0.8rem; margin-right:8px;"></i> Digital Technology</a></li>
+              <li><a href="#blog" onclick="window.showToast('Filtering for Parenting...');"><i class="fas fa-chevron-right highlight-gold" style="font-size:0.8rem; margin-right:8px;"></i> Parenting Manuals</a></li>
+              <li><a href="#blog" onclick="window.showToast('Filtering for Culture...');"><i class="fas fa-chevron-right highlight-gold" style="font-size:0.8rem; margin-right:8px;"></i> Yoruba Cultural Pride</a></li>
+            </ul>
+          </div>
+
+          <!-- Movement Manifesto Sidebar card -->
+          <div class="blog-sidebar-widget" style="background: linear-gradient(135deg, var(--primary-light), var(--bg-secondary))">
+            <h4 style="color:var(--primary);">The Omoluabi Creed</h4>
+            <p class="text-secondary" style="font-size:0.85rem; font-style:italic; line-height:1.6;">
+              "Iwa l'ewa. Honor is far greater than fast money acquired through deception. We reject cultism, drug distribution, and cybercrime. We choose legitimate, legal pathways."
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================== -->
+  <!-- 8. INTERVIEW & TESTIMONY BOOKING VIEW                -->
+  <!-- ==================================================== -->
+  <section id="booking-view" class="view-section">
+    <div class="section-padding container">
+      <div class="text-center">
+        <h1 data-translate="booking-title">Book counseling or Interview</h1>
+        <p class="section-subtitle" data-translate="booking-subtitle">Book a safe mentorship space, request school tour visits, or schedule a transformation testimony interview.</p>
+      </div>
+
+      <div class="split-layout">
+        <!-- Interactive Date & Slot Calendar -->
+        <div class="calendar-widget">
+          <div class="calendar-header">
+            <h3 id="calendar-current-month" style="font-size:1.25rem;">June 2026</h3>
+            <div>
+              <button class="btn-control" style="padding:6px 10px;" onclick="window.showToast('Calendar navigation simulated. Selecting dates on the active month...');"><i class="fas fa-chevron-left"></i></button>
+              <button class="btn-control" style="padding:6px 10px;" onclick="window.showToast('Calendar navigation simulated. Selecting dates on the active month...');"><i class="fas fa-chevron-right"></i></button>
+            </div>
+          </div>
+          
+          <div class="calendar-grid">
+            <div class="calendar-weekday">SUN</div>
+            <div class="calendar-weekday">MON</div>
+            <div class="calendar-weekday">TUE</div>
+            <div class="calendar-weekday">WED</div>
+            <div class="calendar-weekday">THU</div>
+            <div class="calendar-weekday">FRI</div>
+            <div class="calendar-weekday">SAT</div>
+          </div>
+          <div class="calendar-grid" id="calendar-days">
+            <!-- Days injected by javascript -->
+          </div>
+
+          <h4 style="margin-top:25px; font-weight:700;">Select Available Hour Block</h4>
+          <div class="time-slots">
+            <button class="time-slot" data-time="09:00 AM">09:00 AM</button>
+            <button class="time-slot" data-time="10:30 AM">10:30 AM</button>
+            <button class="time-slot active" data-time="12:00 PM">12:00 PM</button>
+            <button class="time-slot" data-time="02:00 PM">02:00 PM</button>
+            <button class="time-slot booked" disabled>03:30 PM (Booked)</button>
+            <button class="time-slot" data-time="05:00 PM">05:00 PM</button>
+          </div>
+        </div>
+
+        <!-- User parameters registration -->
+        <div class="form-card">
+          <h3 style="margin-bottom:20px; color:var(--primary);">Confirm Interview Booking</h3>
+          <form id="interview-booking-form">
+            <div class="form-group">
+              <label for="book-name">Contact Full Name</label>
+              <input type="text" id="book-name" required placeholder="Olabisi Tinubu">
+            </div>
+            <div class="form-group">
+              <label for="book-email">Email Address</label>
+              <input type="email" id="book-email" required placeholder="olabisi@gmail.com">
+            </div>
+            <div class="form-grid" style="margin-bottom:0;">
+              <div class="form-group">
+                <label for="book-phone">Phone Number</label>
+                <input type="tel" id="book-phone" required placeholder="08012345678">
+              </div>
+              <div class="form-group">
+                <label for="book-whatsapp">WhatsApp Number</label>
+                <input type="tel" id="book-whatsapp" required placeholder="09049656467">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="book-category">Interview Category</label>
+              <select id="book-category" required>
+                <option value="Youth interview">Youth mindset Interview</option>
+                <option value="Parent interview">Parent Guidance Interview</option>
+                <option value="School interview">School outreach Interview</option>
+                <option value="Counselor interview">Counselor consultation</option>
+                <option value="Repentance testimony">Repentance / Transformation Interview</option>
+                <option value="Leadership interview">Leadership structure Interview</option>
+                <option value="Media interview">Media press interview</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="book-notes">Case Notes / Context (confidential)</label>
+              <textarea id="book-notes" required placeholder="Describe what you want to talk about, any issues faced, or details of testimony you want to submit..."></textarea>
+            </div>
+            
+            <button type="submit" class="btn btn-primary" style="width:100%; margin-top:15px;" data-translate="booking-btn-submit">Schedule Booking</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Preloaded Questions Database accordion list -->
+      <div class="questions-database">
+        <h2 class="text-center" style="margin-bottom:15px;">Interview Questions Database Templates</h2>
+        <p class="section-subtitle">Certified prompt lists used by our coordinators to conduct transformational interviews.</p>
+        
+        <button class="question-accordion-btn">1. Youth Mindset Interview Prompts <i class="fas fa-chevron-down"></i></button>
+        <div class="question-accordion-content">
+          <div class="question-list">
+            <div class="question-item">What pressures do teenagers face today?</div>
+            <div class="question-item">Why do many youths chase fast money?</div>
+            <div class="question-item">What social media influences affect young people negatively?</div>
+            <div class="question-item">What does success mean to you?</div>
+            <div class="question-item">Have you ever felt pressure to join internet fraud?</div>
+            <div class="question-item">What kind of future do you want?</div>
+            <div class="question-item">Who inspires you positively?</div>
+          </div>
+        </div>
+
+        <button class="question-accordion-btn">2. Repentance & Transformation Confession Prompts <i class="fas fa-chevron-down"></i></button>
+        <div class="question-accordion-content">
+          <div class="question-list">
+            <div class="question-item">What lifestyle were you involved in before?</div>
+            <div class="question-item">What consequences did you face?</div>
+            <div class="question-item">What changed your mindset?</div>
+            <div class="question-item">What advice would you give to teenagers?</div>
+            <div class="question-item">What does integrity mean to you now?</div>
+          </div>
+        </div>
+
+        <button class="question-accordion-btn">3. School Outreach Tour Prompts <i class="fas fa-chevron-down"></i></button>
+        <div class="question-accordion-content">
+          <div class="question-list">
+            <div class="question-item">What major challenges affect students today?</div>
+            <div class="question-item">What values are missing among youths?</div>
+            <div class="question-item">How can schools help students avoid destructive lifestyles?</div>
+            <div class="question-item">What skills should youths learn today?</div>
+          </div>
+        </div>
+
+        <button class="question-accordion-btn">4. Parents & Family Guidance Prompts <i class="fas fa-chevron-down"></i></button>
+        <div class="question-accordion-content">
+          <div class="question-list">
+            <div class="question-item">What changes have you observed in modern teenagers?</div>
+            <div class="question-item">How can parents guide children better?</div>
+            <div class="question-item">How important is communication in parenting?</div>
+            <div class="question-item">What warning signs should parents watch for?</div>
+          </div>
+        </div>
+
+        <button class="question-accordion-btn">5. Leadership & Community Value Restoration <i class="fas fa-chevron-down"></i></button>
+        <div class="question-accordion-content">
+          <div class="question-list">
+            <div class="question-item">What kind of generation are we building?</div>
+            <div class="question-item">Why is character important?</div>
+            <div class="question-item">How can leaders restore values?</div>
+            <div class="question-item">What future do you envision for Nigerian youths?</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================== -->
+  <!-- 9. REPORT & COUNSELING CENTER VIEW                   -->
+  <!-- ==================================================== -->
+  <section id="counsel-view" class="view-section">
+    <div class="section-padding container">
+      <div class="text-center">
+        <h1 data-translate="report-title">Report & Counseling Center</h1>
+        <p class="section-subtitle" data-translate="report-subtitle">Speak to our certified counselors or report drug distribution and cultism safely & anonymously.</p>
+      </div>
+
+      <div class="split-layout">
+        <!-- Secure Reporting Channel form -->
+        <div class="form-card">
+          <h3 style="margin-bottom:20px; color:var(--primary)"><i class="fas fa-user-secret highlight-gold"></i> File Dynamic Anonymous Case Report</h3>
+          <p class="text-secondary" style="font-size:0.85rem; margin-bottom:20px;">Your identity is completely hidden by default. We do NOT share your information with any external body.</p>
+          
+          <form id="anonymous-report-form">
+            <div class="form-group">
+              <label for="rep-category">Incident Category</label>
+              <select id="rep-category" required>
+                <option value="Cultism">Secondary/Campus Cultism Activities</option>
+                <option value="Drug Abuse">Drug Abuse / Local Distribution Channels</option>
+                <option value="Cybercrime coercion">Cybercrime coercion / Blackmail</option>
+                <option value="Domestic Violence">Domestic Abuse / Violence</option>
+                <option value="Mental Support">Anxious Cry for Counseling Support</option>
+              </select>
+            </div>
+            
+            <div class="form-grid" style="margin-bottom:0;">
+              <div class="form-group">
+                <label for="rep-state">State Location</label>
+                <input type="text" id="rep-state" required placeholder="Oyo State">
+              </div>
+              <div class="form-group">
+                <label for="rep-school">Related School Name (if any)</label>
+                <input type="text" id="rep-school" placeholder="Model High School">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="rep-details">Incident Details / Request Descriptions</label>
+              <textarea id="rep-details" required placeholder="Provide precise descriptions of what is happening..."></textarea>
+            </div>
+
+            <div style="background-color:var(--bg-tertiary); padding:15px; border-radius:8px; margin-bottom:20px;">
+              <div class="form-group" style="margin-bottom:0;">
+                <label for="rep-contact">Reporter Name & WhatsApp (Optional)</label>
+                <input type="text" id="rep-contact" placeholder="Leave empty to remain 100% anonymous">
+                <input type="hidden" id="rep-whatsapp" value="">
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width:100%" data-translate="report-btn-submit">Send Secure Report</button>
+          </form>
+        </div>
+
+        <!-- Emergency counseling contacts -->
+        <div class="counseling-contacts">
+          <div class="contact-card-green">
+            <h3>ORM Emergency Support</h3>
+            <p style="margin-bottom:20px; font-size:0.95rem; opacity:0.9">Our lines are open 24/7 for counseling, peer support, cult extraction, and suicide prevention calls.</p>
+            
+            <div style="margin-bottom:20px;">
+              <div style="font-weight:700;"><i class="fas fa-phone-alt highlight-gold" style="margin-right:8px;"></i> Direct Helpline:</div>
+              <div style="font-size:1.35rem; font-weight:800; color:var(--accent);">+234 9049656467</div>
+            </div>
+
+            <div style="margin-bottom:30px;">
+              <div style="font-weight:700;"><i class="fab fa-whatsapp highlight-gold" style="margin-right:8px;"></i> WhatsApp Support Chat:</div>
+              <div style="font-size:1.35rem; font-weight:800; color:var(--accent);">+234 9049656467</div>
+            </div>
+
+            <a href="https://wa.me/2349049656467" class="whatsapp-button-link" target="_blank">
+              <i class="fab fa-whatsapp"></i> Chat Live Counselor Now
+            </a>
+          </div>
+
+          <div class="form-card" style="border-left: 5px solid var(--accent)">
+            <h4 style="margin-bottom:10px;"><i class="fas fa-handshake-angle highlight-gold"></i> Counseling Code</h4>
+            <p class="text-secondary" style="font-size:0.85rem; line-height:1.6">
+              All interactions with ORM counseling support are handled with extreme cultural intelligence, confidentiality, and care. No youth is reported to the authorities for sharing repentance declarations; our single focus is reformation.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================== -->
+  <!-- 10. PARTNERSHIPS & SPONSORS VIEW                      -->
+  <!-- ==================================================== -->
+  <section id="partners-view" class="view-section">
+    <div class="section-padding container">
+      <div class="text-center">
+        <h1 data-translate="nav-partners">Ifọwọsowọpọ</h1>
+        <p class="section-subtitle">Support our educational hubs, community outreach summits, and school tour logistics. Donate legitimally.</p>
+      </div>
+
+      <!-- Donation form details -->
+      <div class="donation-widget">
+        <h3 class="text-center" style="margin-bottom:25px; font-family:var(--font-heading)">Partner Financial Support Ledger</h3>
+        <div class="donation-presets">
+          <button class="preset-btn" data-amount="10000">₦10,000</button>
+          <button class="preset-btn active" data-amount="50000">₦50,000</button>
+          <button class="preset-btn" data-amount="100000">₦100,000</button>
+          <button class="preset-btn" data-amount="250000">₦250,000</button>
+        </div>
+        
+        <form id="donation-form-action">
+          <div class="form-group">
+            <label for="don-amount-custom">Custom Donation Amount (₦)</label>
+            <input type="number" id="don-amount-custom" required value="50000" min="1000" placeholder="Custom Amount">
+          </div>
+          <div class="form-group">
+            <label for="don-name">Partner / Donor Name</label>
+            <input type="text" id="don-name" placeholder="Leave empty for Anonymous Partner">
+          </div>
+          
+          <div class="form-group" style="display:flex; align-items:center; gap:8px;">
+            <input type="checkbox" id="don-monthly" style="width:20px; height:20px; cursor:pointer;">
+            <label for="don-monthly" style="margin-bottom:0; cursor:pointer;">Make this a recurring monthly rebirth pledge</label>
+          </div>
+          
+          <button type="submit" class="btn btn-accent" style="width:100%; margin-top:15px; font-size:1.1rem;">Process Partnership Donation</button>
+        </form>
+      </div>
+
+      <!-- Sponsor grid -->
+      <div class="section-padding text-center">
+        <h2>Certified Rebirth Sponsors & Partners</h2>
+        <div class="sponsor-grid">
+          <div class="sponsor-logo-box">Nigeria Youth Commission</div>
+          <div class="sponsor-logo-box">African Reform Initiative</div>
+          <div class="sponsor-logo-box">Babalola Foundation</div>
+          <div class="sponsor-logo-box">Lagos Education Board</div>
+          <div class="sponsor-logo-box">Ibadan Tech Hubs</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================== -->
+  <!-- 11. CONTACT PAGE VIEW                                -->
+  <!-- ==================================================== -->
+  <section id="contact-view" class="view-section">
+    <div class="section-padding container">
+      <div class="text-center">
+        <h1 data-translate="nav-contact">Kan si wa</h1>
+        <p class="section-subtitle">Have questions about school clubs, volunteering, or partnerships? Reach our logistics desk.</p>
+      </div>
+
+      <div class="split-layout">
+        <!-- Direct contact points -->
+        <div class="form-card">
+          <h3 style="margin-bottom:20px; color:var(--primary);">ORM General Office</h3>
+          
+          <div style="display:flex; flex-direction:column; gap:20px;">
+            <div>
+              <div style="font-weight:700;"><i class="fas fa-map-marked-alt highlight-gold" style="margin-right:8px;"></i> Central Office Address:</div>
+              <p class="text-secondary" style="font-size:0.95rem; margin-top:4px;">Plot 12, Omoluabi Rebirth Center, Ikeja Gra, Lagos, Nigeria.</p>
+            </div>
+
+            <div>
+              <div style="font-weight:700;"><i class="fas fa-envelope-open-text highlight-gold" style="margin-right:8px;"></i> Official Inquiries:</div>
+              <p class="text-secondary" style="font-size:0.95rem; margin-top:4px;">info@omoluabirebirth.org</p>
+            </div>
+
+            <div>
+              <div style="font-weight:700;"><i class="fas fa-phone-volume highlight-gold" style="margin-right:8px;"></i> Hotline / WhatsApp Desk:</div>
+              <p class="text-secondary" style="font-size:0.95rem; margin-top:4px;">+234 9049656467</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Public Query message form -->
+        <div class="form-card">
+          <h3 style="margin-bottom:20px; color:var(--accent);">Send Inquiries Message</h3>
+          <form onsubmit="event.preventDefault(); window.showToast('Message received! We will respond within 24 hours.'); this.reset();">
+            <div class="form-group">
+              <label for="contact-sender">Your Name</label>
+              <input type="text" id="contact-sender" required placeholder="Funsho Bello">
+            </div>
+            <div class="form-group">
+              <label for="contact-mail">Email Address</label>
+              <input type="email" id="contact-mail" required placeholder="funsho@example.com">
+            </div>
+            <div class="form-group">
+              <label for="contact-msg">Inquiry Details</label>
+              <textarea id="contact-msg" required placeholder="Write details of your message..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:100%">Send Inquiries</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================== -->
+  <!-- 12. ADMIN DASHBOARD PAGE VIEW                        -->
+  <!-- ==================================================== -->
+  <section id="admin-view" class="view-section">
+    <div class="admin-grid">
+      <!-- Admin Sidebar Navigation -->
+      <aside class="admin-sidebar">
+        <h3 style="font-size:1.15rem; margin-bottom:25px; padding-left:12px; color:var(--primary); font-family:var(--font-heading)">
+          <i class="fas fa-user-gear highlight-gold"></i> ORM Admin Panel
+        </h3>
+        <div class="admin-sidebar-menu">
+          <button class="admin-menu-item active" data-admin-tab="volunteers" onclick="window.admin.switchTab('volunteers')">
+            <i class="fas fa-users"></i> Volunteers / Ambassadors
+          </button>
+          <button class="admin-menu-item" data-admin-tab="bookings" onclick="window.admin.switchTab('bookings')">
+            <i class="fas fa-calendar-check"></i> Interview Calendar
+          </button>
+          <button class="admin-menu-item" data-admin-tab="reports" onclick="window.admin.switchTab('reports')">
+            <i class="fas fa-mask"></i> Counseling Cases
+          </button>
+          <button class="admin-menu-item" data-admin-tab="donations" onclick="window.admin.switchTab('donations')">
+            <i class="fas fa-hand-holding-dollar"></i> Partner Ledger
+          </button>
+        </div>
+      </aside>
+
+      <!-- Admin Main Panels -->
+      <main class="admin-main">
+        <!-- Analytics Telemetry grid -->
+        <div class="admin-stats-grid">
+          <div class="admin-stat-card">
+            <div>
+              <div class="admin-stat-title">Ambassadors / Vols</div>
+              <div class="admin-stat-value" id="admin-stat-vols">0</div>
+            </div>
+            <div class="admin-stat-icon" style="background-color: var(--primary-light); color: var(--primary);"><i class="fas fa-user-group"></i></div>
+          </div>
+          
+          <div class="admin-stat-card">
+            <div>
+              <div class="admin-stat-title">Active Cases</div>
+              <div class="admin-stat-value" id="admin-stat-reports">0</div>
+            </div>
+            <div class="admin-stat-icon" style="background-color: var(--danger-light); color: var(--danger);"><i class="fas fa-shield-halved"></i></div>
+          </div>
+
+          <div class="admin-stat-card">
+            <div>
+              <div class="admin-stat-title">Bookings Approved</div>
+              <div class="admin-stat-value" id="admin-stat-bookings">0</div>
+            </div>
+            <div class="admin-stat-icon" style="background-color: var(--success-light); color: var(--success);"><i class="fas fa-calendar-days"></i></div>
+          </div>
+
+          <div class="admin-stat-card">
+            <div>
+              <div class="admin-stat-title">Total Fund Ledgers</div>
+              <div class="admin-stat-value" id="admin-stat-funds">₦0</div>
+            </div>
+            <div class="admin-stat-icon" style="background-color: var(--accent-light); color: var(--accent);"><i class="fas fa-wallet"></i></div>
+          </div>
+        </div>
+
+        <!-- Tabular dynamic database output container -->
+        <div class="admin-table-container">
+          <div class="admin-table-header">
+            <h3 id="admin-table-title" style="font-size:1.2rem; font-family:var(--font-heading)">Volunteer Applications</h3>
+            <button class="btn btn-primary btn-sm" onclick="window.router('join-view')">Add New Record</button>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="admin-table">
+              <thead>
+                <tr id="admin-thead-row">
+                  <!-- Injected dynamically -->
+                </tr>
+              </thead>
+              <tbody id="admin-tbody">
+                <!-- Injected dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- CMS Content Manager Form (Add new blog posts dynamically) -->
+        <div class="form-card" style="margin-top:40px;">
+          <h3 style="margin-bottom:20px; color:var(--primary);"><i class="fas fa-file-signature highlight-gold"></i> Dynamic CMS Blog Content Creator</h3>
+          <form id="admin-blog-form" onsubmit="window.admin.handleCreateBlog(event)">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="blog-title-input">Article Headline</label>
+                <input type="text" id="blog-title-input" required placeholder="Understanding Omoluabi Ethics in 2026">
+              </div>
+              <div class="form-group">
+                <label for="blog-category-select">Article Category</label>
+                <select id="blog-category-select" required>
+                  <option value="Youth development">Youth development</option>
+                  <option value="Integrity">Integrity</option>
+                  <option value="Leadership">Leadership</option>
+                  <option value="Entrepreneurship">Entrepreneurship</option>
+                  <option value="Technology">Technology</option>
+                  <option value="Culture">Culture</option>
+                  <option value="Parenting">Parenting</option>
+                  <option value="Mental health">Mental health</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="blog-author-input">Author Name / Role</label>
+                <input type="text" id="blog-author-input" required placeholder="Mrs. Shade Olamide">
+              </div>
+              <div class="form-group">
+                <label for="blog-excerpt-input">Catchy Excerpt (1-2 sentences)</label>
+                <input type="text" id="blog-excerpt-input" required placeholder="Brief introductory summary of the article contents...">
+              </div>
+              <div class="form-group full-width">
+                <label for="blog-content-input">Full Article Body Content</label>
+                <textarea id="blog-content-input" required placeholder="Write the complete article content here..."></textarea>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:100%; margin-top:10px;">Publish Article Live to Public Blog</button>
+          </form>
+        </div>
+      </main>
+    </div>
+  </section>
+
+  <!-- ==================================================== -->
+  <!-- FOOTER & MODALS DEFINITION                           -->
+  <!-- ==================================================== -->
+  
+  <!-- Global Blog Reader Modal -->
+  <div id="blog-reader-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="reader-modal-title" style="font-family:var(--font-heading);">Article Title</h3>
+        <button class="modal-close"><i class="fas fa-times"></i></button>
+      </div>
+      <div id="reader-modal-author" style="background-color:var(--bg-tertiary); padding:10px 25px; font-size:0.85rem; font-weight:600; border-bottom:1px solid var(--border)">
+        Category & Author details
+      </div>
+      <div class="modal-body" id="reader-modal-body">
+        Article content body goes here...
+      </div>
+    </div>
+  </div>
+
+  <!-- Outreach Summit RSVP modal -->
+  <div id="rsvp-modal" class="modal-overlay">
+    <div class="modal-content" style="max-width:450px;">
+      <div class="modal-header">
+        <h3 style="font-family:var(--font-heading)">Confirm Outreach RSVP</h3>
+        <button class="modal-close"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <p style="margin-bottom:20px; font-size:0.9rem;">You are registering to attend: <br><strong id="rsvp-event-title" class="highlight-green">Event Title</strong></p>
+        <form id="rsvp-form-element">
+          <input type="hidden" id="rsvp-event-id" value="">
+          <div class="form-group">
+            <label for="rsvp-name">Your Full Name</label>
+            <input type="text" id="rsvp-name" required placeholder="Kunle Adegoke">
+          </div>
+          <div class="form-group">
+            <label for="rsvp-email">Email Address</label>
+            <input type="email" id="rsvp-email" required placeholder="kunle@example.com">
+          </div>
+          <div class="form-group">
+            <label for="rsvp-phone">Phone Number</label>
+            <input type="tel" id="rsvp-phone" required placeholder="08011223344">
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%; margin-top:10px;">Confirm Attendance</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- General Layout Footer -->
+  <footer>
+    <div class="container footer-grid">
+      <div class="footer-logo">
+        <h3 data-translate="footer-text">OMOLUABI REBIRTH MOVEMENT (ORM)</h3>
+        <p data-translate="footer-desc">OMOLUABI REBIRTH MOVEMENT (ORM) is a registered social and behavior reform NGO rebuilding a generation of African youths built on integrity, discipline, and honest work.</p>
+        <div>
+          <strong>WhatsApp / Call helpline:</strong>
+          <div style="font-size:1.15rem; font-weight:800; color:var(--accent); margin-top:4px;">+234 9049656467</div>
+        </div>
+      </div>
+      
+      <div class="footer-links-column">
+        <h4 class="footer-title">Movement Portal</h4>
+        <ul class="footer-links">
+          <li><a href="#about" onclick="window.router('about-view')">About ORM</a></li>
+          <li><a href="#join" onclick="window.router('join-view')">Become Ambassador</a></li>
+          <li><a href="#stories" onclick="window.router('stories-view')">Transformation Confessions</a></li>
+          <li><a href="#events" onclick="window.router('events-view')">School Summit Schedule</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-links-column">
+        <h4 class="footer-title">Get Safe Assistance</h4>
+        <ul class="footer-links">
+          <li><a href="#counsel" onclick="window.router('counsel-view')">Anonymous Drug Report</a></li>
+          <li><a href="#counsel" onclick="window.router('counsel-view')">Anonymous Cultism Report</a></li>
+          <li><a href="#booking" onclick="window.router('booking-view')">Book Mentor Consultation</a></li>
+          <li><a href="#contact" onclick="window.router('contact-view')">Office Locations</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-links-column">
+        <h4 class="footer-title">Join Legitimate Skills</h4>
+        <ul class="footer-links">
+          <li><a href="#blog" onclick="window.router('blog-view')">Knowledge Articles</a></li>
+          <li><a href="#media" onclick="window.router('media-view')">Masterclass Videos</a></li>
+          <li><a href="#partners" onclick="window.router('partners-view')">Sponsorship Ledgers</a></li>
+          <li><a href="#admin" onclick="window.router('admin-view')">Management Admin</a></li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="container footer-bottom">
+      <div>&copy; 2026 Omoluabi Rebirth Movement (ORM). All rights reserved.</div>
+      <div class="footer-hashtags" data-translate="footer-hashtags">
+        <span class="hashtag">#OmoluabiRebirth</span>
+        <span class="hashtag">#ORM</span>
+        <span class="hashtag">#RebuildingAGeneration</span>
+        <span class="hashtag">#CharacterIsWealth</span>
+        <span class="hashtag">#HonorOverFastMoney</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Core Scripts Loading -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/database.js"></script>
+  <script src="js/translations.js"></script>
+  <script src="js/chatbot.js"></script>
+  <script src="js/admin.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

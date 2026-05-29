@@ -1020,6 +1020,32 @@
   </section>
 
   <!-- ==================================================== -->
+  <!-- ADMIN LOGIN OVERLAY                                  -->
+  <!-- ==================================================== -->
+  <div id="admin-login-overlay" class="admin-login-overlay">
+    <div class="admin-login-box">
+      <div class="admin-login-header">
+        <i class="fas fa-lock" style="font-size:2rem; color:var(--accent); margin-bottom:10px;"></i>
+        <h2 style="font-family:var(--font-heading);">Admin Access</h2>
+        <p style="font-size:0.85rem; opacity:0.7;">Enter admin credentials to access the dashboard</p>
+      </div>
+      <form id="admin-login-form">
+        <div class="form-group">
+          <label for="admin-email">Admin Email</label>
+          <input type="email" id="admin-email" required placeholder="admin@orm.org">
+        </div>
+        <div class="form-group">
+          <label for="admin-password">Password</label>
+          <input type="password" id="admin-password" required placeholder="Enter password">
+        </div>
+        <div id="admin-login-error" style="color:var(--danger); font-size:0.85rem; margin-bottom:10px; display:none;">Invalid credentials. Please try again.</div>
+        <button type="submit" class="btn btn-primary" style="width:100%;">Sign In</button>
+      </form>
+      <button id="admin-login-back-btn" class="btn btn-light" style="width:100%; margin-top:10px;" onclick="window.router('home-view'); document.getElementById('admin-login-overlay').classList.remove('active');">Back to Home</button>
+    </div>
+  </div>
+
+  <!-- ==================================================== -->
   <!-- 12. ADMIN DASHBOARD PAGE VIEW                        -->
   <!-- ==================================================== -->
   <section id="admin-view" class="view-section">
@@ -1042,6 +1068,11 @@
           <button class="admin-menu-item" data-admin-tab="donations" onclick="window.admin.switchTab('donations')">
             <i class="fas fa-hand-holding-dollar"></i> Partner Ledger
           </button>
+          <div style="margin-top:auto; padding-top:20px; border-top:1px solid var(--border);">
+            <button class="admin-menu-item" onclick="window.admin.logout()" style="color:var(--danger);">
+              <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+          </div>
         </div>
       </aside>
 

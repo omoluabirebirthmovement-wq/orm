@@ -1,12 +1,64 @@
 /* Admin Dashboard Controllers and CMS Engine for ORM */
 
+// Default admin credentials (change these in production)
+const ADMIN_CREDENTIALS = {
+  email: "admin@orm.org",
+  password: "Admin@123"
+};
+
 class ORMAdminDashboard {
   constructor() {
-    this.activeTab = "volunteers"; // default view
+    this.activeTab = "volunteers";
+    this.isAuthenticated = sessionStorage.getItem("orm_admin_auth") === "true";
+  }
+
+  // Show login overlay
+  showLogin() {
+    const overlay = document.getElementById("admin-login-overlay");
+    if (overlay) overlay.classList.add("active");
+    const form = document.getElementById("admin-login-form");
+    if (form) {
+      form.onsubmit = (e) => {
+        e.preventDefault();
+        const email = document.getElementById("admin-email").value.trim();
+        const password = document.getElementById("admin-password").value.trim();
+        const errorEl = document.getElementById("admin-login-error");
+        if (email === ADMIN_CREDENTIALS.email && password === ADMIN_CREDENTIALS.password) {
+          this.isAuthenticated = true;
+          sessionStorage.setItem("orm_admin_auth", "true");
+          overlay.classList.remove("active");
+          form.reset();
+          if (errorEl) errorEl.style.display = "none";
+          document.getElementById("admin-email").value = "";
+          document.getElementById("admin-password").value = "";
+          this.renderData();
+        } else {
+          if (errorEl) errorEl.style.display = "block";
+        }
+      };
+    }
+  }
+
+  // Logout
+  logout() {
+    this.isAuthenticated = false;
+    sessionStorage.removeItem("orm_admin_auth");
+    window.router("home-view");
+    window.showToast("Logged out of admin panel.");
+  }
+
+  // Check auth before rendering
+  requireAuth() {
+    if (!this.isAuthenticated) {
+      this.showLogin();
+      return false;
+    }
+    return true;
   }
 
   // Refresh and calculate analytical metrics
   renderStats() {
+    if (!this.requireAuth()) return;
     const volunteers = window.db.getVolunteers();
     const bookings = window.db.getBookings();
     const reports = window.db.getReports();
@@ -26,6 +78,7 @@ class ORMAdminDashboard {
 
   // Master rendering method based on active sub-view
   renderData() {
+    if (!this.requireAuth()) return;
     this.renderStats();
     
     const tableHeader = document.getElementById("admin-table-title");

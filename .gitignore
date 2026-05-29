@@ -20,3 +20,5 @@ yarn-error.log*
 
 # Supabase secrets (never commit API keys)
 js/supabase-config.js
+
+.vercel

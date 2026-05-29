@@ -1770,6 +1770,38 @@ textarea {
   color: var(--primary);
 }
 
+/* Admin Login Overlay */
+.admin-login-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.admin-login-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+.admin-login-box {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--border-radius);
+  padding: 40px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+.admin-login-header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
 .admin-main {
   padding: 40px;
   background-color: var(--bg-primary);

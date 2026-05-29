@@ -87,8 +87,22 @@ function initRouter() {
     // Scroll to top
     window.scrollTo({ top: 0, behavior: "smooth" });
 
-    // Handle Admin rendering triggers
+    // Handle Admin authentication guard
     if (viewId === "admin-view" && window.admin) {
+      if (!window.admin.isAuthenticated) {
+        // Don't show admin view; redirect to home and show login overlay
+        views.forEach(v => {
+          v.classList.remove("active");
+          v.style.display = "none";
+        });
+        document.getElementById("home-view").style.display = "block";
+        setTimeout(() => {
+          document.getElementById("home-view").classList.add("active");
+        }, 50);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        window.admin.showLogin();
+        return;
+      }
       window.admin.renderData();
     }
 

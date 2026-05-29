@@ -1970,13 +1970,6 @@ footer {
 
 /* Mobile Responsiveness Rules */
 @media (max-width: 1200px) {
-  .nav-links a {
-    font-size: 0.75rem;
-    padding: 5px 7px;
-  }
-}
-
-@media (max-width: 1024px) {
   .nav-links, .nav-controls {
     display: none;
   }
@@ -1989,6 +1982,9 @@ footer {
   .mobile-nav-drawer {
     display: block;
   }
+}
+
+@media (max-width: 1024px) {
   .hero .container {
     grid-template-columns: 1fr;
     text-align: center;

@@ -92,7 +92,7 @@ function initRouter() {
     }
 
     // Update active state in Navigation Links (both desktop and mobile)
-    document.querySelectorAll(".nav-links a, .mobile-nav-drawer a").forEach(link => {
+    document.querySelectorAll(".nav-links a, .nav-dropdown-menu a, .mobile-nav-drawer a").forEach(link => {
       link.classList.remove("active");
       const href = link.getAttribute("href");
       if (href && href.includes(viewId.replace("-view", ""))) {
@@ -100,8 +100,9 @@ function initRouter() {
       }
     });
 
-    // Close mobile drawer after navigation
+    // Close mobile drawer and any open dropdown after navigation
     closeMobileNav();
+    document.querySelectorAll(".nav-dropdown").forEach(d => d.classList.remove("open"));
   };
 
   // Nav click handlers (desktop + mobile drawer)

@@ -83,8 +83,42 @@
           <i class="fas fa-moon"></i> Dark Mode
         </button>
       </div>
+
+      <!-- Hamburger Menu Button (tablet/mobile) -->
+      <button class="hamburger-btn" id="hamburger-btn" aria-label="Toggle Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
     </div>
   </header>
+
+  <!-- Mobile Nav Overlay -->
+  <div class="mobile-nav-overlay" id="mobile-nav-overlay"></div>
+
+  <!-- Mobile Navigation Drawer -->
+  <nav class="mobile-nav-drawer" id="mobile-nav-drawer">
+    <a href="#home" class="active" data-translate="nav-home"><i class="fas fa-home"></i> Home</a>
+    <a href="#about" data-translate="nav-about"><i class="fas fa-info-circle"></i> About ORM</a>
+    <a href="#join" data-translate="nav-join"><i class="fas fa-hand-holding-heart"></i> Join</a>
+    <a href="#stories" data-translate="nav-stories"><i class="fas fa-book-open"></i> Stories</a>
+    <a href="#events" data-translate="nav-events"><i class="fas fa-calendar-alt"></i> Outreach & Events</a>
+    <a href="#media" data-translate="nav-media"><i class="fas fa-photo-video"></i> Media</a>
+    <a href="#blog" data-translate="nav-blog"><i class="fas fa-newspaper"></i> Blog</a>
+    <a href="#booking" data-translate="nav-booking"><i class="fas fa-calendar-check"></i> Book Interview</a>
+    <a href="#counsel" data-translate="nav-counsel"><i class="fas fa-hands-helping"></i> Counseling & Report</a>
+    <a href="#partners" data-translate="nav-partners"><i class="fas fa-handshake"></i> Partnerships</a>
+    <a href="#contact" data-translate="nav-contact"><i class="fas fa-envelope"></i> Contact</a>
+    <a href="#admin" data-translate="nav-admin" style="color: var(--accent);"><i class="fas fa-lock"></i> Admin</a>
+    <div class="mobile-nav-controls">
+      <button id="mobile-lang-toggle" class="btn-control lang-btn" aria-label="Change Language">
+        <i class="fas fa-globe"></i> Yoruba
+      </button>
+      <button id="mobile-theme-toggle" class="btn-control" aria-label="Change Theme">
+        <i class="fas fa-moon"></i> Dark Mode
+      </button>
+    </div>
+  </nav>
 
   <!-- ==================================================== -->
   <!-- 1. HOME PAGE VIEW                                    -->

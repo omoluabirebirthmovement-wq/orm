@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initFormBindings();
   initChatbotUI();
   initLiveAlerts();
+  initMobileNav();
   
   // Render Seed grids
   renderBlogsGrid();
@@ -32,26 +33,34 @@ function initTheme() {
   updateThemeIcon();
 
   const themeBtn = document.getElementById("theme-toggle");
+  const mobileThemeBtn = document.getElementById("mobile-theme-toggle");
+  
+  function handleThemeToggle() {
+    window.activeTheme = window.activeTheme === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", window.activeTheme);
+    localStorage.setItem("orm_theme", window.activeTheme);
+    updateThemeIcon();
+    showToast(window.activeLang === "en" ? `Switched to ${window.activeTheme} mode` : `A ti yipada si eto ${window.activeTheme}`);
+  }
+
   if (themeBtn) {
-    themeBtn.addEventListener("click", () => {
-      window.activeTheme = window.activeTheme === "dark" ? "light" : "dark";
-      document.documentElement.setAttribute("data-theme", window.activeTheme);
-      localStorage.setItem("orm_theme", window.activeTheme);
-      updateThemeIcon();
-      showToast(window.activeLang === "en" ? `Switched to ${window.activeTheme} mode` : `A ti yipada si eto ${window.activeTheme}`);
-    });
+    themeBtn.addEventListener("click", handleThemeToggle);
+  }
+  if (mobileThemeBtn) {
+    mobileThemeBtn.addEventListener("click", handleThemeToggle);
   }
 }
 
 function updateThemeIcon() {
-  const themeBtn = document.getElementById("theme-toggle");
-  if (themeBtn) {
-    themeBtn.innerHTML = window.activeTheme === "dark" 
-      ? `<i class="fas fa-sun"></i> <span data-translate="btn-theme-light">Light Mode</span>`
-      : `<i class="fas fa-moon"></i> <span data-translate="btn-theme-dark">Dark Mode</span>`;
-    // Re-translate theme buttons after changes
-    translateElement(themeBtn);
-  }
+  const btns = [document.getElementById("theme-toggle"), document.getElementById("mobile-theme-toggle")];
+  btns.forEach(btn => {
+    if (btn) {
+      btn.innerHTML = window.activeTheme === "dark" 
+        ? `<i class="fas fa-sun"></i> <span data-translate="btn-theme-light">Light Mode</span>`
+        : `<i class="fas fa-moon"></i> <span data-translate="btn-theme-dark">Dark Mode</span>`;
+      translateElement(btn);
+    }
+  });
 }
 
 // 3. ROUTER & PAGE SWITCHER
@@ -82,18 +91,21 @@ function initRouter() {
       window.admin.renderData();
     }
 
-    // Update active state in Navigation Links
-    document.querySelectorAll(".nav-links a").forEach(link => {
+    // Update active state in Navigation Links (both desktop and mobile)
+    document.querySelectorAll(".nav-links a, .mobile-nav-drawer a").forEach(link => {
       link.classList.remove("active");
       const href = link.getAttribute("href");
       if (href && href.includes(viewId.replace("-view", ""))) {
         link.classList.add("active");
       }
     });
+
+    // Close mobile drawer after navigation
+    closeMobileNav();
   };
 
-  // Nav click handlers
-  document.querySelectorAll(".nav-links a, .logo").forEach(el => {
+  // Nav click handlers (desktop + mobile drawer)
+  document.querySelectorAll(".nav-links a, .logo, .mobile-nav-drawer a").forEach(el => {
     el.addEventListener("click", (e) => {
       const href = el.getAttribute("href");
       if (href && href.startsWith("#")) {
@@ -116,13 +128,20 @@ function initRouter() {
 // 4. BILINGUAL TRANSLATION ENGINE
 function initLanguage() {
   const langBtn = document.getElementById("lang-toggle");
+  const mobileLangBtn = document.getElementById("mobile-lang-toggle");
+  
+  function handleLangToggle() {
+    window.activeLang = window.activeLang === "en" ? "yo" : "en";
+    localStorage.setItem("orm_lang", window.activeLang);
+    applyTranslations();
+    showToast(window.activeLang === "en" ? "Language changed to English" : "A ti yi ede pada si Yoruba");
+  }
+
   if (langBtn) {
-    langBtn.addEventListener("click", () => {
-      window.activeLang = window.activeLang === "en" ? "yo" : "en";
-      localStorage.setItem("orm_lang", window.activeLang);
-      applyTranslations();
-      showToast(window.activeLang === "en" ? "Language changed to English" : "A ti yi ede pada si Yoruba");
-    });
+    langBtn.addEventListener("click", handleLangToggle);
+  }
+  if (mobileLangBtn) {
+    mobileLangBtn.addEventListener("click", handleLangToggle);
   }
   applyTranslations();
 }
@@ -131,11 +150,13 @@ function applyTranslations() {
   const elements = document.querySelectorAll("[data-translate]");
   elements.forEach(translateElement);
 
-  // Update language button text
-  const langBtn = document.getElementById("lang-toggle");
-  if (langBtn) {
-    langBtn.innerHTML = `<i class="fas fa-globe"></i> ${window.translations[window.activeLang]["btn-lang"]}`;
-  }
+  // Update language button text (both desktop and mobile)
+  const langBtns = [document.getElementById("lang-toggle"), document.getElementById("mobile-lang-toggle")];
+  langBtns.forEach(btn => {
+    if (btn) {
+      btn.innerHTML = `<i class="fas fa-globe"></i> ${window.translations[window.activeLang]["btn-lang"]}`;
+    }
+  });
 
   // Update HTML Lang Tag
   document.documentElement.lang = window.activeLang;
@@ -722,4 +743,44 @@ function initLiveAlerts() {
       window.showToast(viralAlerts[idx]);
     }
   }, 25000);
+}
+
+// 11. MOBILE HAMBURGER NAVIGATION
+function closeMobileNav() {
+  const hamburger = document.getElementById("hamburger-btn");
+  const drawer = document.getElementById("mobile-nav-drawer");
+  const overlay = document.getElementById("mobile-nav-overlay");
+
+  if (hamburger) hamburger.classList.remove("open");
+  if (drawer) drawer.classList.remove("open");
+  if (overlay) overlay.classList.remove("visible");
+  document.body.style.overflow = "";
+}
+
+function initMobileNav() {
+  const hamburger = document.getElementById("hamburger-btn");
+  const drawer = document.getElementById("mobile-nav-drawer");
+  const overlay = document.getElementById("mobile-nav-overlay");
+
+  if (!hamburger || !drawer || !overlay) return;
+
+  hamburger.addEventListener("click", () => {
+    const isOpen = drawer.classList.contains("open");
+    if (isOpen) {
+      closeMobileNav();
+    } else {
+      hamburger.classList.add("open");
+      drawer.classList.add("open");
+      overlay.classList.add("visible");
+      document.body.style.overflow = "hidden";
+    }
+  });
+
+  // Close on overlay click
+  overlay.addEventListener("click", closeMobileNav);
+
+  // Close on Escape key
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeMobileNav();
+  });
 }

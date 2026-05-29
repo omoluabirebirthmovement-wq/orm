@@ -174,7 +174,7 @@ header {
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 1000;
+  z-index: 1060;
   box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
   transition: var(--transition);
 }
@@ -411,10 +411,12 @@ header {
   z-index: 1040;
   opacity: 0;
   transition: opacity 0.3s ease;
+  pointer-events: none;
 }
 
 .mobile-nav-overlay.visible {
   opacity: 1;
+  pointer-events: auto;
 }
 
 /* Mobile Drawer */

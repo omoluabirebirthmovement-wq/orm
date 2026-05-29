@@ -1,0 +1,8 @@
+{
+  "name": "omoluabi-rebirth-movement",
+  "version": "1.0.0",
+  "description": "Static site",
+  "scripts": {
+    "build": "sh build.sh"
+  }
+}

@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initChatbotUI();
   initLiveAlerts();
   initMobileNav();
+  initFilters();
   
   // Render Seed grids
   renderBlogsGrid();
@@ -340,11 +341,12 @@ window.readBlogArticle = function(id) {
   modal.classList.add("active");
 };
 
-function renderStoriesGrid() {
+function renderStoriesGrid(filter = 'all') {
   const grid = document.getElementById("stories-grid-container");
   if (!grid) return;
 
-  const stories = window.db.getStories();
+  const allStories = window.db.getStories();
+  const stories = filter === 'all' ? allStories : allStories.filter(s => s.type === filter);
   grid.innerHTML = "";
 
   stories.forEach(s => {
@@ -783,5 +785,52 @@ function initMobileNav() {
   // Close on Escape key
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") closeMobileNav();
+  });
+}
+
+// 12. FILTER BUTTONS LOGIC
+function initFilters() {
+  // Media Filter
+  const mediaFilterBtns = document.querySelectorAll('#media-view .filter-btn');
+  const mediaCards = document.querySelectorAll('#media-view .media-card');
+
+  mediaFilterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      // update active state
+      mediaFilterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const filterType = btn.textContent.trim();
+
+      mediaCards.forEach(card => {
+        const tagEl = card.querySelector('.media-tag');
+        const tagText = tagEl ? tagEl.textContent.trim() : '';
+
+        if (filterType === 'All Media' || filterType === tagText) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+
+  // Stories Filter
+  const storiesFilterBtns = document.querySelectorAll('#stories-view .filter-btn');
+  storiesFilterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      // update active state
+      storiesFilterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const filterText = btn.textContent.trim();
+      let filterType = 'all';
+      if (filterText.includes('Repentance')) filterType = 'repentance';
+      else if (filterText.includes('Entrepreneurship')) filterType = 'entrepreneurship';
+      else if (filterText.includes('School')) filterType = 'youth';
+
+      // re-render the grid with filter
+      renderStoriesGrid(filterType);
+    });
   });
 }

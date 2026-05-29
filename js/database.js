@@ -7,7 +7,7 @@ const SEED_BLOGS = [
     category: "Integrity",
     excerpt: "What does it truly mean to be an Omoluabi? Dive deep into the core philosophy of character, respect, and social duty.",
     content: "The term 'Omoluabi' describes a person of excellent character, integrity, and honor in Yoruba culture. It is not merely an individual trait but a social commitment. In a world where the search for quick money (Yahoo-Yahoo, ritualism) is glamorized, reviving the Omoluabi spirit is a matter of generational survival. It is about understanding that character is wealth (Iwa l'ewa), and that true prosperity cannot be separated from integrity. We explore the 7 core pillars: Oro siso (spoken word), Iteriba (respect), Inu rere (good intentions), Otito (truth), Igboya (courage), Ise (hard work), and Opolo pipe (intelligence).",
-    author: "Dr. Akinolu Babalola",
+    author: "Engr. Jimoh Lawal Akinlabi",
     date: "2026-05-20",
     readTime: "5 mins read"
   },

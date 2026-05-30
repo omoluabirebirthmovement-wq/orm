@@ -205,6 +205,21 @@ const SEED_DONATIONS = [
   { id: "don-3", name: "Dr. Chioma Nwachukwu", amount: 100000, type: "one-time", date: "2026-05-25" }
 ];
 
+const SEED_RESOURCES = [
+  { id: "res-1", title: "Digital Skills Starter Guide", desc: "A beginner-friendly guide to coding, design, and freelancing.", icon: "fa-laptop-code", type: "PDF", url: "#" },
+  { id: "res-2", title: "The Omoluabi Character Manual", desc: "A comprehensive guide to the 7 pillars of Omoluabi philosophy.", icon: "fa-book", type: "eBook", url: "#" },
+  { id: "res-3", title: "Parenting in the Digital Age", desc: "Tips for parents to guide teens away from cybercrime and cultism.", icon: "fa-users", type: "PDF", url: "#" },
+  { id: "res-4", title: "Youth Leadership Workbook", desc: "Exercises and prompts for building moral courage and purpose.", icon: "fa-crown", type: "eBook", url: "#" }
+];
+
+const SEED_DIRECTORY = [
+  { id: "dir-1", name: "Adefemi A.", role: "School Ambassador", location: "Lagos", initials: "AA" },
+  { id: "dir-2", name: "Yetunde Alabi", role: "Mentor", location: "Ibadan", initials: "YA" },
+  { id: "dir-3", name: "Olumide S.", role: "Club President", location: "Oyo", initials: "OS" },
+  { id: "dir-4", name: "Tunde Bakare", role: "Volunteer Coordinator", location: "Lagos", initials: "TB" },
+  { id: "dir-5", name: "Chidinma Nwosu", role: "Counselor", location: "Enugu", initials: "CN" }
+];
+
 const INTERVIEW_QUESTIONS = {
   youth: [
     "What pressures do teenagers face today?",
@@ -281,6 +296,12 @@ class ORMDatabase {
     }
     if (!localStorage.getItem("orm_donations")) {
       localStorage.setItem("orm_donations", JSON.stringify(SEED_DONATIONS));
+    }
+    if (!localStorage.getItem("orm_resources")) {
+      localStorage.setItem("orm_resources", JSON.stringify(SEED_RESOURCES));
+    }
+    if (!localStorage.getItem("orm_directory")) {
+      localStorage.setItem("orm_directory", JSON.stringify(SEED_DIRECTORY));
     }
   }
 
@@ -577,6 +598,16 @@ class ORMDatabase {
   // --- QUESTIONS ---
   getQuestions() {
     return INTERVIEW_QUESTIONS;
+  }
+
+  // --- RESOURCES ---
+  getResources() {
+    return JSON.parse(localStorage.getItem("orm_resources"));
+  }
+
+  // --- DIRECTORY ---
+  getDirectory() {
+    return JSON.parse(localStorage.getItem("orm_directory"));
   }
 }
 

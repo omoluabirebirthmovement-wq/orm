@@ -1,0 +1,22 @@
+{
+  "name": "Omoluabi Rebirth Movement",
+  "short_name": "ORM",
+  "description": "Rebuilding a Generation of Integrity and Purpose",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0A1A14",
+  "theme_color": "#0A4D38",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "images/logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "images/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

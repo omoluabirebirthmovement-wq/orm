@@ -21,6 +21,8 @@ document.addEventListener("DOMContentLoaded", () => {
   renderBlogsGrid();
   renderStoriesGrid();
   renderEventsGrid();
+  renderResourcesGrid();
+  renderDirectoryGrid();
   
   // Update admin page table initially
   if (window.admin) {
@@ -134,6 +136,22 @@ function initRouter() {
 }
 
 // 4. BILINGUAL TRANSLATION ENGINE
+function showLoading(containerId) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  el.innerHTML = `
+    <div class="skeleton skeleton-card"></div>
+    <div class="skeleton skeleton-line w60"></div>
+    <div class="skeleton skeleton-line w40"></div>
+    <div class="skeleton skeleton-line"></div>
+  `;
+}
+
+function hideLoading(containerId) {
+  const el = document.getElementById(containerId);
+  if (el) el.innerHTML = "";
+}
+
 function initLanguage() {
   const langBtn = document.getElementById("lang-toggle");
   const mobileLangBtn = document.getElementById("mobile-lang-toggle");
@@ -297,6 +315,8 @@ function renderBlogsGrid() {
   const grid = document.getElementById("blogs-grid-container");
   if (!grid) return;
 
+  showLoading("blogs-grid-container");
+
   const blogs = window.db.getBlogs();
   grid.innerHTML = "";
 
@@ -456,8 +476,47 @@ window.openRsvpModal = function(id, title) {
   modal.classList.add("active");
 };
 
+// Resource Library grid renderer
+function renderResourcesGrid() {
+  const grid = document.getElementById("resources-grid-container");
+  if (!grid) return;
+  const resources = window.db.getResources();
+  grid.innerHTML = resources.map(r => `
+    <div class="resource-card">
+      <i class="fas ${r.icon}"></i>
+      <h4>${r.title}</h4>
+      <p>${r.desc}</p>
+      <span class="badge-status resolved" style="margin-bottom:10px; display:inline-block;">${r.type}</span>
+      <br>
+      <a href="${r.url}" class="btn btn-primary btn-sm" style="margin-top:5px;" onclick="window.showToast('Download started for ${r.title}')"><i class="fas fa-download"></i> Download</a>
+    </div>
+  `).join("");
+}
+
+// Ambassador Directory grid renderer
+function renderDirectoryGrid() {
+  const grid = document.getElementById("directory-grid-container");
+  if (!grid) return;
+  const members = window.db.getDirectory();
+  grid.innerHTML = members.map(m => `
+    <div class="directory-card">
+      <div class="directory-avatar">${m.initials}</div>
+      <h4>${m.name}</h4>
+      <div class="role">${m.role}</div>
+      <div class="location"><i class="fas fa-map-marker-alt" style="margin-right:4px;"></i>${m.location}</div>
+    </div>
+  `).join("");
+}
+
 // 8. FORM SUBMISSIONS BINDING
 function initFormBindings() {
+  // Render CAPTCHA on forms
+  renderCaptcha("captcha-volunteer");
+  renderCaptcha("captcha-story");
+  renderCaptcha("captcha-report");
+  renderCaptcha("captcha-booking");
+  renderCaptcha("captcha-donation");
+
   // Global Modal closes
   document.querySelectorAll(".modal-close, .modal-overlay").forEach(el => {
     el.addEventListener("click", (e) => {
@@ -483,12 +542,18 @@ function initFormBindings() {
       const socials = document.getElementById("vol-socials").value;
       const reason = document.getElementById("vol-reason").value;
 
+      if (!validateCaptcha("captcha-volunteer")) {
+        showToast("Please answer the verification question correctly.");
+        return;
+      }
       window.db.addVolunteer({
         name, age: Number(age), state, school, phone, whatsapp, role, skills, socials, reason
       });
 
+      sendNotification("volunteer", { name, role, state });
       showToast(window.activeLang === 'en' ? "Volunteer application received. Reviewing details!" : "A ti gba iwe ibere rẹ. O n gba atunyẹwo!");
       volForm.reset();
+      renderCaptcha("captcha-volunteer");
       window.router("home-view");
     });
   }
@@ -522,12 +587,17 @@ function initFormBindings() {
       const school = document.getElementById("rep-school").value;
       const whatsapp = document.getElementById("rep-whatsapp").value;
 
+      if (!validateCaptcha("captcha-report")) {
+        showToast("Please answer the verification question correctly.");
+        return;
+      }
       window.db.addReport({
         category, details, contactInfo, state, school, whatsapp
       });
 
       showToast("Report submitted securely. Our counsel team will act promptly.");
       reportForm.reset();
+      renderCaptcha("captcha-report");
       window.router("home-view");
     });
   }
@@ -546,6 +616,10 @@ function initFormBindings() {
 
       if (!window.selectedBookingDate || !window.selectedBookingTime) {
         alert("Please select a date and an available time slot from the calendar widgets.");
+        return;
+      }
+      if (!validateCaptcha("captcha-booking")) {
+        showToast("Please answer the verification question correctly.");
         return;
       }
 
@@ -568,6 +642,7 @@ function initFormBindings() {
       document.querySelectorAll(".time-slot").forEach(s => s.classList.remove("active"));
       window.selectedBookingDate = null;
       window.selectedBookingTime = null;
+      renderCaptcha("captcha-booking");
 
       window.router("home-view");
     });
@@ -586,12 +661,17 @@ function initFormBindings() {
       const before = document.getElementById("story-before-input").value;
       const after = document.getElementById("story-after-input").value;
 
+      if (!validateCaptcha("captcha-story")) {
+        showToast("Please answer the verification question correctly.");
+        return;
+      }
       window.db.addStory({
         name, type, title, excerpt, content, before, after
       });
 
       showToast("Transformation story recorded successfully. Thank you for sharing!");
       storyForm.reset();
+      renderCaptcha("captcha-story");
       renderStoriesGrid();
       window.router("stories-view");
     });
@@ -621,6 +701,10 @@ function initFormBindings() {
         alert("Please enter a valid donation amount.");
         return;
       }
+      if (!validateCaptcha("captcha-donation")) {
+        showToast("Please answer the verification question correctly.");
+        return;
+      }
 
       window.db.addDonation({
         name,
@@ -631,6 +715,7 @@ function initFormBindings() {
       showToast(`Thank you ${name} for donating ₦${amount.toLocaleString()} in support of our youth rebirth programs.`);
       donationFormSubmit.reset();
       presetBtns.forEach(b => b.classList.remove("active"));
+      renderCaptcha("captcha-donation");
     });
   }
 
@@ -839,4 +924,138 @@ function initFilters() {
       renderStoriesGrid(filterType);
     });
   });
+}
+
+// 14. PWA SERVICE WORKER REGISTRATION
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js").catch(() => {});
+  });
+}
+
+// 15. SEARCH ENGINE
+const searchData = {
+  blogs: [],
+  stories: [],
+  events: []
+};
+
+function refreshSearchIndex() {
+  searchData.blogs = (window.db && window.db.getBlogs()) || [];
+  searchData.stories = (window.db && window.db.getStories()) || [];
+  searchData.events = (window.db && window.db.getEvents()) || [];
+}
+
+function performSearch(query) {
+  if (!query || query.length < 2) return [];
+  const q = query.toLowerCase();
+  const results = [];
+  searchData.blogs.forEach(b => {
+    if (b.title.toLowerCase().includes(q) || b.excerpt.toLowerCase().includes(q)) {
+      results.push({ type: "blog", title: b.title, excerpt: b.excerpt, id: b.id, route: "blog-view" });
+    }
+  });
+  searchData.stories.forEach(s => {
+    if (s.title.toLowerCase().includes(q) || s.excerpt.toLowerCase().includes(q)) {
+      results.push({ type: "story", title: s.title, excerpt: s.excerpt, id: s.id, route: "stories-view" });
+    }
+  });
+  searchData.events.forEach(e => {
+    if (e.title.toLowerCase().includes(q) || e.desc.toLowerCase().includes(q)) {
+      results.push({ type: "event", title: e.title, excerpt: e.desc, id: e.id, route: "events-view" });
+    }
+  });
+  return results;
+}
+
+function showSearchModal() {
+  refreshSearchIndex();
+  const existing = document.getElementById("search-modal");
+  if (existing) existing.remove();
+
+  const modal = document.createElement("div");
+  modal.id = "search-modal";
+  modal.className = "search-overlay";
+  modal.innerHTML = `
+    <div class="search-modal-box">
+      <div class="search-modal-header">
+        <i class="fas fa-search" style="color:var(--accent);"></i>
+        <input type="text" id="search-input" class="search-input" placeholder="Search blogs, stories, events..." autofocus>
+        <button class="search-close-btn" onclick="document.getElementById('search-modal').remove()"><i class="fas fa-times"></i></button>
+      </div>
+      <div id="search-results" class="search-results"></div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  setTimeout(() => modal.classList.add("active"), 10);
+
+  const input = document.getElementById("search-input");
+  const resultsContainer = document.getElementById("search-results");
+
+  input.addEventListener("input", () => {
+    const query = input.value.trim();
+    const results = performSearch(query);
+    if (!query || query.length < 2) {
+      resultsContainer.innerHTML = `<div class="search-hint">Type at least 2 characters to search...</div>`;
+      return;
+    }
+    if (results.length === 0) {
+      resultsContainer.innerHTML = `<div class="search-hint">No results found for "${query}"</div>`;
+      return;
+    }
+    resultsContainer.innerHTML = results.map(r => `
+      <div class="search-result-item" onclick="document.getElementById('search-modal').remove(); window.router('${r.route}')">
+        <div><span class="search-badge ${r.type}">${r.type}</span> <strong>${r.title}</strong></div>
+        <div class="search-snippet">${r.excerpt.substring(0, 100)}...</div>
+      </div>
+    `).join("");
+  });
+
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") modal.remove();
+  });
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) modal.remove();
+  });
+}
+
+// 16. EMAIL / WHATSAPP NOTIFICATION SIMULATION
+function sendNotification(type, data) {
+  console.log(`[NOTIFICATION] ${type}:`, data);
+  // In production, this would call a Supabase Edge Function or external API
+  const messages = {
+    volunteer: `New volunteer application from ${data.name}`,
+    booking: `New booking request from ${data.name} for ${data.category}`,
+    report: `New anonymous report filed: ${data.category}`,
+    donation: `New donation of ₦${data.amount} from ${data.name}`
+  };
+  const msg = messages[type] || `Notification: ${type}`;
+  showToast(`📧 ${msg}`);
+}
+
+// 17. CAPTCHA HELPER
+function generateCaptcha() {
+  const a = Math.floor(Math.random() * 10) + 1;
+  const b = Math.floor(Math.random() * 10) + 1;
+  return { a, b, answer: a + b };
+}
+
+function renderCaptcha(containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const captcha = generateCaptcha();
+  container.innerHTML = `
+    <label style="display:block; font-weight:600; margin-bottom:8px; font-size:0.9rem;">Verify you are human: <strong>${captcha.a} + ${captcha.b} = ?</strong></label>
+    <div style="display:flex; gap:10px;">
+      <input type="number" id="${containerId}-answer" class="captcha-input" placeholder="Answer" required style="flex:1; padding:10px; border-radius:6px; border:1px solid var(--border); background:var(--bg-secondary); color:var(--text-primary);">
+      <input type="hidden" id="${containerId}-expected" value="${captcha.answer}">
+    </div>
+  `;
+}
+
+function validateCaptcha(containerId) {
+  const answer = document.getElementById(`${containerId}-answer`);
+  const expected = document.getElementById(`${containerId}-expected`);
+  if (!answer || !expected) return true;
+  return parseInt(answer.value) === parseInt(expected.value);
 }

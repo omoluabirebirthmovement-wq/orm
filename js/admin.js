@@ -10,6 +10,170 @@ class ORMAdminDashboard {
   constructor() {
     this.activeTab = "volunteers";
     this.isAuthenticated = sessionStorage.getItem("orm_admin_auth") === "true";
+    // Load admin users from localStorage
+    this.adminUsers = JSON.parse(localStorage.getItem("orm_admin_users") || "[]");
+    if (this.adminUsers.length === 0) {
+      // Seed default admin
+      this.adminUsers.push({ id: "admin-1", email: ADMIN_CREDENTIALS.email, password: ADMIN_CREDENTIALS.password, role: "superadmin" });
+      localStorage.setItem("orm_admin_users", JSON.stringify(this.adminUsers));
+    }
+  }
+
+  // --- ADMIN USER MANAGEMENT ---
+  getAdminUsers() {
+    return JSON.parse(localStorage.getItem("orm_admin_users") || "[]");
+  }
+
+  addAdminUser(email, password, role) {
+    const users = this.getAdminUsers();
+    const newUser = { id: "admin-" + Date.now(), email, password, role: role || "admin" };
+    users.push(newUser);
+    localStorage.setItem("orm_admin_users", JSON.stringify(users));
+    return newUser;
+  }
+
+  deleteAdminUser(id) {
+    let users = this.getAdminUsers();
+    users = users.filter(u => u.id !== id);
+    localStorage.setItem("orm_admin_users", JSON.stringify(users));
+    this.renderAdminUsers();
+  }
+
+  renderAdminUsers() {
+    const container = document.getElementById("admin-users-container");
+    if (!container) return;
+    const users = this.getAdminUsers();
+    container.innerHTML = `
+      <div style="margin-bottom:20px;">
+        <h4 style="margin-bottom:15px;">Manage Admin Accounts</h4>
+        <div class="admin-user-form">
+          <input type="email" id="new-admin-email" placeholder="Email" style="padding:10px; border-radius:6px; border:1px solid var(--border); background:var(--bg-secondary); color:var(--text-primary);">
+          <input type="password" id="new-admin-password" placeholder="Password" style="padding:10px; border-radius:6px; border:1px solid var(--border); background:var(--bg-secondary); color:var(--text-primary);">
+          <select id="new-admin-role" style="padding:10px; border-radius:6px; border:1px solid var(--border); background:var(--bg-secondary); color:var(--text-primary);">
+            <option value="admin">Admin</option>
+            <option value="superadmin">Super Admin</option>
+          </select>
+          <button class="btn btn-primary btn-sm" onclick="window.admin.addAdminUser(document.getElementById('new-admin-email').value, document.getElementById('new-admin-password').value, document.getElementById('new-admin-role').value); document.getElementById('new-admin-email').value=''; document.getElementById('new-admin-password').value=''; window.showToast('Admin user added.')">Add Admin</button>
+        </div>
+      </div>
+      <table class="admin-table">
+        <thead><tr><th>Email</th><th>Role</th><th>Actions</th></tr></thead>
+        <tbody>
+          ${users.map(u => `
+            <tr>
+              <td>${u.email}</td>
+              <td><span class="badge-status ${u.role === 'superadmin' ? 'resolved' : 'approved'}">${u.role}</span></td>
+              <td>${u.role !== 'superadmin' ? `<button class="btn btn-sm btn-light" onclick="window.admin.deleteAdminUser('${u.id}')">Delete</button>` : '<small>Cannot remove</small>'}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
+  }
+
+  // --- CHARTS ---
+  renderCharts() {
+    const container = document.getElementById("admin-charts-container");
+    if (!container) return;
+    if (typeof Chart === "undefined") {
+      container.innerHTML = `<p style="color:var(--text-secondary);">Loading charts...</p>`;
+      return;
+    }
+    const volunteers = window.db.getVolunteers();
+    const reports = window.db.getReports();
+    const donations = window.db.getDonations();
+
+    // Volunteer status breakdown
+    const volStatus = { pending: 0, approved: 0 };
+    volunteers.forEach(v => { volStatus[v.status] = (volStatus[v.status] || 0) + 1; });
+
+    // Report categories
+    const repCats = {};
+    reports.forEach(r => { repCats[r.category] = (repCats[r.category] || 0) + 1; });
+
+    // Donations over time (simplified)
+    const donByMonth = {};
+    donations.forEach(d => {
+      if (d.date) {
+        const m = d.date.substring(0, 7);
+        donByMonth[m] = (donByMonth[m] || 0) + Number(d.amount);
+      }
+    });
+
+    container.innerHTML = `
+      <div class="admin-charts-grid">
+        <div class="chart-card">
+          <h4><i class="fas fa-users" style="color:var(--primary);margin-right:6px;"></i> Volunteer Status</h4>
+          <canvas id="chart-vol-status"></canvas>
+        </div>
+        <div class="chart-card">
+          <h4><i class="fas fa-exclamation-triangle" style="color:var(--accent);margin-right:6px;"></i> Report Categories</h4>
+          <canvas id="chart-reports"></canvas>
+        </div>
+      </div>
+    `;
+
+    // Volunteer status pie
+    const ctx1 = document.getElementById("chart-vol-status");
+    if (ctx1) {
+      new Chart(ctx1, {
+        type: "doughnut",
+        data: {
+          labels: Object.keys(volStatus),
+          datasets: [{
+            data: Object.values(volStatus),
+            backgroundColor: ["#E65100", "#2E7D32"],
+            borderWidth: 0
+          }]
+        },
+        options: { responsive: true, plugins: { legend: { position: "bottom", labels: { color: "#A2B5AD" } } } }
+      });
+    }
+
+    // Report categories bar
+    const ctx2 = document.getElementById("chart-reports");
+    if (ctx2) {
+      new Chart(ctx2, {
+        type: "bar",
+        data: {
+          labels: Object.keys(repCats),
+          datasets: [{
+            label: "Cases",
+            data: Object.values(repCats),
+            backgroundColor: "#C59B27",
+            borderRadius: 4
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true, ticks: { color: "#A2B5AD" } }, x: { ticks: { color: "#A2B5AD" } } }
+        }
+      });
+    }
+  }
+
+  // --- EXPORT CSV ---
+  exportTableToCSV(filename) {
+    const tbody = document.getElementById("admin-tbody");
+    if (!tbody || !tbody.rows.length) {
+      window.showToast("No data to export.");
+      return;
+    }
+    const thead = document.getElementById("admin-thead-row");
+    const headers = Array.from(thead.querySelectorAll("th")).map(th => th.textContent.trim());
+    const rows = Array.from(tbody.querySelectorAll("tr")).map(tr =>
+      Array.from(tr.querySelectorAll("td")).map(td => td.textContent.trim().replace(/,/g, ";"))
+    );
+    let csv = headers.join(",") + "\n" + rows.map(r => r.join(",")).join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename || "orm_export.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+    window.showToast("CSV exported successfully.");
   }
 
   // Show login overlay
@@ -199,6 +363,12 @@ class ORMAdminDashboard {
         tableBody.appendChild(tr);
       });
     }
+
+    // Show/hide charts and admin users containers
+    document.getElementById("admin-charts-container").style.display = this.activeTab === "charts" ? "block" : "none";
+    document.getElementById("admin-users-container").style.display = this.activeTab === "adminusers" ? "block" : "none";
+    if (this.activeTab === "charts") this.renderCharts();
+    if (this.activeTab === "adminusers") this.renderAdminUsers();
   }
 
   // --- ACTIONS ---

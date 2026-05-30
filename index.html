@@ -19,7 +19,7 @@
   <link rel="apple-touch-icon" href="images/logo.png">
   
   <!-- Styling and Fonts -->
-  <link rel="stylesheet" href="css/styles.css?v=2">
+  <link rel="stylesheet" href="css/styles.css?v=3">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -1276,6 +1276,36 @@
   <!-- FOOTER & MODALS DEFINITION                           -->
   <!-- ==================================================== -->
   
+  <!-- =====================================================
+       VIDEO INTERVIEW GUIDE MODAL
+       ===================================================== -->
+  <div id="video-guide-modal" class="modal-overlay">
+    <div class="modal-content" style="max-width:580px;">
+      <div class="modal-header">
+        <h3 style="font-family:var(--font-heading);"><i class="fas fa-video" style="color:var(--accent);margin-right:8px;"></i>Record Your Video Interview</h3>
+        <button class="modal-close" onclick="document.getElementById('video-guide-modal').classList.remove('active')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body" id="video-guide-body">
+        <!-- Injected by video-guide.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================
+       WHATSAPP FOLLOW-UP SLIDE BANNER
+       ===================================================== -->
+  <div id="wa-followup-banner" class="wa-followup-banner">
+    <div class="wa-followup-inner">
+      <div class="wa-followup-icon"><i class="fab fa-whatsapp"></i></div>
+      <div class="wa-followup-content">
+        <div class="wa-followup-title">Keep in touch with ORM</div>
+        <div id="wa-followup-text" class="wa-followup-sub">Chat with us on WhatsApp</div>
+      </div>
+      <a id="wa-followup-btn" href="#" target="_blank" class="wa-followup-cta">Chat Now</a>
+      <button class="wa-followup-close" onclick="window.dismissFollowUpBanner()" aria-label="Dismiss"><i class="fas fa-times"></i></button>
+    </div>
+  </div>
+
   <!-- Global Blog Reader Modal -->
   <div id="blog-reader-modal" class="modal-overlay">
     <div class="modal-content">
@@ -1387,6 +1417,7 @@
   <script src="js/translations.js?v=2"></script>
   <script src="js/chatbot.js?v=2"></script>
   <script src="js/admin.js?v=2"></script>
-  <script src="js/app.js?v=2"></script>
+  <script src="js/video-guide.js?v=1"></script>
+  <script src="js/app.js?v=3"></script>
 </body>
 </html>

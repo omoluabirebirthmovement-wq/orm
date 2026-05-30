@@ -554,9 +554,13 @@ function initFormBindings() {
       });
 
       sendNotification("volunteer", { name, role, state });
-      showToast(window.activeLang === 'en' ? "Volunteer application received. Reviewing details!" : "A ti gba iwe ibere rẹ. O n gba atunyẹwo!");
+      showToast(window.activeLang === 'en' ? "Application received! Please record your video interview." : "A ti gba iwe ibere rẹ. Jọwọ gbasilẹ fidio rẹ!");
       volForm.reset();
       renderCaptcha("captcha-volunteer");
+      // Show video interview guide after successful submission
+      if (window.showVideoGuide) {
+        setTimeout(() => window.showVideoGuide(name, role, state, role || "volunteer"), 800);
+      }
       window.router("home-view");
     });
   }
@@ -571,10 +575,15 @@ function initFormBindings() {
       const email = document.getElementById("rsvp-email").value;
       const phone = document.getElementById("rsvp-phone").value;
 
+      const evTitle = document.getElementById("rsvp-event-title")?.textContent || "ORM Event";
       window.db.rsvpEvent(eventId, { name, email, phone });
-      showToast("RSVP Confirmed. See you at the summit!");
+      showToast("RSVP Confirmed! See you at the summit 🎉");
       rsvpForm.reset();
       document.getElementById("rsvp-modal").classList.remove("active");
+      // WhatsApp follow-up
+      if (window.showFollowUpBanner) {
+        setTimeout(() => window.showFollowUpBanner("rsvp", { name, eventTitle: evTitle }), 600);
+      }
     });
   }
 
@@ -601,6 +610,10 @@ function initFormBindings() {
       showToast("Report submitted securely. Our counsel team will act promptly.");
       reportForm.reset();
       renderCaptcha("captcha-report");
+      // WhatsApp follow-up banner
+      if (window.showFollowUpBanner) {
+        setTimeout(() => window.showFollowUpBanner("report", { category, state }), 700);
+      }
       window.router("home-view");
     });
   }
@@ -626,18 +639,14 @@ function initFormBindings() {
         return;
       }
 
-      window.db.addBooking({
-        name,
-        email,
-        phone,
-        whatsapp,
-        category,
-        notes,
+      const bookingData = {
+        name, email, phone, whatsapp, category, notes,
         date: window.selectedBookingDate,
         time: window.selectedBookingTime
-      });
+      };
+      window.db.addBooking(bookingData);
 
-      showToast("Booking request registered. A counselor will reach out via WhatsApp soon.");
+      showToast("Booking confirmed! We will contact you on WhatsApp shortly.");
       bookForm.reset();
       
       // Clear calendar selection
@@ -646,7 +655,10 @@ function initFormBindings() {
       window.selectedBookingDate = null;
       window.selectedBookingTime = null;
       renderCaptcha("captcha-booking");
-
+      // WhatsApp follow-up banner
+      if (window.showFollowUpBanner) {
+        setTimeout(() => window.showFollowUpBanner("booking", bookingData), 700);
+      }
       window.router("home-view");
     });
   }
@@ -672,10 +684,14 @@ function initFormBindings() {
         name, type, title, excerpt, content, before, after
       });
 
-      showToast("Transformation story recorded successfully. Thank you for sharing!");
+      showToast("Story saved! You can also record a video version — we'd love to feature it.");
       storyForm.reset();
       renderCaptcha("captcha-story");
       renderStoriesGrid();
+      // Offer video recording for the story
+      if (window.showVideoGuide) {
+        setTimeout(() => window.showVideoGuide(name === "Anonymous" ? "Friend" : name, "Story Sharer", "", type || "repentance"), 800);
+      }
       window.router("stories-view");
     });
   }
@@ -715,10 +731,14 @@ function initFormBindings() {
         type: isMonthly ? "monthly" : "one-time"
       });
 
-      showToast(`Thank you ${name} for donating ₦${amount.toLocaleString()} in support of our youth rebirth programs.`);
+      showToast(`Thank you ${name}! 💚 Donation of ₦${amount.toLocaleString()} received. Please send payment via WhatsApp.`);
       donationFormSubmit.reset();
       presetBtns.forEach(b => b.classList.remove("active"));
       renderCaptcha("captcha-donation");
+      // WhatsApp follow-up with payment details request
+      if (window.showFollowUpBanner) {
+        setTimeout(() => window.showFollowUpBanner("donation", { name, amount }), 700);
+      }
     });
   }
 

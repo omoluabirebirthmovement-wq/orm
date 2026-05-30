@@ -374,7 +374,7 @@ class ORMDatabase {
 
   // --- BLOGS ---
   getBlogs() {
-    return JSON.parse(localStorage.getItem("orm_blogs"));
+    return JSON.parse(localStorage.getItem("orm_blogs")) || [];
   }
 
   addBlog(blog) {
@@ -396,7 +396,7 @@ class ORMDatabase {
 
   // --- STORIES ---
   getStories() {
-    return JSON.parse(localStorage.getItem("orm_stories"));
+    return JSON.parse(localStorage.getItem("orm_stories")) || [];
   }
 
   addStory(story) {
@@ -416,7 +416,7 @@ class ORMDatabase {
 
   // --- EVENTS ---
   getEvents() {
-    return JSON.parse(localStorage.getItem("orm_events"));
+    return JSON.parse(localStorage.getItem("orm_events")) || [];
   }
 
   addEvent(event) {
@@ -452,7 +452,7 @@ class ORMDatabase {
 
   // --- BOOKINGS ---
   getBookings() {
-    return JSON.parse(localStorage.getItem("orm_bookings"));
+    return JSON.parse(localStorage.getItem("orm_bookings")) || [];
   }
 
   addBooking(booking) {
@@ -496,7 +496,7 @@ class ORMDatabase {
 
   // --- REPORTS ---
   getReports() {
-    return JSON.parse(localStorage.getItem("orm_reports"));
+    return JSON.parse(localStorage.getItem("orm_reports")) || [];
   }
 
   addReport(report) {
@@ -532,7 +532,7 @@ class ORMDatabase {
 
   // --- VOLUNTEERS ---
   getVolunteers() {
-    return JSON.parse(localStorage.getItem("orm_volunteers"));
+    return JSON.parse(localStorage.getItem("orm_volunteers")) || [];
   }
 
   addVolunteer(volunteer) {
@@ -576,7 +576,7 @@ class ORMDatabase {
 
   // --- DONATIONS ---
   getDonations() {
-    return JSON.parse(localStorage.getItem("orm_donations"));
+    return JSON.parse(localStorage.getItem("orm_donations")) || [];
   }
 
   addDonation(donation) {
@@ -602,12 +602,14 @@ class ORMDatabase {
 
   // --- RESOURCES ---
   getResources() {
-    return JSON.parse(localStorage.getItem("orm_resources"));
+    const data = localStorage.getItem("orm_resources");
+    return data ? JSON.parse(data) : SEED_RESOURCES;
   }
 
   // --- DIRECTORY ---
   getDirectory() {
-    return JSON.parse(localStorage.getItem("orm_directory"));
+    const data = localStorage.getItem("orm_directory");
+    return data ? JSON.parse(data) : SEED_DIRECTORY;
   }
 }
 

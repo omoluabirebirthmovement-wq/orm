@@ -481,6 +481,10 @@ function renderResourcesGrid() {
   const grid = document.getElementById("resources-grid-container");
   if (!grid) return;
   const resources = window.db.getResources();
+  if (!resources || !resources.length) {
+    grid.innerHTML = `<p class="text-secondary text-center">No resources available yet. Check back soon!</p>`;
+    return;
+  }
   grid.innerHTML = resources.map(r => `
     <div class="resource-card">
       <i class="fas ${r.icon}"></i>
@@ -498,6 +502,10 @@ function renderDirectoryGrid() {
   const grid = document.getElementById("directory-grid-container");
   if (!grid) return;
   const members = window.db.getDirectory();
+  if (!members || !members.length) {
+    grid.innerHTML = `<p class="text-secondary text-center">No ambassadors listed yet.</p>`;
+    return;
+  }
   grid.innerHTML = members.map(m => `
     <div class="directory-card">
       <div class="directory-avatar">${m.initials}</div>

@@ -23,11 +23,6 @@ document.addEventListener("DOMContentLoaded", () => {
   renderEventsGrid();
   renderResourcesGrid();
   renderDirectoryGrid();
-  
-  // Update admin page table initially
-  if (window.admin) {
-    window.admin.renderData();
-  }
 });
 
 // 2. THEME SYSTEM

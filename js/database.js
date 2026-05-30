@@ -331,7 +331,6 @@ class ORMDatabase {
       if (window.renderBlogsGrid) window.renderBlogsGrid();
       if (window.renderStoriesGrid) window.renderStoriesGrid();
       if (window.renderEventsGrid) window.renderEventsGrid();
-      if (window.admin) window.admin.renderData();
     } catch (err) {
       console.error("Failed to pull from Supabase:", err);
     }

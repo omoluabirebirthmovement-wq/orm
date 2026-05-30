@@ -31,7 +31,7 @@ class ORMAdminDashboard {
           if (errorEl) errorEl.style.display = "none";
           document.getElementById("admin-email").value = "";
           document.getElementById("admin-password").value = "";
-          this.renderData();
+          window.router("admin-view");
         } else {
           if (errorEl) errorEl.style.display = "block";
         }

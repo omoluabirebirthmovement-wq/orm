@@ -23,6 +23,14 @@ document.addEventListener("DOMContentLoaded", () => {
   renderEventsGrid();
   renderResourcesGrid();
   renderDirectoryGrid();
+  
+  // Initialize New Automation Features (features.js)
+  if (window.initPledgeWall) window.initPledgeWall();
+  if (window.initEventCountdown) window.initEventCountdown();
+  if (window.initDonationProgressBar) window.initDonationProgressBar();
+  if (window.initLiveStats) window.initLiveStats();
+  if (window.initSchoolRegistration) window.initSchoolRegistration();
+  if (window.initPushNotifications) window.initPushNotifications();
 });
 
 // 2. THEME SYSTEM

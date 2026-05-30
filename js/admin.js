@@ -276,7 +276,7 @@ class ORMAdminDashboard {
           <td><span class="badge-status resolved">${v.role}</span></td>
           <td><span class="badge-status ${v.status}">${v.status}</span></td>
           <td>
-            ${v.status === 'pending' ? `<button class="btn btn-sm btn-primary" onclick="window.admin.approveVolunteer('${v.id}')">Approve</button>` : ''}
+            ${v.status === 'pending' ? `<button class="btn btn-sm btn-primary" onclick="window.admin.approveVolunteer('${v.id}')">Approve</button>` : `<button class="btn btn-sm" style="background:var(--accent);color:white;border:none;" onclick='window.generateCertificate(${JSON.stringify(v).replace(/'/g, "\\'")})'><i class="fas fa-certificate"></i> Generate ID</button>`}
             <button class="btn btn-sm btn-light" onclick="window.admin.deleteVolunteer('${v.id}')">Delete</button>
           </td>
         `;

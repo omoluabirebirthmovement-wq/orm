@@ -1,97 +1,124 @@
-/* Cultural Counseling AI Assistant (Omoluabi Guide) for ORM */
+/* ORM — Smart Cultural Counseling AI (Omoluabi Guide) v2 with Intent Routing */
 
 class OmoluabiChatbot {
   constructor() {
     this.name = "Omoluabi Guide";
-    this.greetings = [
-      "Aafia! I am the Omoluabi Guide. I am here to discuss character, legitimate skills, and help guide you through life's challenges. What is on your mind today?",
-      "Ẹ n lẹ! Welcome to the Omoluabi Counseling Portal. Here, you can talk to me about peer pressures, leaving dark paths, or building a sustainable future. How can I support you?"
+    this.intents = [
+      { keys: ["join","volunteer","ambassador","register","apply","member"],       route: "join-view",     label: "Go to Join Page" },
+      { keys: ["book","appointment","counselor","mentor","schedule","interview"],  route: "booking-view",  label: "Book a Session" },
+      { keys: ["report","cult","cultism","drug","anonymous","confraternity"],      route: "counsel-view",  label: "Submit Anonymous Report" },
+      { keys: ["event","summit","conference","training","bootcamp","workshop"],    route: "events-view",   label: "View Upcoming Events" },
+      { keys: ["blog","article","read","learn","post","news"],                     route: "blog-view",     label: "Read Our Blog" },
+      { keys: ["story","testimony","transformation","confession","repentance"],    route: "stories-view",  label: "Read Transformation Stories" },
+      { keys: ["donate","fund","support","sponsor","contribution"],                route: "partners-view", label: "Support ORM" },
+      { keys: ["media","video","watch","podcast","masterclass"],                   route: "media-view",    label: "Watch Our Media" },
+      { keys: ["pledge","integrity","commit","promise","vow"],                     route: "pledge-view",   label: "Sign the Integrity Pledge" },
+      { keys: ["school","principal","register school","host","outreach"],          route: "school-view",   label: "Register Your School" },
+      { keys: ["contact","address","office","location","reach"],                   route: "contact-view",  label: "Contact ORM" },
     ];
+  }
+
+  detectIntent(text) {
+    for (const intent of this.intents) {
+      if (intent.keys.some(k => text.includes(k))) return intent;
+    }
+    return null;
+  }
+
+  buildRouteBtn(intent) {
+    const waText = encodeURIComponent("Hello ORM! I need help with: " + intent.label);
+    return `<br><br>
+      <button onclick="window.router('${intent.route}'); document.getElementById('chatbot-widget').classList.remove('active');"
+        style="background:var(--primary);color:white;border:none;padding:10px 18px;border-radius:8px;cursor:pointer;font-weight:700;font-size:0.85rem;margin-right:8px;">
+        <i class="fas fa-arrow-right"></i> ${intent.label}
+      </button>
+      <a href="https://wa.me/2349049656467?text=${waText}" target="_blank"
+        style="display:inline-block;background:#25D366;color:white;padding:10px 18px;border-radius:8px;font-weight:700;font-size:0.85rem;text-decoration:none;">
+        <i class="fab fa-whatsapp"></i> Talk to Human
+      </a>`;
   }
 
   getResponse(userInput) {
     const text = userInput.toLowerCase().trim();
-    
-    // Greeting Checks
-    if (this.containsAny(text, ["hello", "hi", "hey", "n lẹ", "baawo", "welcome", "greetings"])) {
-      return "Greetings! How can I help you today? We can discuss digital skills, overcoming peer pressure, dealing with internet fraud, or how to speak to our counselors anonymously.";
+    const intent = this.detectIntent(text);
+
+    if (this.containsAny(text, ["hello","hi","hey","welcome","greetings","aafia","n le","baawo"])) {
+      return `Greetings! I am the <strong>Omoluabi Guide</strong> 🌿<br><br>
+              I can help you with:<br>
+              🔹 Leaving fraud or cybercrime<br>
+              🔹 Reporting cultism or drug abuse anonymously<br>
+              🔹 Finding legitimate digital skills and jobs<br>
+              🔹 Joining ORM as a volunteer or ambassador<br>
+              🔹 Booking a confidential counseling session<br><br>
+              Just tell me what is on your mind. I am here for you. 💚`;
     }
 
-    // Internet Fraud / Yahoo Yahoo
-    if (this.containsAny(text, ["yahoo", "fraud", "scam", "fast money", "client", "g-boy", "ritual", "cybercrime"])) {
-      return `<strong>The glitz of 'Yahoo-Yahoo' is a dangerous illusion.</strong><br><br>
-              In Yoruba culture, we say: <em>"Owo ti a ko ba sise fun, ko le pe lowo"</em> (Wealth gotten without labor does not last).<br><br>
-              Internet fraud leads to constant anxiety, legal danger (EFCC), and erodes your character. But we do not judge you. If you want to step away from this lifestyle, ORM is here to help you redirect your computer and technical skills into legitimate coding, writing, and digital design.<br><br>
-              👉 <a href="#booking" onclick="window.router('booking-view')"><strong>Book a Repentance & Transformation Consultation</strong></a> to speak with a mentor who will guide you onto a legal path. We keep all counseling 100% confidential.`;
+    if (this.containsAny(text, ["yahoo","fraud","scam","fast money","g-boy","ritual","cybercrime","419","client"])) {
+      return `<strong>The glitz of Yahoo-Yahoo is a dangerous illusion.</strong><br><br>
+              <em>"Owo ti a ko ba sise fun, ko le pe lowo"</em> — Wealth gotten without labor never lasts.<br><br>
+              Internet fraud causes anxiety, EFCC danger, and destroys your character permanently. We do not judge you — if you want to redirect your skills into legitimate coding, writing, or design, ORM will guide you step by step.
+              ${this.buildRouteBtn({route:"booking-view", label:"Book a Confidential Consultation"})}`;
     }
 
-    // Cultism & Violence
-    if (this.containsAny(text, ["cult", "cultism", "initiate", "aye", "eye", "confraternity", "violence", "threat"])) {
-      return `<strong>Your safety and character are worth more than any cult membership.</strong><br><br>
-              Cultism promises protection but brings only fear, violence, and premature death. Real power lies in character, self-discipline, and community building.<br><br>
-              If you are being intimidated or threatened to join a cult, or want to exit one safely:<br>
-              1. Do not agree to meet them in isolated locations.<br>
-              2. Submit a completely anonymous report to us.<br><br>
-              👉 <a href="#counseling" onclick="window.router('counsel-view')"><strong>Go to the Safe Reporting Portal</strong></a>. We will work secretly with local community leaders and schools to protect you without revealing your name.`;
+    if (this.containsAny(text, ["cult","initiate","confraternity","violence","threat","gang","aye","eye","black axe"])) {
+      return `<strong>Your safety and character are worth far more than any cult membership.</strong><br><br>
+              Cultism promises protection but delivers only fear, violence, and early death. Real power lies in your character and discipline.<br><br>
+              If you are being pressured to join or want to exit safely — report it anonymously. We work with schools and communities to protect you without revealing your identity.
+              ${this.buildRouteBtn({route:"counsel-view", label:"Submit Anonymous Report"})}`;
     }
 
-    // Drugs & Substance Abuse
-    if (this.containsAny(text, ["drug", "drugs", "codeine", "tramadol", "smoke", "loud", "colorado", "addiction", "abuse"])) {
+    if (this.containsAny(text, ["drug","codeine","tramadol","smoke","loud","addiction","abuse","substance","weed"])) {
       return `<strong>Addiction is a battle you do not have to fight alone.</strong><br><br>
-              Substance abuse acts as a temporary escape but slowly steals your health, focus, and future. We understand the pressures that lead to this, and we want to help you rebuild your strength.<br><br>
-              Our counselors can connect you with friendly, judgment-free support and rehabilitation partners.<br><br>
-              👉 <a href="#counseling" onclick="window.router('counsel-view')"><strong>Book counseling</strong></a> or call/WhatsApp our urgent help line: <strong>+234 9049656467</strong>. Healing starts with a single honest conversation.`;
+              Substance abuse slowly steals your health, focus, and future. Our counselors offer completely judgment-free support and can connect you with rehabilitation partners.<br><br>
+              📞 WhatsApp urgent help: <strong>+234 9049656467</strong>
+              ${this.buildRouteBtn({route:"counsel-view", label:"Book Counseling Session"})}`;
     }
 
-    // Depression / Mental Health
-    if (this.containsAny(text, ["depressed", "depression", "sad", "die", "suicide", "lonely", "stress", "pressure"])) {
-      return `<strong>Please hold on. You are extremely valuable, and this generation needs your unique story.</strong><br><br>
-              In tough moments, it feels like the darkness will never end, but support is available. We care about your life and your future.<br><br>
-              Please take a brave step and speak to one of our friendly counselors immediately. You can remain completely anonymous if you wish.<br><br>
-              📞 <strong>WhatsApp/Call:</strong> +234 9049656467<br>
-              👉 <a href="#counseling" onclick="window.router('counsel-view')"><strong>Submit an anonymous cry for help</strong></a> in our counseling tab, and a certified counselor will reach out to you within hours.`;
+    if (this.containsAny(text, ["depressed","depression","sad","die","suicide","lonely","hopeless","give up","no reason"])) {
+      return `<strong>Please hold on. You are extremely valuable. 💚</strong><br><br>
+              In tough moments, the darkness feels permanent — but support is here. You do not have to face this alone.<br><br>
+              Please speak to one of our counselors right now. You can remain completely anonymous.<br><br>
+              📞 <strong>Call or WhatsApp immediately: +234 9049656467</strong>
+              ${this.buildRouteBtn({route:"counsel-view", label:"Get Anonymous Help Now"})}`;
     }
 
-    // Digital Skills / Entrepreneurship
-    if (this.containsAny(text, ["skills", "digital", "coding", "code", "learn", "program", "work", "job", "money", "legit"])) {
-      return `<strong>The digital economy is full of legitimate wealth!</strong><br><br>
-              You don't need to scam when you can earn with honor. By learning software engineering, UI/UX design, copywriting, video editing, or marketing, you can work for international companies right from Nigeria.<br><br>
-              ORM offers free and discounted boot camps for motivated youths. In Yoruba, we say: <em>"Ise l'ogun ise"</em> (Hard work is the antidote to poverty).<br><br>
-              👉 <a href="#events" onclick="window.router('events-view')"><strong>Check our upcoming Events & boot camps</strong></a> or register to join our next cohort!`;
+    if (this.containsAny(text, ["skill","digital","coding","code","learn","program","job","legit","earn","freelance","design"])) {
+      return `<strong>The digital economy is full of legitimate wealth! 💻</strong><br><br>
+              Software engineering, UI/UX design, copywriting, video editing — all pay well from anywhere in Nigeria.<br><br>
+              ORM offers free workshops and boot camps for motivated youths. <em>"Ise l'ogun ise"</em> — Hard work is the cure for poverty.
+              ${this.buildRouteBtn({route:"events-view", label:"View Events & Boot Camps"})}`;
     }
 
-    // Yoruba Culture / Omoluabi Definition
-    if (this.containsAny(text, ["yoruba", "omoluabi", "culture", "meaning", "proverb", "what is"])) {
+    if (this.containsAny(text, ["yoruba","omoluabi","culture","meaning","proverb","about orm","what is"])) {
       return `<strong>An Omoluabi is a person of exceptional character.</strong><br><br>
-              It represents the highest moral standard in Yoruba civilization, centered on:<br>
-              • <strong>Otito</strong> (Truthfulness)<br>
-              • <strong>Iteriba</strong> (Respect and humility)<br>
-              • <strong>Inu rere</strong> (Good intentions toward others)<br>
-              • <strong>Oro siso</strong> (Keeping one's word)<br>
-              • <strong>Igboya</strong> (Moral courage)<br>
-              • <strong>Ise</strong> (Industriousness and honest labor)<br><br>
-              We believe that <em>"Iwa l'ewa"</em> (Character is beauty) and <em>"Ranti omo eni ti iwo nse"</em> (Remember whose child you are). Let us restore these values together!`;
+              The highest moral standard in Yoruba civilization:<br>
+              • <strong>Otito</strong> — Truthfulness<br>
+              • <strong>Iteriba</strong> — Respect and humility<br>
+              • <strong>Inu rere</strong> — Good intentions<br>
+              • <strong>Igboya</strong> — Moral courage<br>
+              • <strong>Ise</strong> — Industriousness<br><br>
+              <em>"Iwa l'ewa"</em> — Character is beauty. Let us restore these values together!
+              ${this.buildRouteBtn({route:"about-view", label:"Learn More About ORM"})}`;
     }
 
-    // Joining/Volunteering
-    if (this.containsAny(text, ["join", "volunteer", "ambassador", "register", "apply"])) {
-      return `<strong>We would love to have you in the movement!</strong><br><br>
-              Whether you want to be a school coordinator, volunteer your skills, or become an ambassador of change in your community, your voice is powerful.<br><br>
-              👉 <a href="#join" onclick="window.router('join-view')"><strong>Go to our Join Page</strong></a> and fill out our quick registration form. Together, we are rebuilding a generation.`;
+    // Smart intent routing — catches all other navigation requests
+    if (intent) {
+      return `I can help you with that! 🌿 Here is where you need to go:
+              ${this.buildRouteBtn(intent)}`;
     }
 
-    // Default response
-    return `Thank you for sharing that with me. As your Omoluabi Guide, I want to remind you that your character is your greatest wealth.<br><br>
-            If you are going through a difficult time, need help, or want to discuss skills development, you can:<br>
-            • Type keywords like 'fraud', 'drugs', 'skills', 'cultism', or 'depressed' for specific resources.<br>
-            • Send a WhatsApp message to our counseling hotline: <strong>+234 9049656467</strong>.<br>
-            • Speak directly to a human mentor by booking an appointment in the counseling tab.`;
+    return `Thank you for sharing. 🌿 As your Omoluabi Guide — <strong>your character is your greatest wealth.</strong><br><br>
+            Try typing a topic like:<br>
+            👉 <em>fraud, cultism, drugs, skills, join, report, pledge, donate, event, story</em><br><br>
+            Or reach a human counselor now:<br>
+            📞 <strong>WhatsApp: +234 9049656467</strong>
+            ${this.buildRouteBtn({route:"counsel-view", label:"Book a Counseling Session"})}`;
   }
 
   containsAny(text, keywords) {
-    return keywords.some(keyword => text.includes(keyword));
+    return keywords.some(k => text.includes(k));
   }
 }
 
 window.chatbot = new OmoluabiChatbot();
-console.log("Omoluabi AI Chatbot Engine online.");
+console.log("Omoluabi Smart Chatbot v2 — Intent routing active.");

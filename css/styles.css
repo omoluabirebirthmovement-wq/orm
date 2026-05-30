@@ -2609,6 +2609,201 @@ footer {
 /* ============================================ */
 @media (max-width: 480px) {
   .wa-followup-banner.active {
+  margin-top: 4px;
+}
+
+/* ============================================ */
+/* ADMIN EXPORT BUTTON                          */
+/* ============================================ */
+.export-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.8rem;
+  transition: var(--transition);
+}
+.export-btn:hover {
+  background: var(--primary);
+  color: var(--text-white);
+  border-color: var(--primary);
+}
+
+/* ============================================ */
+/* ADMIN CHARTS                                 */
+/* ============================================ */
+.admin-charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+.chart-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--border-radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+.chart-card h4 {
+  font-size: 0.95rem;
+  margin-bottom: 15px;
+  color: var(--text-secondary);
+}
+.chart-card canvas {
+  width: 100% !important;
+  max-height: 200px;
+}
+
+/* ============================================ */
+/* ADMIN USERS TABLE                            */
+/* ============================================ */
+.admin-user-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 20px;
+  background: var(--bg-tertiary);
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+/* ============================================ */
+/* RESPONSIVE ADDITIONS                         */
+/* ============================================ */
+@media (max-width: 768px) {
+  .admin-charts-grid {
+    grid-template-columns: 1fr;
+  }
+  .admin-user-form {
+    grid-template-columns: 1fr;
+  }
+  .resources-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================ */
+/* WHATSAPP FOLLOW-UP SLIDE BANNER              */
+/* ============================================ */
+.wa-followup-banner {
+  position: fixed;
+  bottom: -120px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  width: calc(100% - 32px);
+  max-width: 520px;
+  transition: bottom 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none;
+}
+
+.wa-followup-banner.active {
+  bottom: 24px;
+  pointer-events: auto;
+}
+
+.wa-followup-inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #1a1a2e;
+  border: 1px solid rgba(37, 211, 102, 0.35);
+  border-radius: 16px;
+  padding: 14px 16px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.45), 0 0 0 1px rgba(37,211,102,0.12);
+  backdrop-filter: blur(10px);
+}
+
+.wa-followup-icon {
+  width: 44px;
+  height: 44px;
+  background: #25D366;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: white;
+  flex-shrink: 0;
+}
+
+.wa-followup-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.wa-followup-title {
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: #fff;
+  margin-bottom: 2px;
+}
+
+.wa-followup-sub {
+  font-size: 0.76rem;
+  color: rgba(255,255,255,0.6);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wa-followup-cta {
+  background: #25D366;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 9px 18px;
+  font-weight: 700;
+  font-size: 0.82rem;
+  text-decoration: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+
+.wa-followup-cta:hover {
+  background: #1ebe5a;
+}
+
+.wa-followup-close {
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,0.45);
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 4px 6px;
+  flex-shrink: 0;
+  transition: color 0.2s;
+}
+
+.wa-followup-close:hover {
+  color: rgba(255,255,255,0.9);
+}
+
+/* ============================================ */
+/* VIDEO GUIDE MODAL ENHANCEMENTS               */
+/* ============================================ */
+#video-guide-modal .modal-content {
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+#video-guide-modal .modal-body {
+  padding: 24px;
+}
+
+/* ============================================ */
+/* RESPONSIVE — BANNER MOBILE                   */
+/* ============================================ */
+@media (max-width: 480px) {
+  .wa-followup-banner.active {
     bottom: 80px; /* above floating buttons */
   }
   .wa-followup-sub {
@@ -2618,4 +2813,150 @@ footer {
     padding: 12px;
     gap: 10px;
   }
+}
+
+/* ============================================ */
+/* 10 NEW FEATURES — CSS COMPONENTS             */
+/* ============================================ */
+
+/* Pledge Wall */
+.pledge-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+.pledge-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-secondary);
+  padding: 6px 12px 6px 6px;
+  border-radius: 30px;
+  border: 1px solid var(--border);
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  animation: slideUpFade 0.5s ease;
+}
+.pledge-avatar {
+  width: 24px;
+  height: 24px;
+  background: var(--primary);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+.pledge-loc {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+.pledge-chip-more {
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* Countdown Widget */
+.countdown-widget {
+  background: linear-gradient(135deg, var(--primary) 0%, #062b1b 100%);
+  border-radius: 16px;
+  padding: 24px;
+  color: white;
+  text-align: center;
+  margin: 0 auto;
+  max-width: 600px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.countdown-label {
+  font-size: 0.95rem;
+  margin-bottom: 15px;
+  color: rgba(255,255,255,0.8);
+}
+.countdown-label strong {
+  color: var(--accent);
+}
+.countdown-timer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+.countdown-unit {
+  display: flex;
+  flex-direction: column;
+  background: rgba(0,0,0,0.3);
+  padding: 10px 15px;
+  border-radius: 12px;
+  min-width: 70px;
+}
+.countdown-num {
+  font-size: 2rem;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  line-height: 1;
+}
+.countdown-sub {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+  margin-top: 4px;
+}
+.countdown-sep {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: rgba(255,255,255,0.4);
+}
+.countdown-location {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.7);
+}
+
+/* Donation Progress Bar */
+.donation-progress-wrap {
+  margin: 20px 0;
+}
+.donation-progress-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.donation-progress-track {
+  width: 100%;
+  height: 12px;
+  background: var(--bg-tertiary);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.donation-progress-fill {
+  height: 100%;
+  background: var(--accent);
+  width: 0%;
+  transition: width 1.5s cubic-bezier(0.1, 0.7, 0.1, 1);
+}
+.donor-chip {
+  display: inline-block;
+  background: var(--bg-tertiary);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  margin: 4px;
+  border: 1px solid var(--border);
+}
+
+/* Nav Controls Extra */
+.notify-btn {
+  color: var(--accent) !important;
+}
+.notify-btn[disabled] {
+  opacity: 0.6;
+  cursor: default;
 }

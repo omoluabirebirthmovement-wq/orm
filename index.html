@@ -79,6 +79,8 @@
         <div class="nav-dropdown">
           <button class="nav-dropdown-trigger"><i class="fas fa-ellipsis-h"></i> More</button>
           <div class="nav-dropdown-menu">
+            <a href="#pledge" data-translate="nav-pledge"><i class="fas fa-file-signature"></i> Integrity Pledge</a>
+            <a href="#school" data-translate="nav-school"><i class="fas fa-school"></i> School Outreach</a>
             <a href="#bookreview" data-translate="nav-bookreview"><i class="fas fa-book-open"></i> Book Review</a>
             <a href="#booking" data-translate="nav-booking"><i class="fas fa-calendar-check"></i> Book Interview</a>
             <a href="#counsel" data-translate="nav-counsel"><i class="fas fa-hands-helping"></i> Counseling & Report</a>
@@ -91,6 +93,9 @@
       
       <!-- Utility Controllers -->
       <div class="nav-controls">
+        <button id="push-notify-btn" class="btn-control notify-btn" aria-label="Enable Push Notifications" title="Enable Notifications">
+          <i class="fas fa-bell"></i>
+        </button>
         <button id="lang-toggle" class="btn-control lang-btn" aria-label="Change Language">
           <i class="fas fa-globe"></i> Yoruba
         </button>
@@ -183,6 +188,17 @@
           <h3 id="stat-count-sponsors">15+</h3>
           <p data-translate="stats-partners">Sponsor Partners</p>
         </div>
+        <div class="stat-item">
+          <h3 id="stat-count-pledges">0</h3>
+          <p>Integrity Pledges</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Event Countdown Widget -->
+    <div class="section-padding" style="padding-top:0;">
+      <div class="container">
+        <div id="event-countdown-widget" class="countdown-widget"></div>
       </div>
     </div>
 
@@ -739,6 +755,97 @@
   </section>
 
   <!-- ==================================================== -->
+  <!-- PLEDGE VIEW                                          -->
+  <!-- ==================================================== -->
+  <section id="pledge-view" class="view-section">
+    <div class="section-padding container">
+      <div class="text-center">
+        <h2 class="section-title">The Omoluabi Integrity Pledge</h2>
+        <p class="section-subtitle">Commit to a life of character, respect, and honest labor. Join thousands of Nigerians saying NO to fast money.</p>
+      </div>
+      <div class="form-card" style="max-width:600px; margin: 0 auto 40px auto; text-align:center;">
+        <h3 style="margin-bottom:15px;"><i class="fas fa-file-signature highlight-gold"></i> Sign the Pledge</h3>
+        <p style="font-size:0.9rem; margin-bottom:20px; color:var(--text-secondary);">"I pledge to uphold the values of Omoluabi. I choose integrity over fast money, character over corruption, and hard work over fraud."</p>
+        <form id="pledge-form">
+          <div class="form-group" style="text-align:left;">
+            <label>Your Name</label>
+            <input type="text" id="pledge-name" required placeholder="e.g. Adebayo S.">
+          </div>
+          <div class="form-group" style="text-align:left;">
+            <label>Your State</label>
+            <input type="text" id="pledge-state" required placeholder="e.g. Lagos">
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;"><i class="fas fa-check-circle"></i> Sign Pledge</button>
+        </form>
+      </div>
+      <div style="text-align:center; margin-bottom:30px;">
+        <h3>Wall of Integrity</h3>
+        <p style="color:var(--text-secondary); font-size:0.9rem;">Join the growing list of honorable Nigerians.</p>
+      </div>
+      <div id="pledge-names-list" class="pledge-grid"></div>
+    </div>
+  </section>
+
+  <!-- ==================================================== -->
+  <!-- SCHOOL REGISTRATION VIEW                             -->
+  <!-- ==================================================== -->
+  <section id="school-view" class="view-section">
+    <div class="section-padding container">
+      <div class="text-center">
+        <h2 class="section-title">School Outreach Registration</h2>
+        <p class="section-subtitle">Register your school to host the Omoluabi Youth Orientation & Digital Skills Summit.</p>
+      </div>
+      <div class="form-card" style="max-width:700px; margin: 0 auto;">
+        <form id="school-reg-form">
+          <div class="grid-2">
+            <div class="form-group">
+              <label>School Name</label>
+              <input type="text" id="sch-name" required>
+            </div>
+            <div class="form-group">
+              <label>Principal/Admin Name</label>
+              <input type="text" id="sch-principal" required>
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label>Official Email</label>
+              <input type="email" id="sch-email" required>
+            </div>
+            <div class="form-group">
+              <label>Contact Phone</label>
+              <input type="tel" id="sch-phone" required>
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label>State & City</label>
+              <input type="text" id="sch-state" required>
+            </div>
+            <div class="form-group">
+              <label>Estimated Student Population</label>
+              <select id="sch-students">
+                <option value="100-500">100 - 500</option>
+                <option value="500-1000">500 - 1,000</option>
+                <option value="1000+">1,000+</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>School Address</label>
+            <input type="text" id="sch-address" required>
+          </div>
+          <div class="form-group">
+            <label>Specific Challenges (Cultism, Drugs, etc) - Optional</label>
+            <textarea id="sch-notes" rows="3" placeholder="Tell us what your students are struggling with..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;">Submit Request</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================== -->
   <!-- 9. INTERVIEW & TESTIMONY BOOKING VIEW                -->
   <!-- ==================================================== -->
   <section id="booking-view" class="view-section">
@@ -985,8 +1092,22 @@
   <section id="partners-view" class="view-section">
     <div class="section-padding container">
       <div class="text-center">
-        <h1 data-translate="nav-partners">Ifọwọsowọpọ</h1>
+        <h1 data-translate="nav-partners">Partnerships & Sponsorship</h1>
         <p class="section-subtitle">Support our educational hubs, community outreach summits, and school tour logistics. Donate legitimally.</p>
+      </div>
+
+      <!-- Donation Progress Bar -->
+      <div style="max-width:700px; margin: 0 auto 30px auto; background:var(--bg-secondary); padding:25px; border-radius:16px; border:1px solid var(--border);">
+        <div class="donation-progress-meta">
+          <span>Raised: <span id="donation-raised-amount" style="color:var(--accent);">₦0</span></span>
+          <span>Goal: <span id="donation-goal-amount">₦500,000</span></span>
+        </div>
+        <div class="donation-progress-track">
+          <div id="donation-progress-bar" class="donation-progress-fill"></div>
+        </div>
+        <div style="margin-top:15px; font-size:0.85rem; color:var(--text-secondary);">
+          <strong>Recent Sponsors:</strong> <span id="recent-donors-list">Loading...</span>
+        </div>
       </div>
 
       <!-- Donation form details -->
@@ -1206,6 +1327,8 @@
           <div class="admin-table-header">
             <h3 id="admin-table-title" style="font-size:1.2rem; font-family:var(--font-heading)">Volunteer Applications</h3>
             <div style="display:flex; gap:8px;">
+              <button class="export-btn" style="background:#25D366; color:white; border-color:#25D366;" onclick="window.generateBroadcast('volunteers')"><i class="fab fa-whatsapp"></i> Broadcast to Vols</button>
+              <button class="export-btn" style="background:#25D366; color:white; border-color:#25D366;" onclick="window.generateBroadcast('rsvps')"><i class="fab fa-whatsapp"></i> Broadcast to RSVPs</button>
               <button class="export-btn" onclick="window.admin.exportTableToCSV('orm_export.csv')"><i class="fas fa-download"></i> Export CSV</button>
               <button class="btn btn-primary btn-sm" onclick="window.router('join-view')">Add New Record</button>
             </div>
@@ -1350,6 +1473,35 @@
       </div>
     </div>
   </div>
+  </div>
+
+  <!-- Social Share Modal -->
+  <div id="social-share-modal" class="modal-overlay">
+    <div class="modal-content" style="max-width:400px;">
+      <div class="modal-header">
+        <h3><i class="fas fa-share-alt"></i> Share the Movement</h3>
+        <button class="modal-close"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body" id="social-share-body">
+        <!-- Injected via features.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin Broadcast Modal -->
+  <div id="broadcast-modal" class="modal-overlay">
+    <div class="modal-content" style="max-width:550px;">
+      <div class="modal-header">
+        <h3><i class="fab fa-whatsapp highlight-green"></i> WhatsApp Broadcast Generator</h3>
+        <button class="modal-close"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <p style="margin-bottom:15px;font-size:0.9rem;color:var(--text-secondary);">Copy this text and paste it into WhatsApp Business Broadcast.</p>
+        <textarea id="broadcast-output" readonly style="width:100%;height:300px;font-family:monospace;font-size:0.85rem;padding:12px;background:var(--bg-tertiary);color:var(--text-primary);border:1px solid var(--border);border-radius:8px;"></textarea>
+        <button id="broadcast-copy-btn" class="btn btn-primary" style="width:100%;margin-top:15px;"><i class="fas fa-copy"></i> Copy Broadcast List</button>
+      </div>
+    </div>
+  </div>
 
   <!-- General Layout Footer -->
   <footer>
@@ -1418,6 +1570,7 @@
   <script src="js/chatbot.js?v=2"></script>
   <script src="js/admin.js?v=2"></script>
   <script src="js/video-guide.js?v=1"></script>
+  <script src="js/features.js?v=1"></script>
   <script src="js/app.js?v=3"></script>
 </body>
 </html>

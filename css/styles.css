@@ -1780,21 +1780,12 @@ textarea {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(0,0,0,0.7);
-  backdrop-filter: blur(4px);
   align-items: center;
   justify-content: center;
   z-index: 9999;
-  opacity: 0;
-  transition: opacity 0.3s ease;
 }
 .admin-login-overlay.active {
   display: flex;
-  opacity: 1;
-}
-.admin-login-overlay.active {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
 }
 .admin-login-box {
   background: var(--bg-secondary);

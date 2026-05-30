@@ -401,6 +401,7 @@ header {
 
 /* Mobile Nav Overlay */
 .mobile-nav-overlay {
+  display: none;
   visibility: hidden;
   position: fixed;
   top: 0;
@@ -415,6 +416,7 @@ header {
 }
 
 .mobile-nav-overlay.visible {
+  display: block;
   visibility: visible;
   opacity: 1;
   pointer-events: auto;
@@ -594,6 +596,7 @@ header {
   background-size: 40px 40px;
   background-position: 0 0, 20px 20px;
   z-index: 1;
+  pointer-events: none;
 }
 
 .hero .container {
@@ -2096,9 +2099,6 @@ footer {
   .hamburger-btn {
     display: flex;
   }
-  .mobile-nav-overlay {
-    display: block;
-  }
   .mobile-nav-drawer {
     display: block;
   }
@@ -2151,9 +2151,6 @@ footer {
   }
   .hamburger-btn {
     display: flex;
-  }
-  .mobile-nav-overlay {
-    display: block;
   }
   .mobile-nav-drawer {
     display: block;

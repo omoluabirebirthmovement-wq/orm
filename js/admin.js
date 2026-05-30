@@ -2,8 +2,8 @@
 
 // Default admin credentials (change these in production)
 const ADMIN_CREDENTIALS = {
-  email: "admin@orm.org",
-  password: "Admin@123"
+  email: "omoluabirebirthmovement@gmail.com",
+  password: "Covid-19@#"
 };
 
 class ORMAdminDashboard {

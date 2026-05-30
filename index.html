@@ -42,13 +42,238 @@
         <div>
           <div style="font-size:0.95rem; font-weight:700;">Omoluabi Guide</div>
           <div style="font-size:0.7rem; opacity:0.8;">Cultural Counseling AI</div>
+        </div>
       </div>
-      <!-- Media Upload CTA -->
-      <div class="form-card text-center" style="max-width: 500px; margin: 40px auto 0;">
-        <i class="fas fa-upload" style="font-size:2rem; color:var(--accent); margin-bottom:15px;"></i>
-        <h4 style="margin-bottom:10px;">Submit Your Media</h4>
-        <p class="text-secondary" style="font-size:0.85rem; margin-bottom:15px;">Share your testimonial video, podcast, or digital skills tutorial for review by our media team.</p>
-        <button class="btn btn-primary" onclick="window.showToast('Media upload portal coming soon. Send your files via WhatsApp to +234 9049656467.')"><i class="fas fa-upload"></i> Upload Media</button>
+      <button id="chatbot-close-btn" class="chatbot-close"><i class="fas fa-times"></i></button>
+    </div>
+    <div id="chatbot-messages-feed" class="chatbot-messages">
+      <!-- Chat bubbles loaded dynamically -->
+    </div>
+    <div class="chatbot-input-area">
+      <input type="text" id="chatbot-input-field" class="chatbot-input" placeholder="Ask about fraud, skills, counseling...">
+      <button id="chatbot-send-btn" class="chatbot-send"><i class="fas fa-paper-plane"></i></button>
+    </div>
+  </div>
+
+  <!-- Header Section with Language and Theme Toggles -->
+  <header>
+    <div class="container navbar">
+      <a href="#home" class="logo" id="main-logo-link">
+        <img src="images/logo.png" alt="ORM Logo" style="height: 48px; width: auto; object-fit: contain;">
+        <div class="logo-text">
+          <div class="logo-title">ORM</div>
+          <div class="logo-tagline" data-translate="tagline">“Rebuilding a Generation.”</div>
+        </div>
+      </a>
+      
+      <!-- Primary Multi-Page Navigation Links -->
+      <nav class="nav-links">
+        <a href="#home" class="active" data-translate="nav-home">Home</a>
+        <a href="#about" data-translate="nav-about">About ORM</a>
+        <a href="#join" data-translate="nav-join">Join</a>
+        <a href="#stories" data-translate="nav-stories">Stories</a>
+        <a href="#events" data-translate="nav-events">Outreach & Events</a>
+        <a href="#media" data-translate="nav-media">Media</a>
+        <a href="#blog" data-translate="nav-blog">Blog</a>
+        <!-- More Dropdown -->
+        <div class="nav-dropdown">
+          <button class="nav-dropdown-trigger"><i class="fas fa-ellipsis-h"></i> More</button>
+          <div class="nav-dropdown-menu">
+            <a href="#bookreview" data-translate="nav-bookreview"><i class="fas fa-book-open"></i> Book Review</a>
+            <a href="#booking" data-translate="nav-booking"><i class="fas fa-calendar-check"></i> Book Interview</a>
+            <a href="#counsel" data-translate="nav-counsel"><i class="fas fa-hands-helping"></i> Counseling & Report</a>
+            <a href="#partners" data-translate="nav-partners"><i class="fas fa-handshake"></i> Partnerships</a>
+            <a href="#contact" data-translate="nav-contact"><i class="fas fa-envelope"></i> Contact</a>
+            <a href="#admin" data-translate="nav-admin" style="color: var(--accent);"><i class="fas fa-lock"></i> Admin</a>
+          </div>
+        </div>
+      </nav>
+      
+      <!-- Utility Controllers -->
+      <div class="nav-controls">
+        <button id="lang-toggle" class="btn-control lang-btn" aria-label="Change Language">
+          <i class="fas fa-globe"></i> Yoruba
+        </button>
+        <button id="theme-toggle" class="btn-control" aria-label="Change Theme">
+          <i class="fas fa-moon"></i> Dark Mode
+        </button>
+      </div>
+
+      <!-- Hamburger Menu Button (tablet/mobile) -->
+      <button class="hamburger-btn" id="hamburger-btn" aria-label="Toggle Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Nav Overlay -->
+  <div class="mobile-nav-overlay" id="mobile-nav-overlay"></div>
+
+  <!-- Mobile Navigation Drawer -->
+  <nav class="mobile-nav-drawer" id="mobile-nav-drawer">
+    <a href="#home" class="active" data-translate="nav-home"><i class="fas fa-home"></i> Home</a>
+    <a href="#about" data-translate="nav-about"><i class="fas fa-info-circle"></i> About ORM</a>
+    <a href="#join" data-translate="nav-join"><i class="fas fa-hand-holding-heart"></i> Join</a>
+    <a href="#stories" data-translate="nav-stories"><i class="fas fa-book-open"></i> Stories</a>
+    <a href="#events" data-translate="nav-events"><i class="fas fa-calendar-alt"></i> Outreach & Events</a>
+    <a href="#media" data-translate="nav-media"><i class="fas fa-photo-video"></i> Media</a>
+    <a href="#blog" data-translate="nav-blog"><i class="fas fa-newspaper"></i> Blog</a>
+    <a href="#bookreview" data-translate="nav-bookreview"><i class="fas fa-book-open"></i> Book Review</a>
+    <a href="#booking" data-translate="nav-booking"><i class="fas fa-calendar-check"></i> Book Interview</a>
+    <a href="#counsel" data-translate="nav-counsel"><i class="fas fa-hands-helping"></i> Counseling & Report</a>
+    <a href="#partners" data-translate="nav-partners"><i class="fas fa-handshake"></i> Partnerships</a>
+    <a href="#contact" data-translate="nav-contact"><i class="fas fa-envelope"></i> Contact</a>
+    <a href="#admin" data-translate="nav-admin" style="color: var(--accent);"><i class="fas fa-lock"></i> Admin</a>
+    <div class="mobile-nav-controls">
+      <button id="mobile-lang-toggle" class="btn-control lang-btn" aria-label="Change Language">
+        <i class="fas fa-globe"></i> Yoruba
+      </button>
+      <button id="mobile-theme-toggle" class="btn-control" aria-label="Change Theme">
+        <i class="fas fa-moon"></i> Dark Mode
+      </button>
+    </div>
+  </nav>
+
+  <!-- ==================================================== -->
+  <!-- 1. HOME PAGE VIEW                                    -->
+  <!-- ==================================================== -->
+  <section id="home-view" class="view-section active">
+    <!-- Cinematic Hero Section -->
+    <div class="hero">
+      <div class="hero-background-pattern"></div>
+      <div class="container">
+        <div class="hero-content">
+          <span class="hero-badge" data-translate="hero-badge-txt">A Social & Cultural Reform Movement</span>
+          <h1 class="hero-title" data-translate="hero-title-txt">Rebuilding a Generation of Integrity and Purpose</h1>
+          <p class="hero-description" data-translate="hero-desc-txt">A youth-focused initiative restoring honor, discipline, positive identity, and legitimate leadership among teenagers and youths across Nigeria and Africa.</p>
+          <div class="hero-buttons">
+            <button class="btn btn-primary" data-route="join-view" data-translate="cta-join">Join ORM</button>
+            <button class="btn btn-accent" data-route="stories-view" data-translate="cta-stories">Watch Stories</button>
+            <button class="btn btn-light" data-route="join-view" data-translate="cta-ambassador">Become Ambassador</button>
+          </div>
+        </div>
+        
+        <!-- Premium Visual Banner Cover -->
+        <div class="hero-media">
+          <div class="hero-image-wrapper">
+            <img src="images/e0bbb8c9-c1e0-442b-9800-93153d6ffa2bwf.png" alt="Omoluabi Rebirth Movement Banner" class="hero-media-cover" style="width: 100%; height: auto; border-radius: var(--border-radius); object-fit: cover; border: 2px solid var(--accent);">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Movement Statistics Counters -->
+    <div class="stats-bar">
+      <div class="container stats-grid">
+        <div class="stat-item">
+          <h3 id="stat-count-vols">4,850+</h3>
+          <p data-translate="stats-members">Active Members</p>
+        </div>
+        <div class="stat-item">
+          <h3 id="stat-count-schools">120+</h3>
+          <p data-translate="stats-schools">Schools Reached</p>
+        </div>
+        <div class="stat-item">
+          <h3 id="stat-count-reformed">350+</h3>
+          <p data-translate="stats-reformed">Reformed Youths</p>
+        </div>
+        <div class="stat-item">
+          <h3 id="stat-count-sponsors">15+</h3>
+          <p data-translate="stats-partners">Sponsor Partners</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Core Movement Pillars Grid -->
+    <div class="section-padding">
+      <div class="container text-center">
+        <h2 class="section-title" data-translate="pillars-title">Core Pillars of the Rebirth</h2>
+        <p class="section-subtitle" data-translate="pillars-subtitle">Our strategic approach to social transformation and behavioral reform.</p>
+        
+        <div class="pillars-grid">
+          <div class="pillar-card">
+            <div class="pillar-icon"><i class="fas fa-landmark"></i></div>
+            <h3 data-translate="pillar1-title">Cultural Orientation</h3>
+            <p data-translate="pillar1-desc">Restoring the core values of Omoluabi (character, respect, integrity, truth, and community pride).</p>
+          </div>
+          
+          <div class="pillar-card">
+            <div class="pillar-icon"><i class="fas fa-laptop-code"></i></div>
+            <h3 data-translate="pillar2-title">Legitimate Skillsets</h3>
+            <p data-translate="pillar2-desc">Guiding youths away from cybercrime by teaching digital skills, coding, enterprise, and copywriting.</p>
+          </div>
+          
+          <div class="pillar-card">
+            <div class="pillar-icon"><i class="fas fa-users-rays"></i></div>
+            <h3 data-translate="pillar3-title">Peer Restructuring</h3>
+            <p data-translate="pillar3-desc">Forming secure Omoluabi Clubs in high schools to dismantle cultism, drug distribution, and vices.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Transformational Testimonials Slider -->
+    <div class="section-padding testimonial-section">
+      <div class="container">
+        <div class="text-center">
+          <h2 class="section-title">Rebuilt Hearts, Rebuilt Lives</h2>
+          <p class="section-subtitle">Real experiences shared by youths and community families across Nigeria.</p>
+        </div>
+        
+        <div class="slider-container">
+          <div class="slider-wrapper">
+            <div class="slide">
+              <div class="testimonial-card">
+                <p class="testimonial-text">"Before ORM reached my school in Lagos, cybercrime was seen as the only ticket to survival. Today, I am proud to earn legitimately as a web programmer. Character is indeed wealth."</p>
+                <div class="testimonial-author">Adefemi A.</div>
+                <div class="testimonial-role">Reformed Software Engineer</div>
+              </div>
+            </div>
+            <div class="slide">
+              <div class="testimonial-card">
+                <p class="testimonial-text">"As a mother, the unexplained assets my secondary school boy started bringing home was breaking my heart. The ORM counseling team saved my family. They gave my son back his purpose."</p>
+                <div class="testimonial-author">Mrs. Funmilayo Bello</div>
+                <div class="testimonial-role">Parent, Ibadan</div>
+              </div>
+            </div>
+            <div class="slide">
+              <div class="testimonial-card">
+                <p class="testimonial-text">"We stand together under the Omoluabi creed to reject secondary school cult activities. Our class clubs have created safe spaces for students to support one another legally."</p>
+                <div class="testimonial-author">Olumide S.</div>
+                <div class="testimonial-role">ORM High School Ambassador</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="slider-nav">
+            <button class="slider-dot active" aria-label="Slide 1"></button>
+            <button class="slider-dot" aria-label="Slide 2"></button>
+            <button class="slider-dot" aria-label="Slide 3"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- public Quick Join Action Banner -->
+    <div class="section-padding">
+      <div class="container form-card text-center" style="max-width: 800px; background: linear-gradient(135deg, var(--primary), var(--primary-hover)); color: white;">
+        <h2 style="font-size:2.2rem; margin-bottom:15px; font-family:var(--font-heading)">Join the Generation Rebuilder</h2>
+        <p style="margin-bottom:30px; font-size:1.05rem; opacity:0.9">Become a volunteer, coordinate an outreach, or register your community school for character summits.</p>
+        <button class="btn btn-accent btn-lg" data-route="join-view">Launch Application Form</button>
+      </div>
+    </div>
+
+    <!-- Newsletter Sign-up Section -->
+    <div class="section-padding" style="background-color: var(--bg-secondary); border-top: 1px solid var(--border)">
+      <div class="container text-center" style="max-width: 600px;">
+        <h3>Subscribe to Rebirth Updates</h3>
+        <p class="text-secondary" style="margin-bottom:20px;">Receive notifications about school tours, digital training camps, and news reports.</p>
+        <form class="newsletter-form-el" style="display:flex; gap:10px;">
+          <input type="email" placeholder="Your Email Address" required style="flex-grow:1;">
+          <button type="submit" class="btn btn-primary">Subscribe</button>
+        </form>
       </div>
     </div>
   </section>
@@ -229,9 +454,9 @@
               <textarea id="vol-reason" required placeholder="Write a brief statement about your desire to help rebuild this generation..."></textarea>
             </div>
           </div>
-          
-          <div id="captcha-volunteer" class="captcha-container" style="margin-top:15px;"></div>
-          <button type="submit" class="btn btn-primary" style="width:100%; margin-top:20px;" data-translate="btn-submit-join">Submit Application</button>
+            
+            <div id="captcha-volunteer" class="captcha-container" style="margin-top:15px;"></div>
+            <button type="submit" class="btn btn-primary" style="width:100%; margin-top:20px;" data-translate="btn-submit-join">Submit Application</button>
         </form>
       </div>
     </div>
@@ -412,6 +637,14 @@
             <p class="text-secondary" style="font-size:0.85rem; margin-top:8px;">How to start legal freelance careers: software design, graphics, coding, and remote writing.</p>
           </div>
         </div>
+      </div>
+
+      <!-- Media Upload CTA -->
+      <div class="form-card text-center" style="max-width: 500px; margin: 40px auto 0;">
+        <i class="fas fa-upload" style="font-size:2rem; color:var(--accent); margin-bottom:15px;"></i>
+        <h4 style="margin-bottom:10px;">Submit Your Media</h4>
+        <p class="text-secondary" style="font-size:0.85rem; margin-bottom:15px;">Share your testimonial video, podcast, or digital skills tutorial for review by our media team.</p>
+        <button class="btn btn-primary" onclick="window.showToast('Media upload portal coming soon. Send your files via WhatsApp to +234 9049656467.')"><i class="fas fa-upload"></i> Upload Media</button>
       </div>
     </div>
   </section>

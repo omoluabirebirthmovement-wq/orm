@@ -364,11 +364,22 @@ class ORMAdminDashboard {
       });
     }
 
-    // Show/hide charts and admin users containers
+    // Show/hide specific containers based on active tab
+    const tableContainer = document.querySelector(".admin-table-container");
+    if (tableContainer) {
+      tableContainer.style.display = ["volunteers", "bookings", "reports", "donations"].includes(this.activeTab) ? "block" : "none";
+    }
+    const strategyContainer = document.getElementById("admin-strategy-container");
+    if (strategyContainer) {
+      strategyContainer.style.display = this.activeTab === "strategy" ? "block" : "none";
+    }
+
     document.getElementById("admin-charts-container").style.display = this.activeTab === "charts" ? "block" : "none";
     document.getElementById("admin-users-container").style.display = this.activeTab === "adminusers" ? "block" : "none";
+    
     if (this.activeTab === "charts") this.renderCharts();
     if (this.activeTab === "adminusers") this.renderAdminUsers();
+    if (this.activeTab === "strategy") this.renderStrategyChecklist();
   }
 
   // --- ACTIONS ---
@@ -445,6 +456,71 @@ class ORMAdminDashboard {
     if (window.renderBlogsGrid) {
       window.renderBlogsGrid();
     }
+  }
+
+  // --- STRATEGY CHECKLIST LOGIC ---
+  renderStrategyChecklist() {
+    const container = document.getElementById("strategy-checklist-content");
+    if (!container) return;
+
+    // Default tasks configuration
+    const defaultTasks = [
+      { id: "task_1", phase: "Phase 1: Foundation & Recruitment", text: "Launch Initial Movement Advert Campaign." },
+      { id: "task_2", phase: "Phase 1: Foundation & Recruitment", text: "Collaborate with NINUOYO TV FACEBOOK PAGE to blast advert and assist in recruitment." },
+      { id: "task_3", phase: "Phase 1: Foundation & Recruitment", text: "Review and approve first 50 volunteer applications." },
+      { id: "task_4", phase: "Phase 2: Digital Content Launch", text: "Record the 'Illusion vs. Reality' Anti-Fraud video." },
+      { id: "task_5", phase: "Phase 2: Digital Content Launch", text: "Post daily 'Omoluabi Creed' reminders to WhatsApp groups." },
+      { id: "task_6", phase: "Phase 3: Human Outreach", text: "Schedule the first Physical School Summit." }
+    ];
+
+    // Load saved progress
+    const savedState = JSON.parse(localStorage.getItem("orm_strategy_progress") || "{}");
+    
+    let html = "";
+    let currentPhase = "";
+    let completedCount = 0;
+
+    defaultTasks.forEach(task => {
+      const isDone = !!savedState[task.id];
+      if (isDone) completedCount++;
+
+      if (task.phase !== currentPhase) {
+        html += `<h4 style="margin-top:20px; margin-bottom:10px; color:var(--text-primary); border-bottom:1px solid var(--border); padding-bottom:5px;">${task.phase}</h4>`;
+        currentPhase = task.phase;
+      }
+
+      html += `
+        <div style="display:flex; align-items:flex-start; margin-bottom:12px; padding:10px; background:var(--bg-secondary); border-radius:6px; border:1px solid var(--border);">
+          <input type="checkbox" id="${task.id}" ${isDone ? "checked" : ""} 
+                 onchange="window.admin.toggleStrategyTask('${task.id}', this.checked)"
+                 style="margin-top:4px; margin-right:12px; transform:scale(1.2); cursor:pointer;">
+          <label for="${task.id}" style="cursor:pointer; color:${isDone ? 'var(--text-secondary)' : 'var(--text-primary)'}; text-decoration:${isDone ? 'line-through' : 'none'}; flex-grow:1; line-height:1.4;">
+            ${task.text}
+          </label>
+        </div>
+      `;
+    });
+
+    container.innerHTML = html;
+
+    // Update Progress Bar
+    const progressPercent = Math.round((completedCount / defaultTasks.length) * 100);
+    const progressText = document.getElementById("strategy-progress-text");
+    const progressBar = document.getElementById("strategy-progress-bar");
+    
+    if (progressText) progressText.textContent = \`\${progressPercent}%\`;
+    if (progressBar) progressBar.style.width = \`\${progressPercent}%\`;
+  }
+
+  toggleStrategyTask(taskId, isChecked) {
+    const savedState = JSON.parse(localStorage.getItem("orm_strategy_progress") || "{}");
+    if (isChecked) {
+      savedState[taskId] = true;
+    } else {
+      delete savedState[taskId];
+    }
+    localStorage.setItem("orm_strategy_progress", JSON.stringify(savedState));
+    this.renderStrategyChecklist(); // Re-render to update UI and progress bar
   }
 
   // --- UTILS ---

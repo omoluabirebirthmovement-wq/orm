@@ -1,12 +1,13 @@
 {
-  "name": "Omoluabi Rebirth Movement",
+  "name": "Omoluabi Rebirth Movement — Golden Generation CDC",
   "short_name": "ORM",
-  "description": "Rebuilding a Generation of Integrity and Purpose",
+  "description": "Rebuilding a Generation of Integrity and Purpose. Founded by Golden Generation Community Development Club (CAC: IT-142448).",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0A1A14",
   "theme_color": "#0A4D38",
   "orientation": "portrait-primary",
+  "categories": ["education", "nonprofit", "social services"],
   "icons": [
     {
       "src": "images/logo.png",

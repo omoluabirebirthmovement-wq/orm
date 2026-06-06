@@ -919,11 +919,6 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-  window.onerror = function(msg, url, line, col, error) {
-    alert("JS Error: " + msg + "\nLine: " + line + "\nURL: " + url);
-    return false;
-  };
-
   // === YGI Application Portal JS ===
   const SUPABASE_URL = 'https://yqnvjgxzqzqiepwmmhfy.supabase.co';
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlxbnZqZ3h6cXpxaWVwd21taGZ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzE4NTU4NzUsImV4cCI6MjA0NzQzMTg3NX0.jHxlRKJ3KHdwzlMOBpjKd_aXj1VhvJj5aRlFIovIk5g';
@@ -931,6 +926,16 @@
 
   let currentStep = 1;
   const totalSteps = 6;
+
+  // Explicit required fields per step (avoids querySelectorAll bug on hidden steps)
+  const stepFields = {
+    1: ['f-name','f-dob','f-gender','f-school','f-level','f-guardian','f-guardian-phone','f-guardian-rel'],
+    2: ['f-phone','f-email','f-whatsapp','f-state','f-lga','f-city'],
+    3: ['f-leadership','f-statement'],
+    4: [],
+    5: [],
+    6: []
+  };
 
   // Pre-select position from URL param
   const urlParams = new URLSearchParams(window.location.search);
@@ -1004,45 +1009,54 @@
   }
 
   function validateStep(step) {
-    const required = document.querySelectorAll(`#step-${step} [required]`);
-    let valid = true;
-    let firstInvalid = null;
-    required.forEach(field => {
-      field.style.borderColor = '';
-      if (!field.value.trim()) {
-        field.style.borderColor = '#ff4444';
+    var fields = stepFields[step] || [];
+    var valid = true;
+    var firstInvalid = null;
+
+    // Reset all borders for current step
+    var allStepInputs = document.querySelectorAll('#step-' + step + ' input, #step-' + step + ' select, #step-' + step + ' textarea');
+    allStepInputs.forEach(function(el) { el.style.borderColor = ''; });
+
+    // Validate only the explicit required fields
+    for (var i = 0; i < fields.length; i++) {
+      var el = document.getElementById(fields[i]);
+      if (!el) continue;
+      var val = (el.value || '').toString().trim();
+      if (!val) {
+        el.style.borderColor = '#ff4444';
         valid = false;
-        if (!firstInvalid) firstInvalid = field;
+        if (!firstInvalid) firstInvalid = el;
       }
-    });
+    }
+
     if (!valid) {
       showToast('Please fill in all required fields.');
       if (firstInvalid) {
         firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        firstInvalid.focus();
       }
     }
     return valid;
   }
 
   function navigateStep(dir) {
-    console.log("navigateStep called, dir:", dir, "currentStep:", currentStep);
-    try {
-      if (dir === 1 && !validateStep(currentStep)) {
-        console.log("Validation failed for step:", currentStep);
-        return;
-      }
-      if (currentStep === 4 && dir === 1 && !document.getElementById('f-position').value) {
-        showToast('Please select a position to continue.');
-        return;
-      }
-      if (dir === 1 && currentStep === totalSteps - 1) buildReview();
-      currentStep = Math.max(1, Math.min(totalSteps, currentStep + dir));
-      document.querySelectorAll('.apply-step').forEach((s, i) => s.classList.toggle('active', i + 1 === currentStep));
-      updateStepper();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } catch (err) {
-      alert("Error in navigateStep: " + err.message);
+    if (dir === 1 && !validateStep(currentStep)) return;
+    if (currentStep === 4 && dir === 1 && !document.getElementById('f-position').value) {
+      showToast('Please select a position to continue.');
+      return;
     }
+    if (dir === 1 && currentStep === totalSteps - 1) buildReview();
+    currentStep = Math.max(1, Math.min(totalSteps, currentStep + dir));
+    // Show/hide steps explicitly
+    for (var i = 1; i <= totalSteps; i++) {
+      var stepEl = document.getElementById('step-' + i);
+      if (stepEl) {
+        stepEl.style.display = (i === currentStep) ? 'block' : 'none';
+        stepEl.classList.toggle('active', i === currentStep);
+      }
+    }
+    updateStepper();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function buildReview() {

@@ -932,6 +932,8 @@
         allInputs[k].style.borderColor = '';
       }
 
+      var missingLabels = [];
+
       for (var step = 1; step <= 5; step++) {
         var fields = stepFields[step] || [];
         for (var i = 0; i < fields.length; i++) {
@@ -942,23 +944,34 @@
             el.style.borderColor = '#ff4444';
             valid = false;
             if (!firstInvalid) firstInvalid = el;
+
+            var label = el.previousElementSibling;
+            if (label && label.tagName.toUpperCase() === 'LABEL') {
+              missingLabels.push(label.innerText.replace('*','').trim());
+            } else {
+              missingLabels.push(el.placeholder || el.id);
+            }
           }
         }
       }
 
       if (!document.getElementById('f-position').value) {
-        showToast('Please select a position.');
         valid = false;
+        missingLabels.push('Position Applied For');
         if (!firstInvalid) firstInvalid = document.getElementById('step-4');
       }
 
       if (!valid) {
         showToast('Please fill in all required fields.');
-        alert('Please fill in all required fields highlighted in red.');
         if (firstInvalid) {
           firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
           if (firstInvalid.focus) firstInvalid.focus();
         }
+        
+        // Show alert after scrolling
+        setTimeout(function() {
+          alert('You missed some required fields! Please provide:\n\n- ' + missingLabels.join('\n- '));
+        }, 100);
       }
       return valid;
     } catch (err) {

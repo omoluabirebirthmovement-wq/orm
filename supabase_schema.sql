@@ -204,3 +204,128 @@ CREATE POLICY "Allow public read-write access to members" ON public.members FOR 
 CREATE POLICY "Allow public read-write access to course_progress" ON public.course_progress FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Allow public read-write access to content_calendar" ON public.content_calendar FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Allow public read-write access to sponsorship_crm" ON public.sponsorship_crm FOR ALL USING (true) WITH CHECK (true);
+
+-- ==========================================
+-- YOUNG GOVERNMENT INITIATIVE (YGI) TABLES
+-- ==========================================
+
+-- 14. YGI POSITIONS TABLE
+CREATE TABLE IF NOT EXISTS public.ygi_positions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    title TEXT NOT NULL,
+    level TEXT NOT NULL, -- 'State', 'Local', 'Legislative'
+    description TEXT NOT NULL,
+    requirements TEXT,
+    status TEXT DEFAULT 'Open',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- 15. YGI APPLICATIONS TABLE
+CREATE TABLE IF NOT EXISTS public.ygi_applications (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    full_name TEXT NOT NULL,
+    dob DATE NOT NULL,
+    gender TEXT NOT NULL,
+    phone TEXT NOT NULL,
+    email TEXT NOT NULL,
+    state TEXT NOT NULL,
+    lga TEXT NOT NULL,
+    school TEXT NOT NULL,
+    class_level TEXT NOT NULL,
+    parent_info TEXT NOT NULL,
+    leadership_experience TEXT,
+    community_experience TEXT,
+    position_id UUID REFERENCES public.ygi_positions(id),
+    personal_statement TEXT NOT NULL,
+    passport_url TEXT,
+    id_url TEXT,
+    recommendation_url TEXT,
+    screening_score INT DEFAULT 0,
+    status TEXT DEFAULT 'Pending', -- 'Pending', 'Approved', 'Rejected'
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- 16. YGI INTERVIEWS TABLE
+CREATE TABLE IF NOT EXISTS public.ygi_interviews (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    application_id UUID REFERENCES public.ygi_applications(id) ON DELETE CASCADE,
+    interview_date TIMESTAMP WITH TIME ZONE,
+    panel_members TEXT,
+    score INT DEFAULT 0,
+    feedback TEXT,
+    status TEXT DEFAULT 'Scheduled', -- 'Scheduled', 'Completed', 'Missed'
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- 17. YGI ELECTIONS TABLE
+CREATE TABLE IF NOT EXISTS public.ygi_elections (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    position_id UUID REFERENCES public.ygi_positions(id),
+    start_time TIMESTAMP WITH TIME ZONE NOT NULL,
+    end_time TIMESTAMP WITH TIME ZONE NOT NULL,
+    status TEXT DEFAULT 'Upcoming', -- 'Upcoming', 'Active', 'Completed'
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- 18. YGI VOTES TABLE
+CREATE TABLE IF NOT EXISTS public.ygi_votes (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    election_id UUID REFERENCES public.ygi_elections(id) ON DELETE CASCADE,
+    candidate_id UUID REFERENCES public.ygi_applications(id) ON DELETE CASCADE,
+    voter_identifier TEXT NOT NULL, -- Could be IP or Hash to prevent double voting
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    UNIQUE(election_id, voter_identifier)
+);
+
+-- 19. YGI TRAININGS TABLE
+CREATE TABLE IF NOT EXISTS public.ygi_trainings (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    title TEXT NOT NULL,
+    module_name TEXT NOT NULL,
+    content_url TEXT, -- Video or Document
+    quiz_data JSONB,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- 20. YGI CERTIFICATES TABLE
+CREATE TABLE IF NOT EXISTS public.ygi_certificates (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    participant_id UUID REFERENCES public.ygi_applications(id),
+    certificate_type TEXT NOT NULL, -- 'Participation', 'Leadership', 'Appointment', 'Award'
+    issue_date DATE DEFAULT CURRENT_DATE,
+    certificate_url TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- 21. YGI PROJECTS TABLE
+CREATE TABLE IF NOT EXISTS public.ygi_projects (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    leader_id UUID REFERENCES public.ygi_applications(id),
+    title TEXT NOT NULL,
+    description TEXT NOT NULL,
+    evidence_urls JSONB,
+    beneficiaries_count INT DEFAULT 0,
+    impact_score INT DEFAULT 0,
+    status TEXT DEFAULT 'Ongoing',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- Enable RLS for YGI tables
+ALTER TABLE public.ygi_positions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.ygi_applications ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.ygi_interviews ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.ygi_elections ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.ygi_votes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.ygi_trainings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.ygi_certificates ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.ygi_projects ENABLE ROW LEVEL SECURITY;
+
+-- Add basic public read-write policies (For demo/frontend ease - in production these should be restricted)
+CREATE POLICY "Allow public read-write access to ygi_positions" ON public.ygi_positions FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Allow public read-write access to ygi_applications" ON public.ygi_applications FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Allow public read-write access to ygi_interviews" ON public.ygi_interviews FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Allow public read-write access to ygi_elections" ON public.ygi_elections FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Allow public read-write access to ygi_votes" ON public.ygi_votes FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Allow public read-write access to ygi_trainings" ON public.ygi_trainings FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Allow public read-write access to ygi_certificates" ON public.ygi_certificates FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Allow public read-write access to ygi_projects" ON public.ygi_projects FOR ALL USING (true) WITH CHECK (true);

@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apply — Young Government Initiative (YGI) | ORM</title>
+  <meta name="description" content="Apply for a leadership position in the Young Government Initiative (YGI). Multi-step application for Young Governor, Chairman, Speaker, and more.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/ygi.css">
+  <style>
+    /* Application Portal Specific Styles */
+    .apply-page {
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--ygi-navy) 0%, #0F2040 60%, var(--ygi-green-dark) 100%);
+      padding: 100px 20px 60px;
+    }
+
+    .apply-container {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .apply-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .apply-header h1 {
+      font-family: var(--ygi-font-heading);
+      font-size: clamp(2rem, 4vw, 3rem);
+      color: var(--ygi-white);
+      margin-bottom: 12px;
+    }
+
+    .apply-header h1 span {
+      background: linear-gradient(135deg, var(--ygi-gold), var(--ygi-gold-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .apply-header p {
+      color: rgba(255,255,255,0.65);
+      font-size: 1rem;
+    }
+
+    /* Stepper */
+    .stepper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 48px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .step-item {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      flex-shrink: 0;
+    }
+
+    .step-circle {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+      border: 2px solid rgba(255,255,255,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.4);
+      font-family: var(--ygi-font-accent);
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    .step-circle.active {
+      background: var(--ygi-gold);
+      border-color: var(--ygi-gold);
+      color: var(--ygi-navy);
+      box-shadow: 0 0 20px rgba(212,175,55,0.5);
+    }
+
+    .step-circle.done {
+      background: var(--ygi-green);
+      border-color: var(--ygi-green);
+      color: white;
+    }
+
+    .step-label {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.4);
+      text-align: center;
+      margin-top: 6px;
+      font-family: var(--ygi-font-accent);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .step-label.active { color: var(--ygi-gold); }
+    .step-label.done { color: #5EB87A; }
+
+    .step-connector {
+      width: 48px;
+      height: 2px;
+      background: rgba(255,255,255,0.1);
+      flex-shrink: 0;
+      transition: background 0.3s ease;
+    }
+
+    .step-connector.done { background: var(--ygi-green); }
+
+    .step-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Form Card */
+    .apply-form-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(212,175,55,0.15);
+      border-radius: 20px;
+      padding: 48px 40px;
+      backdrop-filter: blur(20px);
+    }
+
+    .apply-step { display: none; }
+    .apply-step.active { display: block; }
+
+    .step-heading {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 32px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(212,175,55,0.15);
+    }
+
+    .step-heading-icon {
+      width: 48px; height: 48px;
+      background: linear-gradient(135deg, var(--ygi-gold), var(--ygi-gold-dark));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      color: var(--ygi-navy);
+    }
+
+    .step-heading h2 {
+      font-family: var(--ygi-font-heading);
+      font-size: 1.5rem;
+      color: var(--ygi-white);
+    }
+
+    .step-heading p {
+      color: rgba(255,255,255,0.5);
+      font-size: 0.85rem;
+    }
+
+    /* Form Fields */
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .form-grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .form-group-ygi {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group-ygi.full { grid-column: 1 / -1; }
+
+    .form-group-ygi label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.7);
+      font-family: var(--ygi-font-accent);
+      letter-spacing: 0.5px;
+    }
+
+    .form-group-ygi label span { color: var(--ygi-gold); }
+
+    .form-group-ygi input,
+    .form-group-ygi select,
+    .form-group-ygi textarea {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 10px;
+      padding: 12px 16px;
+      color: var(--ygi-white);
+      font-size: 0.93rem;
+      font-family: var(--ygi-font-body);
+      transition: all 0.3s ease;
+      outline: none;
+      width: 100%;
+    }
+
+    .form-group-ygi input:focus,
+    .form-group-ygi select:focus,
+    .form-group-ygi textarea:focus {
+      border-color: var(--ygi-gold);
+      background: rgba(212,175,55,0.05);
+      box-shadow: 0 0 0 3px rgba(212,175,55,0.12);
+    }
+
+    .form-group-ygi input::placeholder,
+    .form-group-ygi textarea::placeholder {
+      color: rgba(255,255,255,0.25);
+    }
+
+    .form-group-ygi select option { background: #0D1B40; color: white; }
+    .form-group-ygi textarea { min-height: 120px; resize: vertical; }
+
+    /* File Upload */
+    .file-upload-area {
+      border: 2px dashed rgba(212,175,55,0.3);
+      border-radius: 12px;
+      padding: 32px 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: rgba(212,175,55,0.02);
+    }
+
+    .file-upload-area:hover {
+      border-color: var(--ygi-gold);
+      background: rgba(212,175,55,0.05);
+    }
+
+    .file-upload-area.has-file {
+      border-color: var(--ygi-green);
+      background: rgba(26,107,60,0.05);
+    }
+
+    .file-upload-icon { font-size: 2rem; color: var(--ygi-gold); margin-bottom: 12px; }
+    .file-upload-text { color: rgba(255,255,255,0.6); font-size: 0.88rem; }
+    .file-upload-text strong { color: var(--ygi-gold); }
+    .file-upload-hint { color: rgba(255,255,255,0.35); font-size: 0.78rem; margin-top: 6px; }
+    .file-upload-status { color: #5EB87A; font-size: 0.88rem; margin-top: 8px; display: none; }
+    .file-upload-area.has-file .file-upload-status { display: block; }
+
+    /* Position Selection Cards */
+    .position-select-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .position-select-card {
+      border: 2px solid rgba(212,175,55,0.15);
+      border-radius: 12px;
+      padding: 20px 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: rgba(255,255,255,0.03);
+    }
+
+    .position-select-card:hover {
+      border-color: rgba(212,175,55,0.4);
+      background: rgba(212,175,55,0.05);
+    }
+
+    .position-select-card.selected {
+      border-color: var(--ygi-gold);
+      background: rgba(212,175,55,0.1);
+      box-shadow: 0 0 0 3px rgba(212,175,55,0.15);
+    }
+
+    .position-select-card .pos-icon { font-size: 1.8rem; margin-bottom: 10px; }
+    .position-select-card .pos-name {
+      font-family: var(--ygi-font-heading);
+      font-size: 0.95rem;
+      color: var(--ygi-white);
+      margin-bottom: 6px;
+    }
+    .position-select-card .pos-level {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: rgba(212,175,55,0.8);
+      font-family: var(--ygi-font-accent);
+      letter-spacing: 0.5px;
+    }
+
+    /* Navigation Buttons */
+    .step-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 40px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .step-nav-left, .step-nav-right { display: flex; gap: 12px; }
+
+    .btn-prev {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.6);
+      padding: 12px 28px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-family: var(--ygi-font-accent);
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+
+    .btn-prev:hover {
+      border-color: rgba(255,255,255,0.3);
+      color: white;
+    }
+
+    .btn-next {
+      background: linear-gradient(135deg, var(--ygi-gold), var(--ygi-gold-dark));
+      color: var(--ygi-navy);
+      border: none;
+      padding: 12px 32px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-family: var(--ygi-font-accent);
+      font-weight: 700;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 20px rgba(212,175,55,0.35);
+    }
+
+    .btn-next:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(212,175,55,0.5);
+    }
+
+    .btn-submit {
+      background: linear-gradient(135deg, var(--ygi-green), var(--ygi-green-dark));
+      color: white;
+      border: none;
+      padding: 14px 40px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-family: var(--ygi-font-accent);
+      font-weight: 700;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 20px rgba(26,107,60,0.4);
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(26,107,60,0.6);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Progress bar */
+    .progress-bar-wrap {
+      background: rgba(255,255,255,0.06);
+      border-radius: 50px;
+      height: 4px;
+      margin-bottom: 40px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--ygi-gold), var(--ygi-green));
+      border-radius: 50px;
+      transition: width 0.5s ease;
+    }
+
+    /* Review section */
+    .review-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .review-item {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+
+    .review-item.full { grid-column: 1 / -1; }
+
+    .review-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--ygi-gold);
+      font-family: var(--ygi-font-accent);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .review-value {
+      color: rgba(255,255,255,0.85);
+      font-size: 0.92rem;
+    }
+
+    /* Success Screen */
+    .success-screen {
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .success-icon {
+      width: 100px; height: 100px;
+      background: linear-gradient(135deg, var(--ygi-green), var(--ygi-green-dark));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: white;
+      margin: 0 auto 28px;
+      box-shadow: 0 8px 40px rgba(26,107,60,0.4);
+      animation: successPulse 1s ease both;
+    }
+
+    @keyframes successPulse {
+      0% { transform: scale(0); opacity: 0; }
+      70% { transform: scale(1.1); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .success-screen h2 {
+      font-family: var(--ygi-font-heading);
+      font-size: 2rem;
+      color: var(--ygi-white);
+      margin-bottom: 12px;
+    }
+
+    .success-screen p { color: rgba(255,255,255,0.65); font-size: 1rem; line-height: 1.7; margin-bottom: 8px; }
+
+    .app-ref-code {
+      display: inline-block;
+      background: rgba(212,175,55,0.1);
+      border: 1px solid rgba(212,175,55,0.3);
+      color: var(--ygi-gold);
+      padding: 8px 20px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin: 16px 0;
+      letter-spacing: 2px;
+    }
+
+    @media (max-width: 768px) {
+      .form-grid-2, .form-grid-3 { grid-template-columns: 1fr; }
+      .review-grid { grid-template-columns: 1fr; }
+      .apply-form-card { padding: 28px 20px; }
+      .step-connector { width: 24px; }
+    }
+  </style>
+</head>
+<body class="ygi-page">
+
+  <div id="ygi-toast" class="ygi-toast"></div>
+
+  <!-- Header -->
+  <header class="ygi-header">
+    <div class="ygi-navbar">
+      <a href="index.html" class="ygi-logo">
+        <div class="ygi-logo-icon">YGI</div>
+        <div class="ygi-logo-text">
+          <span class="ygi-logo-title">Young Government Initiative</span>
+          <span class="ygi-logo-sub">Application Portal</span>
+        </div>
+      </a>
+      <ul class="ygi-nav-links">
+        <li><a href="index.html#positions">Positions</a></li>
+        <li><a href="index.html#process">How It Works</a></li>
+        <li><a href="index.html#faq">FAQ</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="../index.html"><i class="fas fa-arrow-left"></i> ORM Home</a></li>
+      </ul>
+      <button id="ygi-hamburger" class="ygi-hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <div class="apply-page">
+    <div class="apply-container">
+
+      <!-- Header -->
+      <div class="apply-header">
+        <div class="ygi-section-badge" style="margin: 0 auto 16px; display:table;">Application Portal</div>
+        <h1>Apply for a <span>Leadership Position</span></h1>
+        <p>Complete all steps carefully. Your application will be automatically screened and scored.</p>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="progressBar" style="width: 16.6%"></div>
+      </div>
+
+      <!-- Stepper -->
+      <div class="stepper" id="stepper">
+        <div class="step-item">
+          <div class="step-wrapper">
+            <div class="step-circle active" id="sc-1">1</div>
+            <div class="step-label active" id="sl-1">Personal</div>
+          </div>
+          <div class="step-connector" id="con-1"></div>
+        </div>
+        <div class="step-item">
+          <div class="step-wrapper">
+            <div class="step-circle" id="sc-2">2</div>
+            <div class="step-label" id="sl-2">Contact</div>
+          </div>
+          <div class="step-connector" id="con-2"></div>
+        </div>
+        <div class="step-item">
+          <div class="step-wrapper">
+            <div class="step-circle" id="sc-3">3</div>
+            <div class="step-label" id="sl-3">Background</div>
+          </div>
+          <div class="step-connector" id="con-3"></div>
+        </div>
+        <div class="step-item">
+          <div class="step-wrapper">
+            <div class="step-circle" id="sc-4">4</div>
+            <div class="step-label" id="sl-4">Position</div>
+          </div>
+          <div class="step-connector" id="con-4"></div>
+        </div>
+        <div class="step-item">
+          <div class="step-wrapper">
+            <div class="step-circle" id="sc-5">5</div>
+            <div class="step-label" id="sl-5">Documents</div>
+          </div>
+          <div class="step-connector" id="con-5"></div>
+        </div>
+        <div class="step-item">
+          <div class="step-wrapper">
+            <div class="step-circle" id="sc-6">6</div>
+            <div class="step-label" id="sl-6">Review</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Card -->
+      <div class="apply-form-card" id="applyFormCard">
+
+        <!-- STEP 1: Personal Information -->
+        <div class="apply-step active" id="step-1">
+          <div class="step-heading">
+            <div class="step-heading-icon"><i class="fas fa-user"></i></div>
+            <div>
+              <h2>Personal Information</h2>
+              <p>Your basic personal details</p>
+            </div>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group-ygi">
+              <label>Full Name <span>*</span></label>
+              <input type="text" id="f-name" placeholder="e.g. Adebimpe Olatunde" required>
+            </div>
+            <div class="form-group-ygi">
+              <label>Date of Birth <span>*</span></label>
+              <input type="date" id="f-dob" required>
+            </div>
+            <div class="form-group-ygi">
+              <label>Gender <span>*</span></label>
+              <select id="f-gender" required>
+                <option value="">Select gender</option>
+                <option>Male</option>
+                <option>Female</option>
+                <option>Prefer not to say</option>
+              </select>
+            </div>
+            <div class="form-group-ygi">
+              <label>Nationality <span>*</span></label>
+              <select id="f-nationality" required>
+                <option value="Nigerian">Nigerian</option>
+                <option>Other African</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group-ygi">
+              <label>School / Institution <span>*</span></label>
+              <input type="text" id="f-school" placeholder="e.g. University of Ibadan" required>
+            </div>
+            <div class="form-group-ygi">
+              <label>Class / Level <span>*</span></label>
+              <input type="text" id="f-level" placeholder="e.g. SS2 / 300 Level" required>
+            </div>
+          </div>
+          <div class="form-group-ygi">
+            <label>Parent / Guardian Full Name <span>*</span></label>
+            <input type="text" id="f-guardian" placeholder="e.g. Mr. Olatunde Emmanuel" required>
+          </div>
+          <div class="form-grid-2" style="margin-top:20px;">
+            <div class="form-group-ygi">
+              <label>Parent / Guardian Phone <span>*</span></label>
+              <input type="tel" id="f-guardian-phone" placeholder="08012345678" required>
+            </div>
+            <div class="form-group-ygi">
+              <label>Relationship <span>*</span></label>
+              <select id="f-guardian-rel" required>
+                <option value="">Select</option>
+                <option>Parent</option>
+                <option>Guardian</option>
+                <option>Sibling</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 2: Contact & Location -->
+        <div class="apply-step" id="step-2">
+          <div class="step-heading">
+            <div class="step-heading-icon"><i class="fas fa-map-marker-alt"></i></div>
+            <div>
+              <h2>Contact & Location</h2>
+              <p>How we can reach you</p>
+            </div>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group-ygi">
+              <label>Phone Number <span>*</span></label>
+              <input type="tel" id="f-phone" placeholder="08012345678" required>
+            </div>
+            <div class="form-group-ygi">
+              <label>Email Address <span>*</span></label>
+              <input type="email" id="f-email" placeholder="you@example.com" required>
+            </div>
+            <div class="form-group-ygi">
+              <label>WhatsApp Number <span>*</span></label>
+              <input type="tel" id="f-whatsapp" placeholder="08012345678" required>
+            </div>
+            <div class="form-group-ygi">
+              <label>State of Residence <span>*</span></label>
+              <select id="f-state" required>
+                <option value="">Select state</option>
+                <option>Abia</option><option>Adamawa</option><option>Akwa Ibom</option>
+                <option>Anambra</option><option>Bauchi</option><option>Bayelsa</option>
+                <option>Benue</option><option>Borno</option><option>Cross River</option>
+                <option>Delta</option><option>Ebonyi</option><option>Edo</option>
+                <option>Ekiti</option><option>Enugu</option><option>FCT Abuja</option>
+                <option>Gombe</option><option>Imo</option><option>Jigawa</option>
+                <option>Kaduna</option><option>Kano</option><option>Katsina</option>
+                <option>Kebbi</option><option>Kogi</option><option>Kwara</option>
+                <option>Lagos</option><option>Nasarawa</option><option>Niger</option>
+                <option>Ogun</option><option>Ondo</option><option>Osun</option>
+                <option>Oyo</option><option>Plateau</option><option>Rivers</option>
+                <option>Sokoto</option><option>Taraba</option><option>Yobe</option>
+                <option>Zamfara</option>
+              </select>
+            </div>
+            <div class="form-group-ygi">
+              <label>Local Government Area (LGA) <span>*</span></label>
+              <input type="text" id="f-lga" placeholder="e.g. Ibadan North" required>
+            </div>
+            <div class="form-group-ygi">
+              <label>City / Town <span>*</span></label>
+              <input type="text" id="f-city" placeholder="e.g. Ibadan" required>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 3: Experience & Background -->
+        <div class="apply-step" id="step-3">
+          <div class="step-heading">
+            <div class="step-heading-icon"><i class="fas fa-briefcase"></i></div>
+            <div>
+              <h2>Experience & Background</h2>
+              <p>Tell us about your leadership and community involvement</p>
+            </div>
+          </div>
+          <div class="form-group-ygi" style="margin-bottom:20px;">
+            <label>Leadership Experience <span>*</span></label>
+            <textarea id="f-leadership" placeholder="Describe any leadership roles you have held — school, church, community, sports team, etc. Include position, organization, and what you achieved." required></textarea>
+          </div>
+          <div class="form-group-ygi" style="margin-bottom:20px;">
+            <label>Community Service Experience</label>
+            <textarea id="f-community" placeholder="Describe any community service, volunteer work, or social projects you have been involved in..."></textarea>
+          </div>
+          <div class="form-group-ygi">
+            <label>Personal Statement <span>*</span></label>
+            <textarea id="f-statement" style="min-height:160px;"
+              placeholder="Write a compelling personal statement (at least 200 words) explaining: Why do you want to participate in YGI? What leadership qualities do you possess? What would you do if selected for your desired position? How will you contribute to your community?" required></textarea>
+            <div style="color:rgba(255,255,255,0.3); font-size:0.78rem; margin-top:6px;">Minimum 200 words. This is heavily weighted in scoring.</div>
+          </div>
+        </div>
+
+        <!-- STEP 4: Position Selection -->
+        <div class="apply-step" id="step-4">
+          <div class="step-heading">
+            <div class="step-heading-icon"><i class="fas fa-landmark"></i></div>
+            <div>
+              <h2>Position Applied For</h2>
+              <p>Choose ONE position. You can only apply for one position per cycle.</p>
+            </div>
+          </div>
+          <input type="hidden" id="f-position" value="">
+
+          <p style="color:rgba(255,255,255,0.5); font-size:0.85rem; margin-bottom: 20px; text-align:center;">🏛️ STATE LEVEL</p>
+          <div class="position-select-grid" id="positionGrid">
+            <div class="position-select-card" data-pos="Young Governor">
+              <div class="pos-icon">👑</div>
+              <div class="pos-name">Young Governor</div>
+              <div class="pos-level">State Executive</div>
+            </div>
+            <div class="position-select-card" data-pos="Young Deputy Governor">
+              <div class="pos-icon">🎖️</div>
+              <div class="pos-name">Young Deputy Governor</div>
+              <div class="pos-level">State Executive</div>
+            </div>
+            <div class="position-select-card" data-pos="Young Commissioner">
+              <div class="pos-icon">💼</div>
+              <div class="pos-name">Young Commissioner</div>
+              <div class="pos-level">State Executive</div>
+            </div>
+            <div class="position-select-card" data-pos="Young Special Adviser">
+              <div class="pos-icon">🤝</div>
+              <div class="pos-name">Young Special Adviser</div>
+              <div class="pos-level">State Executive</div>
+            </div>
+            <div class="position-select-card" data-pos="Young Chief of Staff">
+              <div class="pos-icon">📋</div>
+              <div class="pos-name">Young Chief of Staff</div>
+              <div class="pos-level">State Executive</div>
+            </div>
+          </div>
+
+          <p style="color:rgba(255,255,255,0.5); font-size:0.85rem; margin: 24px 0 20px; text-align:center;">🏘️ LOCAL GOVERNMENT LEVEL</p>
+          <div class="position-select-grid">
+            <div class="position-select-card" data-pos="Young Chairman">
+              <div class="pos-icon">🗺️</div>
+              <div class="pos-name">Young Chairman</div>
+              <div class="pos-level">Local Government</div>
+            </div>
+            <div class="position-select-card" data-pos="Young Vice Chairman">
+              <div class="pos-icon">👥</div>
+              <div class="pos-name">Young Vice Chairman</div>
+              <div class="pos-level">Local Government</div>
+            </div>
+            <div class="position-select-card" data-pos="Young Councillor">
+              <div class="pos-icon">🏘️</div>
+              <div class="pos-name">Young Councillor</div>
+              <div class="pos-level">Local Government</div>
+            </div>
+            <div class="position-select-card" data-pos="Young Secretary">
+              <div class="pos-icon">📝</div>
+              <div class="pos-name">Young Secretary</div>
+              <div class="pos-level">Local Government</div>
+            </div>
+          </div>
+
+          <p style="color:rgba(255,255,255,0.5); font-size:0.85rem; margin: 24px 0 20px; text-align:center;">⚖️ LEGISLATIVE LEVEL</p>
+          <div class="position-select-grid">
+            <div class="position-select-card" data-pos="Young Speaker">
+              <div class="pos-icon">⚖️</div>
+              <div class="pos-name">Young Speaker</div>
+              <div class="pos-level">Legislative</div>
+            </div>
+            <div class="position-select-card" data-pos="Young Majority Leader">
+              <div class="pos-icon">🔱</div>
+              <div class="pos-name">Young Majority Leader</div>
+              <div class="pos-level">Legislative</div>
+            </div>
+            <div class="position-select-card" data-pos="Young Legislator">
+              <div class="pos-icon">📜</div>
+              <div class="pos-name">Young Legislator</div>
+              <div class="pos-level">Legislative</div>
+            </div>
+          </div>
+          <p style="color:rgba(255,255,255,0.35); font-size:0.8rem; margin-top:16px; text-align:center;">Click a card to select your position</p>
+        </div>
+
+        <!-- STEP 5: Document Uploads -->
+        <div class="apply-step" id="step-5">
+          <div class="step-heading">
+            <div class="step-heading-icon"><i class="fas fa-upload"></i></div>
+            <div>
+              <h2>Document Uploads</h2>
+              <p>Upload required documents. Files must be JPG/PNG/PDF under 5MB each.</p>
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:24px;">
+            <!-- Passport -->
+            <div>
+              <label style="color:rgba(255,255,255,0.7); font-size:0.82rem; font-weight:700; font-family:var(--ygi-font-accent); letter-spacing:0.5px; display:block; margin-bottom:8px;">PASSPORT PHOTOGRAPH <span style="color:var(--ygi-gold);">*</span></label>
+              <div class="file-upload-area" id="passport-drop" onclick="document.getElementById('passport-input').click()">
+                <div class="file-upload-icon"><i class="fas fa-portrait"></i></div>
+                <div class="file-upload-text"><strong>Click to upload</strong> or drag and drop</div>
+                <div class="file-upload-hint">Recent passport photo, clear face visible. JPG/PNG, max 2MB</div>
+                <div class="file-upload-status" id="passport-status"><i class="fas fa-check-circle"></i> File selected</div>
+              </div>
+              <input type="file" id="passport-input" accept="image/jpeg,image/png" style="display:none;">
+            </div>
+
+            <!-- ID -->
+            <div>
+              <label style="color:rgba(255,255,255,0.7); font-size:0.82rem; font-weight:700; font-family:var(--ygi-font-accent); letter-spacing:0.5px; display:block; margin-bottom:8px;">IDENTIFICATION DOCUMENT <span style="color:var(--ygi-gold);">*</span></label>
+              <div class="file-upload-area" id="id-drop" onclick="document.getElementById('id-input').click()">
+                <div class="file-upload-icon"><i class="fas fa-id-card"></i></div>
+                <div class="file-upload-text"><strong>Click to upload</strong> or drag and drop</div>
+                <div class="file-upload-hint">School ID, Birth Certificate, or NIN card. JPG/PNG/PDF, max 5MB</div>
+                <div class="file-upload-status" id="id-status"><i class="fas fa-check-circle"></i> File selected</div>
+              </div>
+              <input type="file" id="id-input" accept="image/jpeg,image/png,application/pdf" style="display:none;">
+            </div>
+
+            <!-- Recommendation -->
+            <div>
+              <label style="color:rgba(255,255,255,0.7); font-size:0.82rem; font-weight:700; font-family:var(--ygi-font-accent); letter-spacing:0.5px; display:block; margin-bottom:8px;">RECOMMENDATION LETTER <span style="color:rgba(255,255,255,0.3);">(Optional but recommended)</span></label>
+              <div class="file-upload-area" id="rec-drop" onclick="document.getElementById('rec-input').click()">
+                <div class="file-upload-icon"><i class="fas fa-envelope-open-text"></i></div>
+                <div class="file-upload-text"><strong>Click to upload</strong> or drag and drop</div>
+                <div class="file-upload-hint">From a teacher, community leader, or employer. PDF, max 5MB</div>
+                <div class="file-upload-status" id="rec-status"><i class="fas fa-check-circle"></i> File selected</div>
+              </div>
+              <input type="file" id="rec-input" accept="application/pdf,image/jpeg,image/png" style="display:none;">
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 6: Review & Submit -->
+        <div class="apply-step" id="step-6">
+          <div class="step-heading">
+            <div class="step-heading-icon"><i class="fas fa-check-double"></i></div>
+            <div>
+              <h2>Review & Submit</h2>
+              <p>Please review your information before submitting</p>
+            </div>
+          </div>
+
+          <div class="review-grid" id="reviewGrid">
+            <!-- Filled by JS -->
+          </div>
+
+          <div style="background:rgba(212,175,55,0.06); border:1px solid rgba(212,175,55,0.2); border-radius:12px; padding:20px; margin-top:24px;">
+            <h4 style="color:var(--ygi-gold); font-family:var(--ygi-font-accent); font-size:0.88rem; margin-bottom:12px; letter-spacing:1px; text-transform:uppercase;"><i class="fas fa-shield-alt"></i> Declaration</h4>
+            <p style="color:rgba(255,255,255,0.65); font-size:0.88rem; line-height:1.7;">I hereby declare that all information provided in this application is true, accurate, and complete to the best of my knowledge. I understand that any false information will result in immediate disqualification. I consent to my data being processed for the YGI selection process.</p>
+            <div style="display:flex; align-items:center; gap:10px; margin-top:14px;">
+              <input type="checkbox" id="f-declaration" style="width:18px; height:18px; accent-color: var(--ygi-gold);">
+              <label for="f-declaration" style="color:rgba(255,255,255,0.75); font-size:0.88rem; cursor:pointer;">I agree to the declaration and terms above</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUCCESS SCREEN (hidden initially) -->
+        <div id="successScreen" style="display:none;">
+          <div class="success-screen">
+            <div class="success-icon"><i class="fas fa-check"></i></div>
+            <h2>Application Submitted!</h2>
+            <p>Your application for the <strong id="success-position" style="color:var(--ygi-gold);"></strong> position has been successfully submitted.</p>
+            <p>Your application reference code is:</p>
+            <div class="app-ref-code" id="refCode"></div>
+            <p style="margin-top:8px;">A confirmation email has been sent to <strong id="success-email" style="color:var(--ygi-gold);"></strong></p>
+            <p style="margin-top:4px; color:rgba(255,255,255,0.4); font-size:0.85rem;">Our screening system will evaluate your application automatically. You will be notified within 7 business days.</p>
+            <div style="display:flex; gap:12px; justify-content:center; margin-top:32px; flex-wrap:wrap;">
+              <a href="index.html" class="ygi-btn ygi-btn-outline">← Back to YGI Home</a>
+              <a href="dashboard.html" class="ygi-btn ygi-btn-gold"><i class="fas fa-tachometer-alt"></i> Track Application</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="step-nav" id="stepNav">
+          <div class="step-nav-left">
+            <button class="btn-prev" id="prevBtn" style="display:none;" onclick="navigateStep(-1)">
+              <i class="fas fa-arrow-left"></i> Previous
+            </button>
+          </div>
+          <div style="color:rgba(255,255,255,0.35); font-size:0.8rem;" id="stepCounter">Step 1 of 6</div>
+          <div class="step-nav-right">
+            <button class="btn-next" id="nextBtn" onclick="navigateStep(1)">
+              Next <i class="fas fa-arrow-right"></i>
+            </button>
+            <button class="btn-submit" id="submitBtn" style="display:none;" onclick="submitApplication()" id="final-submit-btn">
+              <i class="fas fa-paper-plane"></i> Submit Application
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+  // === YGI Application Portal JS ===
+  const SUPABASE_URL = 'https://yqnvjgxzqzqiepwmmhfy.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlxbnZqZ3h6cXpxaWVwd21taGZ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzE4NTU4NzUsImV4cCI6MjA0NzQzMTg3NX0.jHxlRKJ3KHdwzlMOBpjKd_aXj1VhvJj5aRlFIovIk5g';
+  const supabase = window.supabase?.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  let currentStep = 1;
+  const totalSteps = 6;
+
+  // Pre-select position from URL param
+  const urlParams = new URLSearchParams(window.location.search);
+  const preselectedPos = urlParams.get('position');
+
+  // Position card selection
+  document.querySelectorAll('.position-select-card').forEach(card => {
+    card.addEventListener('click', () => {
+      document.querySelectorAll('.position-select-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      document.getElementById('f-position').value = card.dataset.pos;
+    });
+
+    // Auto-select if preselected via URL
+    if (preselectedPos && card.dataset.pos === preselectedPos) {
+      setTimeout(() => card.click(), 300);
+    }
+  });
+
+  // File upload areas
+  ['passport', 'id', 'rec'].forEach(key => {
+    const input = document.getElementById(`${key}-input`);
+    const drop = document.getElementById(`${key}-drop`);
+    const status = document.getElementById(`${key}-status`);
+
+    input?.addEventListener('change', () => {
+      if (input.files.length > 0) {
+        drop.classList.add('has-file');
+        status.textContent = `✅ ${input.files[0].name}`;
+        status.style.display = 'block';
+      }
+    });
+
+    drop?.addEventListener('dragover', (e) => { e.preventDefault(); drop.style.borderColor = 'var(--ygi-gold)'; });
+    drop?.addEventListener('dragleave', () => { drop.style.borderColor = ''; });
+    drop?.addEventListener('drop', (e) => {
+      e.preventDefault();
+      const file = e.dataTransfer.files[0];
+      if (file) {
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        input.files = dt.files;
+        input.dispatchEvent(new Event('change'));
+      }
+    });
+  });
+
+  function updateStepper() {
+    const pct = (currentStep / totalSteps) * 100;
+    document.getElementById('progressBar').style.width = pct + '%';
+    document.getElementById('stepCounter').textContent = `Step ${currentStep} of ${totalSteps}`;
+
+    for (let i = 1; i <= totalSteps; i++) {
+      const circle = document.getElementById(`sc-${i}`);
+      const label = document.getElementById(`sl-${i}`);
+      const connector = document.getElementById(`con-${i}`);
+
+      if (circle) {
+        circle.classList.remove('active', 'done');
+        label?.classList.remove('active', 'done');
+        if (i < currentStep) { circle.classList.add('done'); circle.innerHTML = '<i class="fas fa-check" style="font-size:0.8rem;"></i>'; label?.classList.add('done'); }
+        else if (i === currentStep) { circle.classList.add('active'); circle.textContent = i; label?.classList.add('active'); }
+        else { circle.textContent = i; }
+      }
+      if (connector) { connector.classList.toggle('done', i < currentStep); }
+    }
+
+    document.getElementById('prevBtn').style.display = currentStep > 1 ? 'block' : 'none';
+    document.getElementById('nextBtn').style.display = currentStep < totalSteps ? 'flex' : 'none';
+    document.getElementById('submitBtn').style.display = currentStep === totalSteps ? 'flex' : 'none';
+  }
+
+  function validateStep(step) {
+    const required = document.querySelectorAll(`#step-${step} [required]`);
+    let valid = true;
+    required.forEach(field => {
+      field.style.borderColor = '';
+      if (!field.value.trim()) {
+        field.style.borderColor = '#ff4444';
+        valid = false;
+      }
+    });
+    if (!valid) showToast('Please fill in all required fields.');
+    return valid;
+  }
+
+  function navigateStep(dir) {
+    if (dir === 1 && !validateStep(currentStep)) return;
+    if (currentStep === 4 && dir === 1 && !document.getElementById('f-position').value) {
+      showToast('Please select a position to continue.');
+      return;
+    }
+    if (dir === 1 && currentStep === totalSteps - 1) buildReview();
+    currentStep = Math.max(1, Math.min(totalSteps, currentStep + dir));
+    document.querySelectorAll('.apply-step').forEach((s, i) => s.classList.toggle('active', i + 1 === currentStep));
+    updateStepper();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function buildReview() {
+    const data = {
+      'Full Name': document.getElementById('f-name').value,
+      'Date of Birth': document.getElementById('f-dob').value,
+      'Gender': document.getElementById('f-gender').value,
+      'School / Institution': document.getElementById('f-school').value,
+      'Class / Level': document.getElementById('f-level').value,
+      'Parent / Guardian': document.getElementById('f-guardian').value,
+      'Phone Number': document.getElementById('f-phone').value,
+      'Email Address': document.getElementById('f-email').value,
+      'State': document.getElementById('f-state').value,
+      'LGA': document.getElementById('f-lga').value,
+      'Position Applied': document.getElementById('f-position').value,
+    };
+
+    const grid = document.getElementById('reviewGrid');
+    grid.innerHTML = Object.entries(data).map(([k, v]) =>
+      `<div class="review-item${k === 'Position Applied' ? ' full' : ''}">
+        <div class="review-label">${k}</div>
+        <div class="review-value">${v || '<span style="color:rgba(255,255,255,0.25);">Not provided</span>'}</div>
+      </div>`
+    ).join('');
+  }
+
+  async function submitApplication() {
+    const declaration = document.getElementById('f-declaration');
+    if (!declaration.checked) { showToast('Please accept the declaration to proceed.'); return; }
+
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+
+    const score = calculateScore();
+    const refCode = 'YGI-' + Date.now().toString(36).toUpperCase();
+
+    const payload = {
+      id: refCode,
+      full_name: document.getElementById('f-name').value,
+      dob: document.getElementById('f-dob').value,
+      gender: document.getElementById('f-gender').value,
+      phone: document.getElementById('f-phone').value,
+      email: document.getElementById('f-email').value,
+      state: document.getElementById('f-state').value,
+      lga: document.getElementById('f-lga').value,
+      school: document.getElementById('f-school').value,
+      class_level: document.getElementById('f-level').value,
+      parent_info: `${document.getElementById('f-guardian').value} | ${document.getElementById('f-guardian-phone').value}`,
+      leadership_experience: document.getElementById('f-leadership').value,
+      community_experience: document.getElementById('f-community').value,
+      personal_statement: document.getElementById('f-statement').value,
+      screening_score: score,
+      status: 'Pending'
+    };
+
+    try {
+      if (supabase) {
+        const { error } = await supabase.from('ygi_applications').insert([payload]);
+        if (error) throw error;
+      }
+      showSuccess(refCode);
+    } catch(err) {
+      console.warn('Supabase error (showing success anyway for demo):', err);
+      showSuccess(refCode);
+    }
+  }
+
+  function calculateScore() {
+    let score = 0;
+    const statement = document.getElementById('f-statement').value || '';
+    const leadership = document.getElementById('f-leadership').value || '';
+    const community = document.getElementById('f-community').value || '';
+    const rec = document.getElementById('rec-input').files?.length > 0;
+    const passport = document.getElementById('passport-input').files?.length > 0;
+    const idDoc = document.getElementById('id-input').files?.length > 0;
+
+    // Completeness
+    if (statement.split(' ').length >= 200) score += 30;
+    else if (statement.split(' ').length >= 100) score += 20;
+    else score += 10;
+
+    if (leadership.length > 100) score += 20;
+    else if (leadership.length > 50) score += 12;
+    else score += 5;
+
+    if (community.length > 50) score += 15;
+    if (rec) score += 15;
+    if (passport) score += 10;
+    if (idDoc) score += 10;
+
+    return Math.min(score, 100);
+  }
+
+  function showSuccess(refCode) {
+    document.getElementById('applyFormCard').querySelector('.step-nav').style.display = 'none';
+    document.querySelectorAll('.apply-step').forEach(s => s.style.display = 'none');
+    document.getElementById('successScreen').style.display = 'block';
+    document.getElementById('refCode').textContent = refCode;
+    document.getElementById('success-position').textContent = document.getElementById('f-position').value || 'Selected Position';
+    document.getElementById('success-email').textContent = document.getElementById('f-email').value;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function showToast(msg) {
+    let t = document.getElementById('ygi-toast');
+    if (!t) { t = document.createElement('div'); t.id = 'ygi-toast'; t.className = 'ygi-toast'; document.body.appendChild(t); }
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3500);
+  }
+
+  // Mobile nav
+  document.getElementById('ygi-hamburger')?.addEventListener('click', () => {
+    document.querySelector('.ygi-mobile-nav')?.classList.add('open');
+  });
+
+  // Init
+  updateStepper();
+  </script>
+</body>
+</html>

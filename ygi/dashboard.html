@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leader Dashboard — Young Government Initiative (YGI)</title>
+  <meta name="description" content="YGI Leader Dashboard — Track your projects, training, performance, and certificates.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/ygi.css">
+  <style>
+    body.ygi-page { background: #080E20; }
+    .db-layout { display: flex; min-height: 100vh; }
+
+    /* Sidebar */
+    .db-sidebar {
+      width: 260px; flex-shrink: 0;
+      background: #0D1630;
+      border-right: 1px solid rgba(212,175,55,0.12);
+      position: fixed; top: 0; left: 0; bottom: 0;
+      display: flex; flex-direction: column;
+      z-index: 200; transition: transform 0.3s ease;
+    }
+    .db-sidebar-logo {
+      padding: 24px 20px;
+      border-bottom: 1px solid rgba(212,175,55,0.1);
+      display: flex; align-items: center; gap: 12px;
+      text-decoration: none;
+    }
+    .db-nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
+    .db-nav-label {
+      color: rgba(255,255,255,0.3); font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      font-family: var(--ygi-font-accent); padding: 16px 8px 8px;
+    }
+    .db-nav-link {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px; border-radius: 10px;
+      color: rgba(255,255,255,0.55); text-decoration: none;
+      font-size: 0.88rem; font-weight: 500;
+      font-family: var(--ygi-font-accent);
+      transition: all 0.25s ease; cursor: pointer;
+      border: none; background: none; width: 100%; text-align: left;
+    }
+    .db-nav-link:hover { background: rgba(212,175,55,0.08); color: rgba(255,255,255,0.85); }
+    .db-nav-link.active { background: rgba(212,175,55,0.12); color: var(--ygi-gold); }
+    .db-nav-link i { width: 18px; text-align: center; font-size: 0.95rem; }
+    .db-nav-link .nav-badge {
+      margin-left: auto; background: var(--ygi-gold); color: var(--ygi-navy);
+      font-size: 0.65rem; font-weight: 800; padding: 2px 7px; border-radius: 50px;
+    }
+    .db-sidebar-footer { padding: 16px 12px; border-top: 1px solid rgba(255,255,255,0.05); }
+    .db-user-card {
+      display: flex; align-items: center; gap: 10px; padding: 12px;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px;
+    }
+    .db-user-avatar {
+      width: 38px; height: 38px;
+      background: linear-gradient(135deg, var(--ygi-gold), var(--ygi-green));
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; color: white; font-weight: 700; flex-shrink: 0;
+    }
+    .db-user-name { font-size: 0.85rem; font-weight: 600; color: white; }
+    .db-user-role { font-size: 0.72rem; color: var(--ygi-gold); }
+
+    /* Main */
+    .db-main { margin-left: 260px; flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+    .db-topbar {
+      background: rgba(13,22,48,0.95); backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(212,175,55,0.08);
+      padding: 0 28px; height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .db-topbar-title { font-family: var(--ygi-font-heading); font-size: 1.25rem; color: white; }
+    .db-topbar-title span { color: var(--ygi-gold); }
+    .db-topbar-actions { display: flex; align-items: center; gap: 12px; }
+    .db-icon-btn {
+      width: 36px; height: 36px; background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(255,255,255,0.6); cursor: pointer; font-size: 0.9rem;
+      transition: all 0.2s; text-decoration: none;
+    }
+    .db-icon-btn:hover { background: rgba(212,175,55,0.1); color: var(--ygi-gold); border-color: rgba(212,175,55,0.2); }
+    .db-content { padding: 28px; flex: 1; }
+
+    .db-panel { display: none; }
+    .db-panel.active { display: block; }
+
+    /* Stat cards */
+    .db-stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 18px; margin-bottom: 28px; }
+    .db-stat-card {
+      background: #0D1630; border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 14px; padding: 22px 20px; display: flex; align-items: flex-start; gap: 16px;
+      transition: all 0.3s ease;
+    }
+    .db-stat-card:hover { border-color: rgba(212,175,55,0.2); transform: translateY(-2px); }
+    .db-stat-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0;
+    }
+    .db-stat-icon.gold { background: rgba(212,175,55,0.12); color: var(--ygi-gold); }
+    .db-stat-icon.green { background: rgba(26,107,60,0.2); color: #5EB87A; }
+    .db-stat-icon.blue { background: rgba(59,130,246,0.15); color: #60A5FA; }
+    .db-stat-icon.purple { background: rgba(139,92,246,0.15); color: #A78BFA; }
+    .db-stat-value { font-family: var(--ygi-font-heading); font-size: 1.9rem; font-weight: 900; color: white; line-height: 1; }
+    .db-stat-label { color: rgba(255,255,255,0.5); font-size: 0.8rem; margin-top: 4px; }
+    .db-stat-change { font-size: 0.75rem; margin-top: 6px; }
+    .db-stat-change.up { color: #5EB87A; }
+    .db-stat-change.pending { color: var(--ygi-gold); }
+
+    /* Cards */
+    .db-card {
+      background: #0D1630; border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 14px; padding: 22px; margin-bottom: 20px;
+    }
+    .db-card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .db-card-title {
+      font-family: var(--ygi-font-heading); font-size: 1.05rem; color: white;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .db-card-title i { color: var(--ygi-gold); }
+    .db-card-action {
+      color: var(--ygi-gold); font-size: 0.8rem; font-weight: 600;
+      cursor: pointer; text-decoration: none; font-family: var(--ygi-font-accent);
+      background: none; border: none;
+    }
+    .db-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+    /* Profile banner */
+    .db-profile-banner {
+      background: linear-gradient(135deg, #0D1B40, #1A6B3C 60%, #0D1B40);
+      border-radius: 14px; padding: 32px; display: flex; align-items: center; gap: 28px;
+      margin-bottom: 24px; position: relative; overflow: hidden;
+      border: 1px solid rgba(212,175,55,0.15);
+    }
+    .db-profile-avatar {
+      width: 90px; height: 90px;
+      background: linear-gradient(135deg, var(--ygi-gold), var(--ygi-gold-dark));
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 2.5rem; color: var(--ygi-navy); font-weight: 900; flex-shrink: 0;
+      border: 4px solid rgba(212,175,55,0.3); font-family: var(--ygi-font-heading);
+    }
+    .db-profile-info { position: relative; z-index: 1; }
+    .db-profile-name { font-family: var(--ygi-font-heading); font-size: 1.6rem; color: white; margin-bottom: 4px; }
+    .db-profile-pos { color: var(--ygi-gold); font-weight: 600; font-family: var(--ygi-font-accent); font-size: 0.95rem; margin-bottom: 8px; }
+    .db-profile-meta { display: flex; gap: 20px; flex-wrap: wrap; }
+    .db-profile-meta span { color: rgba(255,255,255,0.6); font-size: 0.85rem; display: flex; align-items: center; gap: 6px; }
+    .db-profile-meta i { color: var(--ygi-gold); }
+    .db-status-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 14px; border-radius: 50px; font-size: 0.78rem; font-weight: 700;
+      font-family: var(--ygi-font-accent); letter-spacing: 0.5px;
+    }
+    .db-status-badge.active { background: rgba(26,107,60,0.25); color: #5EB87A; border: 1px solid rgba(94,184,122,0.3); }
+    .db-status-badge.pending { background: rgba(212,175,55,0.15); color: var(--ygi-gold); border: 1px solid rgba(212,175,55,0.3); }
+    .db-status-badge.dot::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+    /* Progress bar */
+    .db-progress-wrap { background: rgba(255,255,255,0.05); border-radius: 50px; height: 8px; overflow: hidden; margin-top: 8px; }
+    .db-progress-fill { height: 100%; border-radius: 50px; transition: width 1s ease; }
+    .db-progress-fill.gold { background: linear-gradient(90deg, var(--ygi-gold), var(--ygi-gold-light)); }
+    .db-progress-fill.green { background: linear-gradient(90deg, #1A6B3C, #5EB87A); }
+    .db-progress-fill.blue { background: linear-gradient(90deg, #3B82F6, #60A5FA); }
+
+    /* Module items */
+    .db-module-item { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .db-module-item:last-child { border-bottom: none; }
+    .db-module-icon { width: 40px; height: 40px; background: rgba(255,255,255,0.05); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+    .db-module-name { font-size: 0.9rem; color: white; font-weight: 500; margin-bottom: 4px; }
+    .db-module-status { margin-left: auto; flex-shrink: 0; font-size: 0.75rem; font-weight: 700; font-family: var(--ygi-font-accent); }
+    .db-module-status.done { color: #5EB87A; }
+    .db-module-status.progress { color: var(--ygi-gold); }
+    .db-module-status.locked { color: rgba(255,255,255,0.25); }
+
+    /* Table */
+    .db-table { width: 100%; border-collapse: collapse; }
+    .db-table th { text-align: left; font-size: 0.72rem; font-family: var(--ygi-font-accent); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.3); padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .db-table td { padding: 13px 12px; color: rgba(255,255,255,0.8); font-size: 0.88rem; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .db-table tr:hover td { background: rgba(255,255,255,0.02); }
+    .db-badge { display: inline-block; padding: 3px 10px; border-radius: 50px; font-size: 0.72rem; font-weight: 700; font-family: var(--ygi-font-accent); }
+    .db-badge.green { background: rgba(26,107,60,0.25); color: #5EB87A; }
+    .db-badge.gold { background: rgba(212,175,55,0.15); color: var(--ygi-gold); }
+    .db-badge.blue { background: rgba(59,130,246,0.15); color: #60A5FA; }
+    .db-badge.gray { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.4); }
+
+    /* Certificates */
+    .db-cert-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+    .db-cert-card {
+      background: linear-gradient(135deg, #0F1A38, #1A2F5E);
+      border: 1px solid rgba(212,175,55,0.2); border-radius: 12px;
+      padding: 24px 18px; text-align: center; position: relative; overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    .db-cert-card:hover { transform: translateY(-4px); border-color: var(--ygi-gold); box-shadow: 0 8px 32px rgba(212,175,55,0.15); }
+    .db-cert-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--ygi-gold), var(--ygi-green)); }
+    .db-cert-icon { font-size: 2.2rem; margin-bottom: 12px; display: block; }
+    .db-cert-type { color: white; font-weight: 700; font-family: var(--ygi-font-heading); font-size: 0.95rem; margin-bottom: 6px; }
+    .db-cert-date { color: rgba(255,255,255,0.4); font-size: 0.75rem; margin-bottom: 14px; }
+    .db-cert-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(212,175,55,0.1); border: 1px solid rgba(212,175,55,0.25);
+      color: var(--ygi-gold); border-radius: 50px; padding: 6px 14px;
+      font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: all 0.2s;
+      font-family: var(--ygi-font-accent);
+    }
+    .db-cert-btn:hover { background: var(--ygi-gold); color: var(--ygi-navy); }
+
+    /* Performance metrics */
+    .db-metric { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .db-metric:last-child { border-bottom: none; }
+    .db-metric-label { color: rgba(255,255,255,0.65); font-size: 0.88rem; }
+    .db-metric-score { display: flex; align-items: center; gap: 10px; }
+    .db-metric-value { color: white; font-weight: 700; font-size: 0.95rem; width: 35px; text-align: right; }
+    .db-metric-bar-wrap { width: 100px; background: rgba(255,255,255,0.05); border-radius: 50px; height: 6px; }
+    .db-metric-bar-fill { height: 100%; border-radius: 50px; background: var(--ygi-gold); }
+
+    /* Parliament */
+    .db-motion-item {
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px; padding: 18px; margin-bottom: 12px; transition: all 0.2s;
+    }
+    .db-motion-item:hover { border-color: rgba(212,175,55,0.2); }
+    .db-motion-title { color: white; font-weight: 600; font-size: 0.95rem; margin-bottom: 6px; }
+    .db-motion-meta { color: rgba(255,255,255,0.4); font-size: 0.78rem; display: flex; gap: 16px; }
+    .db-motion-votes { display: flex; gap: 12px; margin-top: 12px; }
+    .db-vote-btn {
+      flex: 1; padding: 8px; border-radius: 8px; border: 1px solid; cursor: pointer;
+      font-size: 0.82rem; font-weight: 700; font-family: var(--ygi-font-accent);
+      transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px;
+      background: transparent;
+    }
+    .db-vote-btn.for { border-color: rgba(94,184,122,0.3); color: #5EB87A; }
+    .db-vote-btn.for:hover { background: rgba(94,184,122,0.15); }
+    .db-vote-btn.against { border-color: rgba(248,113,113,0.3); color: #F87171; }
+    .db-vote-btn.against:hover { background: rgba(248,113,113,0.15); }
+
+    /* Form */
+    .db-form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+    .db-form-group label { font-size: 0.8rem; font-weight: 600; color: rgba(255,255,255,0.55); font-family: var(--ygi-font-accent); letter-spacing: 0.5px; }
+    .db-form-group input, .db-form-group select, .db-form-group textarea {
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px; padding: 11px 14px; color: white; font-size: 0.9rem; outline: none; transition: all 0.2s;
+    }
+    .db-form-group input:focus, .db-form-group select:focus, .db-form-group textarea:focus { border-color: var(--ygi-gold); box-shadow: 0 0 0 3px rgba(212,175,55,0.1); }
+    .db-form-group input::placeholder, .db-form-group textarea::placeholder { color: rgba(255,255,255,0.2); }
+    .db-form-group textarea { min-height: 100px; resize: vertical; }
+    .db-form-group select option { background: #0D1630; }
+    .db-form-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    .db-sidebar-toggle {
+      display: none; position: fixed; bottom: 20px; left: 20px;
+      width: 48px; height: 48px; background: var(--ygi-gold); color: var(--ygi-navy);
+      border-radius: 50%; border: none; font-size: 1.2rem; cursor: pointer;
+      z-index: 300; box-shadow: 0 4px 20px rgba(212,175,55,0.4);
+      align-items: center; justify-content: center;
+    }
+    .db-empty { text-align: center; padding: 48px 24px; }
+    .db-empty i { font-size: 3rem; color: rgba(255,255,255,0.1); margin-bottom: 16px; display: block; }
+    .db-empty p { color: rgba(255,255,255,0.3); font-size: 0.9rem; }
+
+    @media (max-width: 768px) {
+      .db-sidebar { transform: translateX(-100%); }
+      .db-sidebar.open { transform: translateX(0); }
+      .db-main { margin-left: 0; }
+      .db-content { padding: 16px; }
+      .db-two-col { grid-template-columns: 1fr; }
+      .db-sidebar-toggle { display: flex; }
+      .db-topbar { padding: 0 16px; }
+      .db-profile-banner { flex-direction: column; text-align: center; gap: 16px; }
+    }
+  </style>
+</head>
+<body class="ygi-page">
+<div id="ygi-toast" class="ygi-toast"></div>
+<button class="db-sidebar-toggle" id="sidebarToggle"><i class="fas fa-bars"></i></button>
+
+<div class="db-layout">
+  <!-- SIDEBAR -->
+  <aside class="db-sidebar" id="dbSidebar">
+    <a href="index.html" class="db-sidebar-logo">
+      <div class="ygi-logo-icon" style="width:38px;height:38px;font-size:1rem;">YGI</div>
+      <div class="ygi-logo-text">
+        <span class="ygi-logo-title" style="font-size:0.75rem;">YGI Dashboard</span>
+        <span class="ygi-logo-sub">Leader Portal</span>
+      </div>
+    </a>
+    <nav class="db-nav">
+      <div class="db-nav-label">Main</div>
+      <button class="db-nav-link active" data-panel="overview"><i class="fas fa-th-large"></i> Overview</button>
+      <button class="db-nav-link" data-panel="profile"><i class="fas fa-user-circle"></i> My Profile</button>
+      <button class="db-nav-link" data-panel="performance"><i class="fas fa-chart-bar"></i> Performance</button>
+      <div class="db-nav-label">Duties</div>
+      <button class="db-nav-link" data-panel="projects"><i class="fas fa-project-diagram"></i> Projects <span class="nav-badge">3</span></button>
+      <button class="db-nav-link" data-panel="parliament"><i class="fas fa-gavel"></i> Parliament</button>
+      <button class="db-nav-link" data-panel="activities"><i class="fas fa-calendar-check"></i> Activities</button>
+      <div class="db-nav-label">Learning</div>
+      <button class="db-nav-link" data-panel="training"><i class="fas fa-graduation-cap"></i> Training</button>
+      <button class="db-nav-link" data-panel="certificates"><i class="fas fa-certificate"></i> Certificates</button>
+      <div class="db-nav-label">Platform</div>
+      <a class="db-nav-link" href="index.html"><i class="fas fa-landmark"></i> YGI Home</a>
+      <a class="db-nav-link" href="../index.html"><i class="fas fa-arrow-left"></i> ORM Platform</a>
+    </nav>
+    <div class="db-sidebar-footer">
+      <div class="db-user-card">
+        <div class="db-user-avatar" id="sidebarInitial">A</div>
+        <div><div class="db-user-name" id="sidebarName">Leader</div><div class="db-user-role" id="sidebarRole">YGI Leader</div></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="db-main">
+    <div class="db-topbar">
+      <div class="db-topbar-title">Young <span>Government</span> Initiative</div>
+      <div class="db-topbar-actions">
+        <a href="index.html" class="db-icon-btn" title="YGI Home"><i class="fas fa-home"></i></a>
+        <button class="db-icon-btn" title="Notifications" onclick="showToast('You have 2 new notifications.')"><i class="fas fa-bell"></i></button>
+        <button class="db-icon-btn" title="Refresh" onclick="location.reload()"><i class="fas fa-sync-alt"></i></button>
+      </div>
+    </div>
+
+    <div class="db-content">
+      <!-- =========== OVERVIEW =========== -->
+      <div class="db-panel active" id="panel-overview">
+        <div class="db-profile-banner">
+          <div class="db-profile-avatar" id="overviewAvatar">A</div>
+          <div class="db-profile-info">
+            <div class="db-profile-name" id="overviewName">Welcome, Leader</div>
+            <div class="db-profile-pos" id="overviewPos">Your YGI Position</div>
+            <div class="db-profile-meta">
+              <span><i class="fas fa-map-marker-alt"></i> <span id="overviewState">—</span></span>
+              <span><i class="fas fa-calendar"></i> Joined <span id="overviewDate">2026</span></span>
+            </div>
+            <div style="margin-top:10px;"><span class="db-status-badge active dot">Active Leader</span></div>
+          </div>
+        </div>
+
+        <div class="db-stats-grid">
+          <div class="db-stat-card"><div class="db-stat-icon gold"><i class="fas fa-project-diagram"></i></div><div><div class="db-stat-value" id="stat-projects">0</div><div class="db-stat-label">Projects</div><div class="db-stat-change up"><i class="fas fa-arrow-up"></i> Impact</div></div></div>
+          <div class="db-stat-card"><div class="db-stat-icon green"><i class="fas fa-graduation-cap"></i></div><div><div class="db-stat-value" id="stat-training">0/8</div><div class="db-stat-label">Training</div><div class="db-stat-change pending"><i class="fas fa-clock"></i> Progress</div></div></div>
+          <div class="db-stat-card"><div class="db-stat-icon blue"><i class="fas fa-users"></i></div><div><div class="db-stat-value" id="stat-beneficiaries">0</div><div class="db-stat-label">Beneficiaries</div><div class="db-stat-change up"><i class="fas fa-heart"></i> Reached</div></div></div>
+          <div class="db-stat-card"><div class="db-stat-icon purple"><i class="fas fa-certificate"></i></div><div><div class="db-stat-value" id="stat-certs">1</div><div class="db-stat-label">Certificates</div><div class="db-stat-change up"><i class="fas fa-star"></i> Earned</div></div></div>
+        </div>
+
+        <div class="db-two-col">
+          <div class="db-card">
+            <div class="db-card-header"><div class="db-card-title"><i class="fas fa-graduation-cap"></i> Training Progress</div><button class="db-card-action" onclick="switchPanel('training')">View All →</button></div>
+            <div class="db-module-item"><div class="db-module-icon">🏛️</div><div><div class="db-module-name">Leadership Development</div><div class="db-progress-wrap" style="width:140px;"><div class="db-progress-fill gold" style="width:70%"></div></div></div><span class="db-module-status progress">70%</span></div>
+            <div class="db-module-item"><div class="db-module-icon">🎤</div><div><div class="db-module-name">Public Speaking</div><div class="db-progress-wrap" style="width:140px;"><div class="db-progress-fill gold" style="width:100%"></div></div></div><span class="db-module-status done">✓ Done</span></div>
+            <div class="db-module-item"><div class="db-module-icon">⚖️</div><div><div class="db-module-name">Governance & Policy</div><div class="db-progress-wrap" style="width:140px;"><div class="db-progress-fill gold" style="width:30%"></div></div></div><span class="db-module-status progress">30%</span></div>
+          </div>
+          <div class="db-card">
+            <div class="db-card-header"><div class="db-card-title"><i class="fas fa-bolt"></i> Quick Actions</div></div>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+              <button class="ygi-btn ygi-btn-gold" style="font-size:0.85rem; padding:10px 20px; width:100%;" onclick="switchPanel('projects')"><i class="fas fa-plus"></i> Submit New Project</button>
+              <button class="ygi-btn ygi-btn-green" style="font-size:0.85rem; padding:10px 20px; width:100%;" onclick="switchPanel('parliament')"><i class="fas fa-gavel"></i> Propose Motion</button>
+              <button class="ygi-btn ygi-btn-outline" style="font-size:0.85rem; padding:10px 20px; width:100%; color:white; border-color:rgba(255,255,255,0.2);" onclick="switchPanel('training')"><i class="fas fa-play"></i> Continue Training</button>
+              <button class="ygi-btn ygi-btn-outline" style="font-size:0.85rem; padding:10px 20px; width:100%; color:var(--ygi-gold); border-color:rgba(212,175,55,0.3);" onclick="switchPanel('certificates')"><i class="fas fa-download"></i> Certificate</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- =========== PROFILE =========== -->
+      <div class="db-panel" id="panel-profile">
+        <h2 style="color:white; font-family:var(--ygi-font-heading); margin-bottom:24px;">My Profile <span style="color:var(--ygi-gold);">& Position</span></h2>
+        <div class="db-card">
+          <div class="db-card-header"><div class="db-card-title"><i class="fas fa-search"></i> Load Your Profile</div></div>
+          <p style="color:rgba(255,255,255,0.5); font-size:0.88rem; margin-bottom:16px;">Enter your application reference code to load your profile details.</p>
+          <div class="db-form-2">
+            <div class="db-form-group"><label>Reference Code</label><input type="text" id="refCodeInput" placeholder="e.g. YGI-1ABCD2EFG" style="text-transform:uppercase;"></div>
+            <div class="db-form-group"><label>&nbsp;</label><button class="ygi-btn ygi-btn-gold" onclick="loadProfile()" style="font-size:0.88rem; padding:11px 24px; width:100%;"><i class="fas fa-search"></i> Load Profile</button></div>
+          </div>
+        </div>
+        <div id="profileDetailsCard" style="display:none;">
+          <div class="db-two-col">
+            <div class="db-card"><div class="db-card-header"><div class="db-card-title"><i class="fas fa-user"></i> Personal Details</div></div><div id="profileDetails"></div></div>
+            <div class="db-card"><div class="db-card-header"><div class="db-card-title"><i class="fas fa-landmark"></i> Position Info</div></div><div id="positionDetails"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- =========== PERFORMANCE =========== -->
+      <div class="db-panel" id="panel-performance">
+        <h2 style="color:white; font-family:var(--ygi-font-heading); margin-bottom:24px;">Performance <span style="color:var(--ygi-gold);">Metrics</span></h2>
+        <div class="db-two-col">
+          <div class="db-card">
+            <div class="db-card-header"><div class="db-card-title"><i class="fas fa-chart-bar"></i> Score Breakdown</div></div>
+            <div class="db-metric"><span class="db-metric-label">Application Score</span><div class="db-metric-score"><div class="db-metric-bar-wrap"><div class="db-metric-bar-fill" style="width:82%"></div></div><span class="db-metric-value">82</span></div></div>
+            <div class="db-metric"><span class="db-metric-label">Interview Score</span><div class="db-metric-score"><div class="db-metric-bar-wrap"><div class="db-metric-bar-fill" style="width:76%"></div></div><span class="db-metric-value">76</span></div></div>
+            <div class="db-metric"><span class="db-metric-label">Training Progress</span><div class="db-metric-score"><div class="db-metric-bar-wrap"><div class="db-metric-bar-fill" style="width:37%"></div></div><span class="db-metric-value">37</span></div></div>
+            <div class="db-metric"><span class="db-metric-label">Community Impact</span><div class="db-metric-score"><div class="db-metric-bar-wrap"><div class="db-metric-bar-fill" style="width:60%"></div></div><span class="db-metric-value">60</span></div></div>
+            <div class="db-metric"><span class="db-metric-label">Parliament Activity</span><div class="db-metric-score"><div class="db-metric-bar-wrap"><div class="db-metric-bar-fill" style="width:45%"></div></div><span class="db-metric-value">45</span></div></div>
+          </div>
+          <div class="db-card">
+            <div class="db-card-header"><div class="db-card-title"><i class="fas fa-trophy"></i> Overall Standing</div></div>
+            <div style="text-align:center; padding:20px;">
+              <div style="font-size:4.5rem; font-family:var(--ygi-font-heading); font-weight:900; background:linear-gradient(135deg,var(--ygi-gold),#5EB87A); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;">72</div>
+              <div style="color:rgba(255,255,255,0.5); font-size:0.88rem; margin-bottom:20px;">Overall Score / 100</div>
+              <div class="db-badge gold" style="font-size:0.85rem; padding:8px 20px;">🌟 Rising Star</div>
+              <p style="color:rgba(255,255,255,0.45); font-size:0.82rem; line-height:1.6; margin-top:16px;">Complete more training and projects to improve your ranking.</p>
+            </div>
+          </div>
+        </div>
+        <div class="db-card">
+          <div class="db-card-header"><div class="db-card-title"><i class="fas fa-file-alt"></i> Activity Report</div><button class="db-card-action" onclick="showToast('Generating PDF report...')"><i class="fas fa-download"></i> Export</button></div>
+          <table class="db-table">
+            <thead><tr><th>Activity</th><th>Date</th><th>Status</th><th>Score</th></tr></thead>
+            <tbody>
+              <tr><td>Application Submitted</td><td>Jun 6, 2026</td><td><span class="db-badge green">Completed</span></td><td>82/100</td></tr>
+              <tr><td>Screening Assessment</td><td>Jun 8, 2026</td><td><span class="db-badge green">Passed</span></td><td>78/100</td></tr>
+              <tr><td>Panel Interview</td><td>Jun 15, 2026</td><td><span class="db-badge gold">Pending</span></td><td>—</td></tr>
+              <tr><td>Leadership Module 1</td><td>Jun 20, 2026</td><td><span class="db-badge blue">In Progress</span></td><td>70%</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- =========== PROJECTS =========== -->
+      <div class="db-panel" id="panel-projects">
+        <h2 style="color:white; font-family:var(--ygi-font-heading); margin-bottom:24px;">Community <span style="color:var(--ygi-gold);">Projects</span></h2>
+        <div class="db-card">
+          <div class="db-card-header"><div class="db-card-title"><i class="fas fa-plus-circle"></i> Submit New Project</div></div>
+          <div class="db-form-2">
+            <div class="db-form-group"><label>Project Title</label><input type="text" id="proj-title" placeholder="e.g. Youth Clean-Up Drive"></div>
+            <div class="db-form-group"><label>Status</label><select id="proj-status"><option value="Ongoing">Ongoing</option><option value="Completed">Completed</option><option value="Planned">Planned</option></select></div>
+          </div>
+          <div class="db-form-group"><label>Description</label><textarea id="proj-desc" placeholder="Describe your project objectives, activities, and expected outcomes..."></textarea></div>
+          <div class="db-form-2">
+            <div class="db-form-group"><label>Beneficiaries</label><input type="number" id="proj-beneficiaries" placeholder="e.g. 200" min="0"></div>
+            <div class="db-form-group"><label>Location</label><input type="text" id="proj-location" placeholder="e.g. Ibadan North LGA"></div>
+          </div>
+          <button class="ygi-btn ygi-btn-gold" onclick="submitProject()" style="font-size:0.88rem; padding:11px 28px;"><i class="fas fa-paper-plane"></i> Submit Project</button>
+        </div>
+        <div class="db-card">
+          <div class="db-card-header"><div class="db-card-title"><i class="fas fa-list"></i> My Projects</div></div>
+          <div id="myProjectsList"><div class="db-empty"><i class="fas fa-folder-open"></i><p>No projects submitted yet. Use the form above!</p></div></div>
+        </div>
+      </div>
+
+      <!-- =========== PARLIAMENT =========== -->
+      <div class="db-panel" id="panel-parliament">
+        <h2 style="color:white; font-family:var(--ygi-font-heading); margin-bottom:24px;">Digital <span style="color:var(--ygi-gold);">Parliament</span></h2>
+        <div class="db-two-col">
+          <div class="db-card">
+            <div class="db-card-header"><div class="db-card-title"><i class="fas fa-scroll"></i> Propose a Motion</div></div>
+            <div class="db-form-group"><label>Title</label><input type="text" id="motion-title" placeholder="e.g. Motion for Free Digital Skills Training"></div>
+            <div class="db-form-group"><label>Type</label><select id="motion-type"><option>Motion</option><option>Bill</option><option>Resolution</option></select></div>
+            <div class="db-form-group"><label>Content</label><textarea id="motion-content" placeholder="State your motion clearly with arguments..."></textarea></div>
+            <button class="ygi-btn ygi-btn-green" onclick="submitMotion()" style="font-size:0.88rem; padding:11px 28px;"><i class="fas fa-gavel"></i> Submit</button>
+          </div>
+          <div class="db-card">
+            <div class="db-card-header"><div class="db-card-title"><i class="fas fa-balance-scale"></i> Active Motions</div></div>
+            <div class="db-motion-item">
+              <div class="db-motion-title">Motion: Establish YGI Digital Skills Fund for 500 Youths</div>
+              <div class="db-motion-meta"><span>Proposer: Young Governor, Oyo</span><span>34 For / 8 Against</span></div>
+              <div class="db-motion-votes">
+                <button class="db-vote-btn for" onclick="castVote(this)"><i class="fas fa-thumbs-up"></i> Support (34)</button>
+                <button class="db-vote-btn against" onclick="castVote(this)"><i class="fas fa-thumbs-down"></i> Oppose (8)</button>
+              </div>
+            </div>
+            <div class="db-motion-item">
+              <div class="db-motion-title">Bill: Community Reporting Framework Act 2026</div>
+              <div class="db-motion-meta"><span>Proposer: Young Speaker, Lagos</span><span>21 For / 5 Against</span></div>
+              <div class="db-motion-votes">
+                <button class="db-vote-btn for" onclick="castVote(this)"><i class="fas fa-thumbs-up"></i> Support (21)</button>
+                <button class="db-vote-btn against" onclick="castVote(this)"><i class="fas fa-thumbs-down"></i> Oppose (5)</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- =========== TRAINING =========== -->
+      <div class="db-panel" id="panel-training">
+        <h2 style="color:white; font-family:var(--ygi-font-heading); margin-bottom:24px;">Training <span style="color:var(--ygi-gold);">Modules</span></h2>
+        <div id="trainingGrid" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:18px;"></div>
+      </div>
+
+      <!-- =========== CERTIFICATES =========== -->
+      <div class="db-panel" id="panel-certificates">
+        <h2 style="color:white; font-family:var(--ygi-font-heading); margin-bottom:24px;">My <span style="color:var(--ygi-gold);">Certificates</span></h2>
+        <div class="db-cert-grid">
+          <div class="db-cert-card"><span class="db-cert-icon">📜</span><div class="db-cert-type">Certificate of Participation</div><div class="db-cert-date">Issued: June 6, 2026</div><button class="db-cert-btn" onclick="generateCertificate()"><i class="fas fa-download"></i> Download</button></div>
+          <div class="db-cert-card" style="opacity:0.4;"><span class="db-cert-icon">🏆</span><div class="db-cert-type">Leadership Certificate</div><div class="db-cert-date">Unlock: Complete Training</div><button class="db-cert-btn" style="cursor:not-allowed;"><i class="fas fa-lock"></i> Locked</button></div>
+          <div class="db-cert-card" style="opacity:0.4;"><span class="db-cert-icon">🎖️</span><div class="db-cert-type">Appointment Certificate</div><div class="db-cert-date">Unlock: Upon Appointment</div><button class="db-cert-btn" style="cursor:not-allowed;"><i class="fas fa-lock"></i> Locked</button></div>
+          <div class="db-cert-card" style="opacity:0.4;"><span class="db-cert-icon">🌟</span><div class="db-cert-type">Best Young Governor Award</div><div class="db-cert-date">Unlock: End of Term</div><button class="db-cert-btn" style="cursor:not-allowed;"><i class="fas fa-lock"></i> Locked</button></div>
+        </div>
+        <div class="db-card" style="margin-top:24px;">
+          <div class="db-card-header"><div class="db-card-title"><i class="fas fa-magic"></i> Generate Certificate</div></div>
+          <div class="db-form-2">
+            <div class="db-form-group"><label>Your Full Name</label><input type="text" id="cert-name" placeholder="As it appears on certificate"></div>
+            <div class="db-form-group"><label>Position</label><input type="text" id="cert-position" placeholder="e.g. Young Governor, Oyo State"></div>
+          </div>
+          <button class="ygi-btn ygi-btn-gold" onclick="generateCertificate()" style="font-size:0.88rem; padding:11px 28px;"><i class="fas fa-certificate"></i> Generate & Print</button>
+        </div>
+      </div>
+
+      <!-- =========== ACTIVITIES =========== -->
+      <div class="db-panel" id="panel-activities">
+        <h2 style="color:white; font-family:var(--ygi-font-heading); margin-bottom:24px;">Activity <span style="color:var(--ygi-gold);">Reports</span></h2>
+        <div class="db-card">
+          <div class="db-card-header"><div class="db-card-title"><i class="fas fa-calendar-check"></i> Participation Log</div><button class="db-card-action" onclick="showToast('Exporting report...')"><i class="fas fa-download"></i> Export</button></div>
+          <table class="db-table">
+            <thead><tr><th>Event</th><th>Date</th><th>Type</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>YGI Orientation</td><td>Jun 7, 2026</td><td>Orientation</td><td><span class="db-badge green">Attended</span></td></tr>
+              <tr><td>Leadership Module 1</td><td>Jun 10, 2026</td><td>Training</td><td><span class="db-badge green">Completed</span></td></tr>
+              <tr><td>Public Speaking Workshop</td><td>Jun 12, 2026</td><td>Workshop</td><td><span class="db-badge green">Attended</span></td></tr>
+              <tr><td>Panel Interview</td><td>Jun 15, 2026</td><td>Interview</td><td><span class="db-badge gold">Scheduled</span></td></tr>
+              <tr><td>Parliament Session 1</td><td>Jun 22, 2026</td><td>Parliament</td><td><span class="db-badge gray">Upcoming</span></td></tr>
+              <tr><td>Community Project Kickoff</td><td>Jun 28, 2026</td><td>Project</td><td><span class="db-badge gray">Upcoming</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL='https://yqnvjgxzqzqiepwmmhfy.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlxbnZqZ3h6cXpxaWVwd21taGZ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzE4NTU4NzUsImV4cCI6MjA0NzQzMTg3NX0.jHxlRKJ3KHdwzlMOBpjKd_aXj1VhvJj5aRlFIovIk5g';
+const db=window.supabase?.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+function switchPanel(name){
+  document.querySelectorAll('.db-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.db-nav-link').forEach(l=>l.classList.remove('active'));
+  document.getElementById('panel-'+name)?.classList.add('active');
+  document.querySelector(`[data-panel="${name}"]`)?.classList.add('active');
+  if(name==='training')renderTraining();
+  document.getElementById('dbSidebar').classList.remove('open');
+}
+document.querySelectorAll('.db-nav-link[data-panel]').forEach(l=>l.addEventListener('click',()=>switchPanel(l.dataset.panel)));
+document.getElementById('sidebarToggle')?.addEventListener('click',()=>document.getElementById('dbSidebar').classList.toggle('open'));
+
+function showToast(m){const t=document.getElementById('ygi-toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3500);}
+
+async function loadProfile(){
+  const code=document.getElementById('refCodeInput').value.trim().toUpperCase();
+  if(!code){showToast('Please enter your reference code.');return;}
+  try{
+    const{data,error}=await db.from('ygi_applications').select('*').eq('ref_code',code).single();
+    if(error||!data){showToast('No profile found.');return;}
+    setProfile(data);showToast('Profile loaded!');
+    document.getElementById('profileDetailsCard').style.display='block';
+  }catch(e){showToast('Error loading. Try again.');}
+}
+
+function setProfile(d){
+  const ini=d.full_name?.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase()||'YG';
+  document.getElementById('overviewAvatar').textContent=ini;
+  document.getElementById('overviewName').textContent=d.full_name||'Leader';
+  document.getElementById('overviewPos').textContent=d.position_title||'YGI Leader';
+  document.getElementById('overviewState').textContent=d.state||'—';
+  document.getElementById('sidebarInitial').textContent=ini.charAt(0);
+  document.getElementById('sidebarName').textContent=d.full_name?.split(' ')[0]||'Leader';
+  document.getElementById('sidebarRole').textContent=d.position_title||'YGI Leader';
+  const pd=document.getElementById('profileDetails');
+  pd.innerHTML=[['Full Name',d.full_name],['Email',d.email],['Phone',d.phone],['State',d.state],['LGA',d.lga],['School',d.school],['Status',d.status]].map(([l,v])=>`<div style="border-bottom:1px solid rgba(255,255,255,0.05);padding:10px 0;"><div style="color:var(--ygi-gold);font-size:0.72rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;font-family:var(--ygi-font-accent);margin-bottom:3px;">${l}</div><div style="color:rgba(255,255,255,0.85);font-size:0.9rem;">${v||'—'}</div></div>`).join('');
+  const po=document.getElementById('positionDetails');
+  po.innerHTML=`<div style="text-align:center;padding:20px 0;"><div style="font-size:3rem;margin-bottom:12px;">🏛️</div><div style="color:var(--ygi-gold);font-family:var(--ygi-font-heading);font-size:1.3rem;font-weight:700;margin-bottom:8px;">${d.position_title||'Pending'}</div><div class="db-status-badge ${d.status==='Approved'?'active':'pending'} dot" style="margin:0 auto;">${d.status}</div><div style="margin-top:16px;color:rgba(255,255,255,0.5);font-size:0.85rem;">Score: <strong style="color:var(--ygi-gold);font-size:1.2rem;">${d.screening_score||0}/100</strong></div><div class="db-progress-wrap" style="max-width:200px;margin:8px auto 0;"><div class="db-progress-fill gold" style="width:${d.screening_score||0}%"></div></div></div>`;
+}
+
+const modules=[
+  {icon:'🏛️',title:'Leadership Development',sub:'Module 1 · 60 mins',status:'progress',pct:70},
+  {icon:'🎤',title:'Public Speaking',sub:'Module 2 · 45 mins',status:'done',pct:100},
+  {icon:'⚖️',title:'Governance & Policy',sub:'Module 3 · 75 mins',status:'progress',pct:30},
+  {icon:'🤝',title:'Civic Responsibility',sub:'Module 4 · 45 mins',status:'locked',pct:0},
+  {icon:'📋',title:'Project Management',sub:'Module 5 · 60 mins',status:'locked',pct:0},
+  {icon:'💡',title:'Entrepreneurship',sub:'Module 6 · 60 mins',status:'locked',pct:0},
+  {icon:'💻',title:'Digital Skills',sub:'Module 7 · 45 mins',status:'locked',pct:0},
+  {icon:'🌍',title:'Community Development',sub:'Module 8 · 60 mins',status:'locked',pct:0},
+];
+function renderTraining(){
+  const g=document.getElementById('trainingGrid');if(!g)return;
+  g.innerHTML=modules.map(m=>`<div class="db-card" style="cursor:pointer;" onclick="${m.status!=='locked'?`showToast('Opening: ${m.title}')`:`showToast('Complete previous modules first.')`}"><div style="font-size:2.5rem;margin-bottom:12px;">${m.icon}</div><div style="color:white;font-weight:600;font-size:0.95rem;margin-bottom:4px;font-family:var(--ygi-font-heading);">${m.title}</div><div style="color:rgba(255,255,255,0.4);font-size:0.78rem;margin-bottom:12px;">${m.sub}</div><div class="db-progress-wrap"><div class="db-progress-fill ${m.status==='done'?'green':'gold'}" style="width:${m.pct}%"></div></div><div style="display:flex;justify-content:space-between;margin-top:8px;"><span style="font-size:0.75rem;color:rgba(255,255,255,0.4);">${m.pct}%</span><span class="db-module-status ${m.status}">${m.status==='done'?'✓ Done':m.status==='progress'?'▶ Resume':'🔒 Locked'}</span></div></div>`).join('');
+}
+
+async function submitProject(){
+  const t=document.getElementById('proj-title').value,d=document.getElementById('proj-desc').value,b=parseInt(document.getElementById('proj-beneficiaries').value)||0;
+  if(!t||!d){showToast('Fill in all project fields.');return;}
+  try{if(db)await db.from('ygi_projects').insert([{title:t,description:d,beneficiaries_count:b,status:document.getElementById('proj-status').value}]);showToast('Project submitted!');document.getElementById('proj-title').value='';document.getElementById('proj-desc').value='';document.getElementById('proj-beneficiaries').value='';}catch(e){showToast('Error. Try again.');}
+}
+
+async function submitMotion(){
+  const t=document.getElementById('motion-title').value,c=document.getElementById('motion-content').value,ty=document.getElementById('motion-type').value;
+  if(!t||!c){showToast('Fill in motion title and content.');return;}
+  try{if(db)await db.from('ygi_parliament').insert([{title:t,content:c,type:ty}]);showToast(ty+' submitted!');document.getElementById('motion-title').value='';document.getElementById('motion-content').value='';}catch(e){showToast('Error. Try again.');}
+}
+
+function castVote(btn){
+  const p=btn.closest('.db-motion-votes');
+  p.querySelectorAll('.db-vote-btn').forEach(b=>{b.disabled=true;b.style.opacity='0.5';});
+  btn.style.opacity='1';btn.style.fontWeight='900';
+  showToast('Your vote has been recorded.');
+}
+
+function generateCertificate(){
+  const name=document.getElementById('cert-name')?.value||'YGI Leader';
+  const pos=document.getElementById('cert-position')?.value||'Young Leader';
+  const w=window.open('','_blank');
+  w.document.write(`<!DOCTYPE html><html><head><title>YGI Certificate</title><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet"><style>body{margin:0;background:#0D1B40;display:flex;align-items:center;justify-content:center;min-height:100vh;}.cert{width:800px;background:white;padding:60px;border-radius:12px;text-align:center;border:12px solid #D4AF37;box-shadow:0 20px 60px rgba(0,0,0,0.5);}.cert-top{color:#1A6B3C;font-family:Montserrat,sans-serif;font-size:0.85rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:8px;}.cert-org{color:#0D1B40;font-family:Montserrat;font-size:0.9rem;font-weight:600;margin-bottom:24px;}.cert-seal{width:80px;height:80px;background:linear-gradient(135deg,#D4AF37,#B8930F);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;color:#0D1B40;font-weight:900;font-size:1.5rem;font-family:'Playfair Display',serif;}.cert-title{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:900;color:#0D1B40;margin-bottom:8px;}.cert-sub{color:#5A6480;font-size:0.9rem;margin-bottom:32px;}.cert-name{font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:900;color:#1A6B3C;border-bottom:3px solid #D4AF37;display:inline-block;padding-bottom:8px;margin-bottom:24px;}.cert-pos{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:#0D1B40;margin-bottom:32px;}.cert-footer{display:flex;justify-content:space-between;margin-top:48px;}.cert-sig{text-align:center;}.cert-sig-line{width:160px;border-top:2px solid #0D1B40;margin:0 auto 6px;}.cert-sig-name{font-size:0.8rem;font-weight:700;color:#0D1B40;}.cert-sig-title{font-size:0.72rem;color:#5A6480;}</style></head><body><div class="cert"><div class="cert-top">Golden Generation Community Development Club</div><div class="cert-org">Young Government Initiative (YGI)</div><div class="cert-seal">YGI</div><div class="cert-title">Certificate of Participation</div><div class="cert-sub">This is to certify that</div><div class="cert-name">${name}</div><div style="color:#5A6480;font-size:0.9rem;margin-bottom:8px;">has actively participated in the</div><div class="cert-pos">${pos}</div><p style="color:#5A6480;font-size:0.88rem;line-height:1.7;">under the Young Government Initiative Leadership & Governance Program<br>organized by Golden Generation CDC (CAC: IT-142448)</p><div class="cert-footer"><div class="cert-sig"><div class="cert-sig-line"></div><div class="cert-sig-name">Engr. Jimoh Lawal Akinlabi</div><div class="cert-sig-title">Founder, ORM</div></div><div style="color:#5A6480;font-size:0.82rem;align-self:flex-end;">Date: ${new Date().toLocaleDateString('en-NG',{day:'numeric',month:'long',year:'numeric'})}</div><div class="cert-sig"><div class="cert-sig-line"></div><div class="cert-sig-name">YGI Program Director</div><div class="cert-sig-title">Golden Generation CDC</div></div></div></div></body></html>`);
+  w.document.close();
+  setTimeout(()=>w.print(),800);
+}
+
+renderTraining();
+</script>
+</body>
+</html>

@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YGI Admin Dashboard — Young Government Initiative</title>
+  <meta name="description" content="Admin panel for managing YGI applications, elections, training, and community projects.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --ygi-gold: #D4AF37; --ygi-gold-light: #F0D060; --ygi-gold-dark: #B8930F;
+      --ygi-green: #1A6B3C; --ygi-green-light: #2A8A50; --ygi-navy: #0D1B40;
+      --ygi-white: #FFFFFF; --ygi-text: #1A1A2E; --ygi-text-muted: #5A6480;
+      --ygi-font-heading: 'Playfair Display', serif;
+      --ygi-font-body: 'Inter', sans-serif;
+      --ygi-font-accent: 'Montserrat', sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--ygi-font-body); background: #080E20; color: #fff; min-height: 100vh; }
+
+    .admin-layout { display: flex; min-height: 100vh; }
+
+    /* Sidebar */
+    .admin-sidebar {
+      width: 260px; flex-shrink: 0; background: #0D1630;
+      border-right: 1px solid rgba(212,175,55,0.12);
+      position: fixed; top: 0; left: 0; bottom: 0;
+      display: flex; flex-direction: column; z-index: 200;
+      transition: transform 0.3s ease;
+    }
+    .admin-sidebar-logo {
+      padding: 24px 20px; border-bottom: 1px solid rgba(212,175,55,0.1);
+      display: flex; align-items: center; gap: 12px; text-decoration: none;
+    }
+    .admin-logo-icon {
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, #D4AF37, #B8930F);
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; color: #0D1B40; font-weight: 900; font-family: var(--ygi-font-accent);
+    }
+    .admin-logo-title { font-family: var(--ygi-font-accent); font-weight: 800; font-size: 0.75rem; color: #D4AF37; letter-spacing: 1px; text-transform: uppercase; }
+    .admin-logo-sub { font-size: 0.68rem; color: rgba(255,255,255,0.5); }
+    .admin-nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
+    .admin-nav-label { color: rgba(255,255,255,0.25); font-size: 0.65rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; font-family: var(--ygi-font-accent); padding: 16px 8px 8px; }
+    .admin-nav-link {
+      display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px;
+      color: rgba(255,255,255,0.55); text-decoration: none; font-size: 0.85rem; font-weight: 500;
+      font-family: var(--ygi-font-accent); transition: all 0.25s ease; cursor: pointer;
+      border: none; background: none; width: 100%; text-align: left;
+    }
+    .admin-nav-link:hover { background: rgba(212,175,55,0.08); color: rgba(255,255,255,0.85); }
+    .admin-nav-link.active { background: rgba(212,175,55,0.12); color: #D4AF37; }
+    .admin-nav-link i { width: 18px; text-align: center; font-size: 0.9rem; }
+    .admin-nav-link .badge { margin-left: auto; background: #D4AF37; color: #0D1B40; font-size: 0.62rem; font-weight: 800; padding: 2px 7px; border-radius: 50px; }
+    .admin-sidebar-footer { padding: 16px 12px; border-top: 1px solid rgba(255,255,255,0.05); }
+
+    /* Main */
+    .admin-main { margin-left: 260px; flex: 1; display: flex; flex-direction: column; }
+    .admin-topbar {
+      background: rgba(13,22,48,0.95); backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(212,175,55,0.08);
+      padding: 0 28px; height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .admin-topbar-title { font-family: var(--ygi-font-heading); font-size: 1.2rem; }
+    .admin-topbar-title span { color: #D4AF37; }
+    .admin-topbar-actions { display: flex; align-items: center; gap: 10px; }
+    .admin-icon-btn {
+      width: 36px; height: 36px; background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(255,255,255,0.6); cursor: pointer; font-size: 0.9rem;
+      transition: all 0.2s; text-decoration: none;
+    }
+    .admin-icon-btn:hover { background: rgba(212,175,55,0.1); color: #D4AF37; }
+    .admin-content { padding: 28px; flex: 1; }
+
+    .admin-panel { display: none; }
+    .admin-panel.active { display: block; }
+
+    /* Stat cards */
+    .admin-stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-bottom: 28px; }
+    .admin-stat {
+      background: #0D1630; border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 14px; padding: 20px; transition: all 0.3s ease;
+    }
+    .admin-stat:hover { border-color: rgba(212,175,55,0.2); transform: translateY(-2px); }
+    .admin-stat-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    .admin-stat-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+    }
+    .admin-stat-icon.gold { background: rgba(212,175,55,0.12); color: #D4AF37; }
+    .admin-stat-icon.green { background: rgba(26,107,60,0.2); color: #5EB87A; }
+    .admin-stat-icon.blue { background: rgba(59,130,246,0.15); color: #60A5FA; }
+    .admin-stat-icon.purple { background: rgba(139,92,246,0.15); color: #A78BFA; }
+    .admin-stat-icon.red { background: rgba(248,113,113,0.12); color: #F87171; }
+    .admin-stat-icon.teal { background: rgba(20,184,166,0.15); color: #2DD4BF; }
+    .admin-stat-icon.orange { background: rgba(251,146,60,0.15); color: #FB923C; }
+    .admin-stat-change { font-size: 0.7rem; font-weight: 700; font-family: var(--ygi-font-accent); }
+    .admin-stat-change.up { color: #5EB87A; }
+    .admin-stat-change.down { color: #F87171; }
+    .admin-stat-value { font-family: var(--ygi-font-heading); font-size: 2rem; font-weight: 900; line-height: 1; margin-bottom: 4px; }
+    .admin-stat-label { color: rgba(255,255,255,0.45); font-size: 0.78rem; }
+
+    /* Card */
+    .admin-card {
+      background: #0D1630; border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 14px; padding: 22px; margin-bottom: 20px;
+    }
+    .admin-card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .admin-card-title { font-family: var(--ygi-font-heading); font-size: 1rem; display: flex; align-items: center; gap: 8px; }
+    .admin-card-title i { color: #D4AF37; }
+    .admin-card-action {
+      color: #D4AF37; font-size: 0.78rem; font-weight: 600; cursor: pointer;
+      text-decoration: none; font-family: var(--ygi-font-accent); background: none; border: none;
+    }
+
+    /* Table */
+    .admin-table { width: 100%; border-collapse: collapse; }
+    .admin-table th {
+      text-align: left; font-size: 0.7rem; font-family: var(--ygi-font-accent);
+      font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+      color: rgba(255,255,255,0.3); padding: 10px 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .admin-table td {
+      padding: 12px; color: rgba(255,255,255,0.8); font-size: 0.85rem;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .admin-table tr:hover td { background: rgba(255,255,255,0.02); }
+    .admin-badge { display: inline-block; padding: 3px 10px; border-radius: 50px; font-size: 0.7rem; font-weight: 700; font-family: var(--ygi-font-accent); }
+    .admin-badge.green { background: rgba(26,107,60,0.25); color: #5EB87A; }
+    .admin-badge.gold { background: rgba(212,175,55,0.15); color: #D4AF37; }
+    .admin-badge.blue { background: rgba(59,130,246,0.15); color: #60A5FA; }
+    .admin-badge.red { background: rgba(248,113,113,0.15); color: #F87171; }
+    .admin-badge.gray { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.4); }
+
+    .admin-action-btn {
+      padding: 5px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 600;
+      font-family: var(--ygi-font-accent); cursor: pointer; border: none;
+      transition: all 0.2s; margin-right: 4px;
+    }
+    .admin-action-btn.approve { background: rgba(26,107,60,0.2); color: #5EB87A; }
+    .admin-action-btn.approve:hover { background: rgba(26,107,60,0.4); }
+    .admin-action-btn.reject { background: rgba(248,113,113,0.15); color: #F87171; }
+    .admin-action-btn.reject:hover { background: rgba(248,113,113,0.3); }
+    .admin-action-btn.view { background: rgba(59,130,246,0.15); color: #60A5FA; }
+    .admin-action-btn.view:hover { background: rgba(59,130,246,0.3); }
+
+    /* Filters */
+    .admin-filters { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
+    .admin-filter-input {
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px; padding: 9px 14px; color: white; font-size: 0.85rem;
+      outline: none; transition: all 0.2s; font-family: var(--ygi-font-body);
+    }
+    .admin-filter-input:focus { border-color: #D4AF37; box-shadow: 0 0 0 3px rgba(212,175,55,0.1); }
+    .admin-filter-input::placeholder { color: rgba(255,255,255,0.2); }
+    .admin-filter-select { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 9px 14px; color: white; font-size: 0.85rem; outline: none; }
+    .admin-filter-select option { background: #0D1630; }
+
+    .admin-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .admin-three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+    /* Charts placeholder */
+    .admin-chart-placeholder {
+      background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.08);
+      border-radius: 12px; height: 220px; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; color: rgba(255,255,255,0.2);
+    }
+    .admin-chart-placeholder i { font-size: 2.5rem; margin-bottom: 12px; }
+
+    /* Bar chart (CSS only) */
+    .admin-bar-chart { display: flex; align-items: flex-end; gap: 12px; height: 180px; padding-top: 10px; }
+    .admin-bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .admin-bar {
+      width: 100%; border-radius: 6px 6px 0 0; transition: height 1s ease;
+      min-width: 28px; position: relative;
+    }
+    .admin-bar-label { font-size: 0.68rem; color: rgba(255,255,255,0.4); font-family: var(--ygi-font-accent); white-space: nowrap; }
+    .admin-bar-value { font-size: 0.72rem; color: rgba(255,255,255,0.7); font-weight: 700; font-family: var(--ygi-font-accent); }
+
+    /* Toast */
+    .admin-toast {
+      position: fixed; bottom: 24px; right: 24px;
+      background: #0D1B40; border: 1px solid #D4AF37; color: white;
+      padding: 14px 24px; border-radius: 12px; font-size: 0.9rem;
+      z-index: 9999; box-shadow: 0 4px 24px rgba(212,175,55,0.25);
+      transform: translateY(120px); opacity: 0; transition: all 0.3s ease; max-width: 340px;
+    }
+    .admin-toast.show { transform: translateY(0); opacity: 1; }
+
+    .admin-sidebar-toggle {
+      display: none; position: fixed; bottom: 20px; left: 20px;
+      width: 48px; height: 48px; background: #D4AF37; color: #0D1B40;
+      border-radius: 50%; border: none; font-size: 1.2rem; cursor: pointer;
+      z-index: 300; box-shadow: 0 4px 20px rgba(212,175,55,0.4);
+      align-items: center; justify-content: center;
+    }
+
+    @media (max-width: 768px) {
+      .admin-sidebar { transform: translateX(-100%); }
+      .admin-sidebar.open { transform: translateX(0); }
+      .admin-main { margin-left: 0; }
+      .admin-content { padding: 16px; }
+      .admin-two-col, .admin-three-col { grid-template-columns: 1fr; }
+      .admin-sidebar-toggle { display: flex; }
+      .admin-topbar { padding: 0 16px; }
+      .admin-stats { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div id="admin-toast" class="admin-toast"></div>
+<button class="admin-sidebar-toggle" id="adminSidebarToggle"><i class="fas fa-bars"></i></button>
+
+<div class="admin-layout">
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar" id="adminSidebar">
+    <a href="../ygi/index.html" class="admin-sidebar-logo">
+      <div class="admin-logo-icon">YGI</div>
+      <div>
+        <div class="admin-logo-title">YGI Admin</div>
+        <div class="admin-logo-sub">Control Panel</div>
+      </div>
+    </a>
+    <nav class="admin-nav">
+      <div class="admin-nav-label">Dashboard</div>
+      <button class="admin-nav-link active" data-panel="overview"><i class="fas fa-th-large"></i> Overview</button>
+
+      <div class="admin-nav-label">Management</div>
+      <button class="admin-nav-link" data-panel="applications"><i class="fas fa-file-alt"></i> Applications <span class="badge">24</span></button>
+      <button class="admin-nav-link" data-panel="interviews"><i class="fas fa-video"></i> Interviews</button>
+      <button class="admin-nav-link" data-panel="elections"><i class="fas fa-vote-yea"></i> Elections</button>
+      <button class="admin-nav-link" data-panel="leaders"><i class="fas fa-users"></i> Active Leaders</button>
+
+      <div class="admin-nav-label">Programs</div>
+      <button class="admin-nav-link" data-panel="training"><i class="fas fa-graduation-cap"></i> Training</button>
+      <button class="admin-nav-link" data-panel="projects"><i class="fas fa-project-diagram"></i> Projects</button>
+      <button class="admin-nav-link" data-panel="parliament"><i class="fas fa-gavel"></i> Parliament</button>
+      <button class="admin-nav-link" data-panel="certificates"><i class="fas fa-certificate"></i> Certificates</button>
+
+      <div class="admin-nav-label">Platform</div>
+      <a class="admin-nav-link" href="../ygi/index.html"><i class="fas fa-landmark"></i> YGI Public</a>
+      <a class="admin-nav-link" href="../index.html"><i class="fas fa-arrow-left"></i> ORM Home</a>
+    </nav>
+    <div class="admin-sidebar-footer">
+      <div style="display:flex;align-items:center;gap:10px;padding:12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:12px;">
+        <div style="width:36px;height:36px;background:linear-gradient(135deg,#D4AF37,#1A6B3C);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.9rem;color:white;font-weight:700;">A</div>
+        <div><div style="font-size:0.82rem;font-weight:600;">Admin</div><div style="font-size:0.7rem;color:#D4AF37;">Super Admin</div></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <div class="admin-topbar-title">YGI <span>Admin</span> Dashboard</div>
+      <div class="admin-topbar-actions">
+        <a href="../ygi/index.html" class="admin-icon-btn" title="YGI Home"><i class="fas fa-home"></i></a>
+        <button class="admin-icon-btn" title="Refresh" onclick="loadAllData()"><i class="fas fa-sync-alt"></i></button>
+        <button class="admin-icon-btn" title="Export" onclick="showToast('Generating export...')"><i class="fas fa-download"></i></button>
+      </div>
+    </div>
+
+    <div class="admin-content">
+
+      <!-- =========== OVERVIEW =========== -->
+      <div class="admin-panel active" id="panel-overview">
+        <div class="admin-stats">
+          <div class="admin-stat"><div class="admin-stat-top"><div class="admin-stat-icon gold"><i class="fas fa-file-alt"></i></div><div class="admin-stat-change up">↑ 12%</div></div><div class="admin-stat-value" id="s-total">0</div><div class="admin-stat-label">Total Applications</div></div>
+          <div class="admin-stat"><div class="admin-stat-top"><div class="admin-stat-icon green"><i class="fas fa-check-circle"></i></div><div class="admin-stat-change up">↑ 8%</div></div><div class="admin-stat-value" id="s-approved">0</div><div class="admin-stat-label">Approved</div></div>
+          <div class="admin-stat"><div class="admin-stat-top"><div class="admin-stat-icon gold"><i class="fas fa-clock"></i></div></div><div class="admin-stat-value" id="s-pending">0</div><div class="admin-stat-label">Pending Review</div></div>
+          <div class="admin-stat"><div class="admin-stat-top"><div class="admin-stat-icon blue"><i class="fas fa-users"></i></div></div><div class="admin-stat-value" id="s-leaders">0</div><div class="admin-stat-label">Active Leaders</div></div>
+          <div class="admin-stat"><div class="admin-stat-top"><div class="admin-stat-icon purple"><i class="fas fa-graduation-cap"></i></div></div><div class="admin-stat-value">75%</div><div class="admin-stat-label">Training Completion</div></div>
+          <div class="admin-stat"><div class="admin-stat-top"><div class="admin-stat-icon teal"><i class="fas fa-project-diagram"></i></div></div><div class="admin-stat-value" id="s-projects">0</div><div class="admin-stat-label">Community Projects</div></div>
+          <div class="admin-stat"><div class="admin-stat-top"><div class="admin-stat-icon orange"><i class="fas fa-vote-yea"></i></div></div><div class="admin-stat-value" id="s-elections">0</div><div class="admin-stat-label">Elections</div></div>
+        </div>
+
+        <div class="admin-two-col">
+          <!-- Applications by State -->
+          <div class="admin-card">
+            <div class="admin-card-header"><div class="admin-card-title"><i class="fas fa-map-marked-alt"></i> Applications by State</div></div>
+            <div class="admin-bar-chart" id="stateChart">
+              <div class="admin-bar-col"><div class="admin-bar-value">12</div><div class="admin-bar" style="height:60%;background:linear-gradient(to top,#D4AF37,#F0D060);"></div><div class="admin-bar-label">Lagos</div></div>
+              <div class="admin-bar-col"><div class="admin-bar-value">9</div><div class="admin-bar" style="height:45%;background:linear-gradient(to top,#1A6B3C,#5EB87A);"></div><div class="admin-bar-label">Oyo</div></div>
+              <div class="admin-bar-col"><div class="admin-bar-value">7</div><div class="admin-bar" style="height:35%;background:linear-gradient(to top,#3B82F6,#60A5FA);"></div><div class="admin-bar-label">FCT</div></div>
+              <div class="admin-bar-col"><div class="admin-bar-value">5</div><div class="admin-bar" style="height:25%;background:linear-gradient(to top,#8B5CF6,#A78BFA);"></div><div class="admin-bar-label">Rivers</div></div>
+              <div class="admin-bar-col"><div class="admin-bar-value">4</div><div class="admin-bar" style="height:20%;background:linear-gradient(to top,#EC4899,#F472B6);"></div><div class="admin-bar-label">Enugu</div></div>
+              <div class="admin-bar-col"><div class="admin-bar-value">3</div><div class="admin-bar" style="height:15%;background:linear-gradient(to top,#14B8A6,#2DD4BF);"></div><div class="admin-bar-label">Ogun</div></div>
+            </div>
+          </div>
+
+          <!-- Recent Applications -->
+          <div class="admin-card">
+            <div class="admin-card-header"><div class="admin-card-title"><i class="fas fa-clock"></i> Recent Applications</div><button class="admin-card-action" onclick="switchPanel('applications')">View All →</button></div>
+            <div id="recentApps">
+              <div style="text-align:center;padding:40px;color:rgba(255,255,255,0.2);"><i class="fas fa-inbox" style="font-size:2rem;margin-bottom:12px;display:block;"></i>Loading applications...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Position Distribution -->
+        <div class="admin-card">
+          <div class="admin-card-header"><div class="admin-card-title"><i class="fas fa-chart-pie"></i> Applications by Position</div></div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;">
+            <div style="background:rgba(212,175,55,0.06);border:1px solid rgba(212,175,55,0.15);border-radius:10px;padding:14px;text-align:center;"><div style="font-size:1.5rem;margin-bottom:6px;">👑</div><div style="color:#D4AF37;font-weight:700;font-size:0.88rem;">Young Governor</div><div style="color:rgba(255,255,255,0.4);font-size:0.78rem;">8 applicants</div></div>
+            <div style="background:rgba(26,107,60,0.08);border:1px solid rgba(26,107,60,0.2);border-radius:10px;padding:14px;text-align:center;"><div style="font-size:1.5rem;margin-bottom:6px;">🗺️</div><div style="color:#5EB87A;font-weight:700;font-size:0.88rem;">Young Chairman</div><div style="color:rgba(255,255,255,0.4);font-size:0.78rem;">6 applicants</div></div>
+            <div style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.15);border-radius:10px;padding:14px;text-align:center;"><div style="font-size:1.5rem;margin-bottom:6px;">⚖️</div><div style="color:#60A5FA;font-weight:700;font-size:0.88rem;">Young Speaker</div><div style="color:rgba(255,255,255,0.4);font-size:0.78rem;">5 applicants</div></div>
+            <div style="background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.15);border-radius:10px;padding:14px;text-align:center;"><div style="font-size:1.5rem;margin-bottom:6px;">💼</div><div style="color:#A78BFA;font-weight:700;font-size:0.88rem;">Young Commissioner</div><div style="color:rgba(255,255,255,0.4);font-size:0.78rem;">3 applicants</div></div>
+            <div style="background:rgba(251,146,60,0.08);border:1px solid rgba(251,146,60,0.15);border-radius:10px;padding:14px;text-align:center;"><div style="font-size:1.5rem;margin-bottom:6px;">📜</div><div style="color:#FB923C;font-weight:700;font-size:0.88rem;">Young Legislator</div><div style="color:rgba(255,255,255,0.4);font-size:0.78rem;">2 applicants</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- =========== APPLICATIONS =========== -->
+      <div class="admin-panel" id="panel-applications">
+        <h2 style="font-family:var(--ygi-font-heading);margin-bottom:24px;">Application <span style="color:#D4AF37;">Management</span></h2>
+        <div class="admin-filters">
+          <input type="text" class="admin-filter-input" id="searchApps" placeholder="🔍 Search by name, email..." style="min-width:250px;" oninput="filterApps()">
+          <select class="admin-filter-select" id="filterStatus" onchange="filterApps()"><option value="">All Statuses</option><option value="Pending">Pending</option><option value="Approved">Approved</option><option value="Rejected">Rejected</option></select>
+          <select class="admin-filter-select" id="filterState" onchange="filterApps()"><option value="">All States</option><option>Lagos</option><option>Oyo</option><option>FCT Abuja</option><option>Rivers</option><option>Enugu</option></select>
+          <button class="admin-action-btn view" onclick="exportCSV()"><i class="fas fa-download"></i> Export CSV</button>
+        </div>
+        <div class="admin-card">
+          <div class="admin-card-header"><div class="admin-card-title"><i class="fas fa-list"></i> All Applications (<span id="appCount">0</span>)</div><button class="admin-card-action" onclick="loadAllData()"><i class="fas fa-sync-alt"></i> Refresh</button></div>
+          <div style="overflow-x:auto;">
+            <table class="admin-table" id="appsTable">
+              <thead><tr><th>Name</th><th>Position</th><th>State</th><th>Score</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+              <tbody id="appsBody"><tr><td colspan="7" style="text-align:center;padding:40px;color:rgba(255,255,255,0.2);">Loading...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- =========== INTERVIEWS =========== -->
+      <div class="admin-panel" id="panel-interviews">
+        <h2 style="font-family:var(--ygi-font-heading);margin-bottom:24px;">Interview <span style="color:#D4AF37;">Management</span></h2>
+        <div class="admin-card">
+          <div class="admin-card-header"><div class="admin-card-title"><i class="fas fa-calendar-plus"></i> Schedule Interview</div></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;">
+            <div><label style="font-size:0.78rem;color:rgba(255,255,255,0.5);font-family:var(--ygi-font-accent);font-weight:600;">Applicant</label><select class="admin-filter-select" id="int-applicant" style="width:100%;margin-top:6px;"><option>Select applicant...</option></select></div>
+            <div><label style="font-size:0.78rem;color:rgba(255,255,255,0.5);font-family:var(--ygi-font-accent);font-weight:600;">Date & Time</label><input type="datetime-local" class="admin-filter-input" id="int-date" style="width:100%;margin-top:6px;"></div>
+            <div><label style="font-size:0.78rem;color:rgba(255,255,255,0.5);font-family:var(--ygi-font-accent);font-weight:600;">Panel Members</label><input type="text" class="admin-filter-input" id="int-panel" placeholder="e.g. Dr. Akin, Mrs. Bello" style="width:100%;margin-top:6px;"></div>
+          </div>
+          <button class="admin-action-btn approve" style="margin-top:16px;padding:10px 24px;font-size:0.85rem;" onclick="scheduleInterview()"><i class="fas fa-calendar-check"></i> Schedule Interview</button>
+        </div>
+        <div class="admin-card">
+          <div class="admin-card-header"><div class="admin-card-title"><i class="fas fa-list"></i> Scheduled Interviews</div></div>
+          <table class="admin-table">
+            <thead><tr><th>Applicant</th><th>Position</th><th>Date</th><th>Panel</th><th>Status</th><th>Score</th><th>Actions</th></tr></thead>
+            <tbody id="interviewsBody">
+              <tr><td>Adebimpe Olatunde</td><td>Young Governor</td><td>Jun 15, 2026 10:00 AM</td><td>Dr. Akin, Mrs. Bello</td><td><span class="admin-badge gold">Scheduled</span></td><td>—</td><td><button class="admin-action-btn approve" onclick="showToast('Interview marked as completed.')">Complete</button></td></tr>
+              <tr><td>Emmanuel Fashola</td><td>Young Speaker</td><td>Jun 15, 2026 2:00 PM</td><td>Prof. Adeyemi, Mr. Obi</td><td><span class="admin-badge gold">Scheduled</span></td><td>—</td><td><button class="admin-action-btn approve" onclick="showToast('Interview marked as completed.')">Complete</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- =========== ELECTIONS =========== -->
+      <div class="admin-panel" id="panel-elections">
+        <h2 style="font-family:var(--ygi-font-heading);margin-bottom:24px;">Election <span style="color:#D4AF37;">Management</span></h2>
+        <div class="admin-card">
+          <div class="admin-card-header"><div class="admin-card-title"><i class="fas fa-plus-circle"></i> Create Election</div></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+            <div><label style="font-size:0.78rem;color:rgba(255,255,255,0.5);font-family:var(--ygi-font-accent);font-weight:600;">Position</label><select class="admin-filter-select" id="elec-pos" style="width:100%;margin-top:6px;"><option>Young Governor</option><option>Young Chairman</option><option>Young Speaker</option></select></div>
+            <div><label style="font-size:0.78rem;color:rgba(255,255,255,0.5);font-family:var(--ygi-font-accent);font-weight:600;">Title</label><input type="text" class="admin-filter-input" id="elec-title" placeholder="e.g. Young Governor Election 2026" style="width:100%;margin-top:6px;"></div>
+            <div><label style="font-size:0.78rem;color:rgba(255,255,255,0.5);font-family:var(--ygi-font-accent);font-weight:600;">Start</label><input type="datetime-local" class="admin-filter-input" id="elec-start" style="width:100%;margin-top:6px;"></div>
+            <div><label style="font-size:0.78rem;color:rgba(255,255,255,0.5);font-family:var(--ygi-font-accent);font-weight:600;">End</label><input type="datetime-local" class="admin-filter-input" id="elec-end" style="width:100%;margin-top:6px;"></div>
+          </div>
+          <button class="admin-action-btn approve" style="margin-top:16px;padding:10px 24px;font-size:0.85rem;" onclick="createElection()"><i class="fas fa-vote-yea"></i> Create Election</button>
+        </div>
+        <div class="admin-card">
+          <div class="admin-card-header"><div class="admin-card-title"><i class="fas fa-chart-bar"></i> Election Results</div></div>
+          <div style="text-align:center;padding:40px;color:rgba(255,255,255,0.2);"><i class="fas fa-poll" style="font-size:2.5rem;margin-bottom:12px;display:block;"></i><p>No elections created yet. Create one above.</p></div>
+        </div>
+      </div>
+
+      <!-- =========== LEADERS =========== -->
+      <div class="admin-panel" id="panel-leaders">
+        <h2 style="font-family:var(--ygi-font-heading);margin-bottom:24px;">Active <span style="color:#D4AF37;">Leaders</span></h2>
+        <div class="admin-card">
+          <div class="admin-card-header"><div class="admin-card-title"><i class="fas fa-users"></i> Appointed & Elected Leaders</div></div>
+          <table class="admin-table">
+            <thead><tr><th>Name</th><th>Position</th><th>State</th><th>Score</th><th>Projects</th><th>Training</th><th>Status</th></tr></thead>
+            <tbody id="leadersBody">
+              <tr><td colspan="7" style="text-align:center;padding:40px;color:rgba(255,255,255,0.2);">Loading approved leaders...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- =========== TRAINING =========== -->
+      <div class="admin-panel" id="panel-training">
+        <h2 style="font-family:var(--ygi-font-heading);margin-bottom:24px;">Training <span style="color:#D4AF37;">Analytics</span></h2>
+        <div class="admin-stats" style="grid-template-columns:repeat(auto-fill,minmax(180px,1fr));">
+          <div class="admin-stat"><div class="admin-stat-top"><div class="admin-stat-icon green"><i class="fas fa-book"></i></div></div><div class="admin-stat-value">8</div><div class="admin-stat-label">Total Modules</div></div>
+          <div class="admin-stat"><div class="admin-stat-top"><div class="admin-stat-icon gold"><i class="fas fa-users"></i></div></div><div class="admin-stat-value">45</div><div class="admin-stat-label">Enrolled Learners</div></div>
+          <div class="admin-stat"><div class="admin-stat-top"><div class="admin-stat-icon blue"><i class="fas fa-check-double"></i></div></div><div class="admin-stat-value">75%</div><div class="admin-stat-label">Avg. Completion</div></div>
+          <div class="admin-stat"><div class="admin-stat-top"><div class="admin-stat-icon purple"><i class="fas fa-certificate"></i></div></div><div class="admin-stat-value">12</div><div class="admin-stat-label">Certificates Issued</div></div>
+        </div>
+        <div class="admin-card">
+          <div class="admin-card-header"><div class="admin-card-title"><i class="fas fa-list-alt"></i> Module Performance</div></div>
+          <table class="admin-table">
+            <thead><tr><th>Module</th><th>Enrolled</th><th>Completed</th><th>Avg. Score</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>🏛️ Leadership Development</td><td>45</td><td>32</td><td>78%</td><td><span class="admin-badge green">Active</span></td></tr>
+              <tr><td>🎤 Public Speaking</td><td>40</td><td>38</td><td>82%</td><td><span class="admin-badge green">Active</span></td></tr>
+              <tr><td>⚖️ Governance & Policy</td><td>35</td><td>18</td><td>71%</td><td><span class="admin-badge green">Active</span></td></tr>
+              <tr><td>🤝 Civic Responsibility</td><td>28</td><td>10</td><td>—</td><td><span class="admin-badge gold">In Progress</span></td></tr>
+              <tr><td>📋 Project Management</td><td>20</td><td>5</td><td>—</td><td><span class="admin-badge gold">In Progress</span></td></tr>
+              <tr><td>💡 Entrepreneurship</td><td>15</td><td>0</td><td>—</td><td><span class="admin-badge gray">Upcoming</span></td></tr>
+              <tr><td>💻 Digital Skills</td><td>12</td><td>0</td><td>—</td><td><span class="admin-badge gray">Upcoming</span></td></tr>
+              <tr><td>🌍 Community Development</td><td>10</td><td>0</td><td>—</td><td><span class="admin-badge gray">Upcoming</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- =========== PROJECTS =========== -->
+      <div class="admin-panel" id="panel-projects">
+        <h2 style="font-family:var(--ygi-font-heading);margin-bottom:24px;">Community <span style="color:#D4AF37;">Projects</span></h2>
+        <div class="admin-card">
+          <div class="admin-card-header"><div class="admin-card-title"><i class="fas fa-project-diagram"></i> All Projects</div></div>
+          <table class="admin-table">
+            <thead><tr><th>Project</th><th>Leader</th><th>Beneficiaries</th><th>Impact Score</th><th>Status</th></tr></thead>
+            <tbody id="projectsBody"><tr><td colspan="5" style="text-align:center;padding:40px;color:rgba(255,255,255,0.2);">Loading projects...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- =========== PARLIAMENT =========== -->
+      <div class="admin-panel" id="panel-parliament">
+        <h2 style="font-family:var(--ygi-font-heading);margin-bottom:24px;">Digital <span style="color:#D4AF37;">Parliament</span></h2>
+        <div class="admin-card">
+          <div class="admin-card-header"><div class="admin-card-title"><i class="fas fa-gavel"></i> Motions & Bills</div></div>
+          <table class="admin-table">
+            <thead><tr><th>Title</th><th>Type</th><th>Proposer</th><th>For</th><th>Against</th><th>Status</th></tr></thead>
+            <tbody id="parliamentBody"><tr><td colspan="6" style="text-align:center;padding:40px;color:rgba(255,255,255,0.2);">Loading motions...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- =========== CERTIFICATES =========== -->
+      <div class="admin-panel" id="panel-certificates">
+        <h2 style="font-family:var(--ygi-font-heading);margin-bottom:24px;">Certificate <span style="color:#D4AF37;">Management</span></h2>
+        <div class="admin-stats" style="grid-template-columns:repeat(auto-fill,minmax(180px,1fr));">
+          <div class="admin-stat"><div class="admin-stat-top"><div class="admin-stat-icon gold"><i class="fas fa-scroll"></i></div></div><div class="admin-stat-value">24</div><div class="admin-stat-label">Participation Certs</div></div>
+          <div class="admin-stat"><div class="admin-stat-top"><div class="admin-stat-icon green"><i class="fas fa-award"></i></div></div><div class="admin-stat-value">8</div><div class="admin-stat-label">Leadership Certs</div></div>
+          <div class="admin-stat"><div class="admin-stat-top"><div class="admin-stat-icon blue"><i class="fas fa-file-contract"></i></div></div><div class="admin-stat-value">12</div><div class="admin-stat-label">Appointment Letters</div></div>
+          <div class="admin-stat"><div class="admin-stat-top"><div class="admin-stat-icon purple"><i class="fas fa-trophy"></i></div></div><div class="admin-stat-value">5</div><div class="admin-stat-label">Award Certificates</div></div>
+        </div>
+        <div class="admin-card">
+          <div class="admin-card-header"><div class="admin-card-title"><i class="fas fa-trophy"></i> Award Categories</div></div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;">
+            <div style="background:rgba(212,175,55,0.06);border:1px solid rgba(212,175,55,0.15);border-radius:10px;padding:16px;text-align:center;"><div style="font-size:2rem;margin-bottom:8px;">🏆</div><div style="color:#D4AF37;font-weight:700;font-size:0.88rem;">Best Young Governor</div><div style="color:rgba(255,255,255,0.4);font-size:0.75rem;margin-top:4px;">Awarded to the highest-performing Governor</div></div>
+            <div style="background:rgba(26,107,60,0.08);border:1px solid rgba(26,107,60,0.2);border-radius:10px;padding:16px;text-align:center;"><div style="font-size:2rem;margin-bottom:8px;">🏅</div><div style="color:#5EB87A;font-weight:700;font-size:0.88rem;">Best Young Chairman</div><div style="color:rgba(255,255,255,0.4);font-size:0.75rem;margin-top:4px;">Outstanding LGA leadership</div></div>
+            <div style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.15);border-radius:10px;padding:16px;text-align:center;"><div style="font-size:2rem;margin-bottom:8px;">⚖️</div><div style="color:#60A5FA;font-weight:700;font-size:0.88rem;">Outstanding Legislator</div><div style="color:rgba(255,255,255,0.4);font-size:0.75rem;margin-top:4px;">Most impactful parliamentary activity</div></div>
+            <div style="background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.15);border-radius:10px;padding:16px;text-align:center;"><div style="font-size:2rem;margin-bottom:8px;">🌟</div><div style="color:#A78BFA;font-weight:700;font-size:0.88rem;">Community Impact Leader</div><div style="color:rgba(255,255,255,0.4);font-size:0.75rem;margin-top:4px;">Highest community project impact</div></div>
+            <div style="background:rgba(251,146,60,0.08);border:1px solid rgba(251,146,60,0.15);border-radius:10px;padding:16px;text-align:center;"><div style="font-size:2rem;margin-bottom:8px;">🚀</div><div style="color:#FB923C;font-weight:700;font-size:0.88rem;">Emerging Leader of the Year</div><div style="color:rgba(255,255,255,0.4);font-size:0.75rem;margin-top:4px;">Most promising newcomer</div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL='https://yqnvjgxzqzqiepwmmhfy.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlxbnZqZ3h6cXpxaWVwd21taGZ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzE4NTU4NzUsImV4cCI6MjA0NzQzMTg3NX0.jHxlRKJ3KHdwzlMOBpjKd_aXj1VhvJj5aRlFIovIk5g';
+const db=window.supabase?.createClient(SUPABASE_URL,SUPABASE_KEY);
+let allApps=[];
+
+function switchPanel(n){
+  document.querySelectorAll('.admin-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.admin-nav-link').forEach(l=>l.classList.remove('active'));
+  document.getElementById('panel-'+n)?.classList.add('active');
+  document.querySelector(`[data-panel="${n}"]`)?.classList.add('active');
+  document.getElementById('adminSidebar').classList.remove('open');
+}
+document.querySelectorAll('.admin-nav-link[data-panel]').forEach(l=>l.addEventListener('click',()=>switchPanel(l.dataset.panel)));
+document.getElementById('adminSidebarToggle')?.addEventListener('click',()=>document.getElementById('adminSidebar').classList.toggle('open'));
+
+function showToast(m){const t=document.getElementById('admin-toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3500);}
+
+async function loadAllData(){
+  try{
+    if(!db)return;
+    const{data:apps}=await db.from('ygi_applications').select('*').order('created_at',{ascending:false});
+    allApps=apps||[];
+    const total=allApps.length;
+    const approved=allApps.filter(a=>a.status==='Approved').length;
+    const pending=allApps.filter(a=>a.status==='Pending').length;
+    document.getElementById('s-total').textContent=total;
+    document.getElementById('s-approved').textContent=approved;
+    document.getElementById('s-pending').textContent=pending;
+    document.getElementById('s-leaders').textContent=approved;
+    document.getElementById('appCount').textContent=total;
+    renderAppsTable(allApps);
+    renderRecentApps(allApps.slice(0,5));
+    renderLeaders(allApps.filter(a=>a.status==='Approved'));
+
+    const{data:projects}=await db.from('ygi_projects').select('*');
+    document.getElementById('s-projects').textContent=projects?.length||0;
+    renderProjects(projects||[]);
+
+    const{data:elections}=await db.from('ygi_elections').select('*');
+    document.getElementById('s-elections').textContent=elections?.length||0;
+
+    const{data:motions}=await db.from('ygi_parliament').select('*');
+    renderParliament(motions||[]);
+  }catch(e){console.warn('Admin load:',e);}
+}
+
+function renderAppsTable(apps){
+  const b=document.getElementById('appsBody');
+  if(!apps.length){b.innerHTML='<tr><td colspan="7" style="text-align:center;padding:40px;color:rgba(255,255,255,0.2);">No applications found.</td></tr>';return;}
+  b.innerHTML=apps.map(a=>`<tr>
+    <td><strong>${a.full_name}</strong><br><span style="color:rgba(255,255,255,0.4);font-size:0.75rem;">${a.email||''}</span></td>
+    <td>${a.position_title||'—'}</td>
+    <td>${a.state||'—'}</td>
+    <td><strong style="color:#D4AF37;">${a.screening_score||0}</strong>/100</td>
+    <td><span class="admin-badge ${a.status==='Approved'?'green':a.status==='Rejected'?'red':'gold'}">${a.status}</span></td>
+    <td style="font-size:0.78rem;color:rgba(255,255,255,0.4);">${new Date(a.created_at).toLocaleDateString('en-NG',{day:'numeric',month:'short'})}</td>
+    <td>
+      ${a.status==='Pending'?`<button class="admin-action-btn approve" onclick="updateStatus('${a.id}','Approved')"><i class="fas fa-check"></i></button><button class="admin-action-btn reject" onclick="updateStatus('${a.id}','Rejected')"><i class="fas fa-times"></i></button>`:''}
+      <button class="admin-action-btn view" onclick="showToast('Viewing: ${a.full_name}')"><i class="fas fa-eye"></i></button>
+    </td>
+  </tr>`).join('');
+}
+
+function renderRecentApps(apps){
+  const c=document.getElementById('recentApps');
+  if(!apps.length){c.innerHTML='<div style="text-align:center;padding:32px;color:rgba(255,255,255,0.2);"><i class="fas fa-inbox" style="font-size:2rem;margin-bottom:8px;display:block;"></i>No applications yet.</div>';return;}
+  c.innerHTML=apps.map(a=>`<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04);">
+    <div style="width:36px;height:36px;background:rgba(212,175,55,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.85rem;color:#D4AF37;font-weight:700;flex-shrink:0;">${(a.full_name||'?')[0]}</div>
+    <div style="flex:1;min-width:0;"><div style="color:white;font-size:0.85rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${a.full_name}</div><div style="color:rgba(255,255,255,0.4);font-size:0.72rem;">${a.position_title||'—'} · ${a.state||''}</div></div>
+    <span class="admin-badge ${a.status==='Approved'?'green':a.status==='Rejected'?'red':'gold'}">${a.status}</span>
+  </div>`).join('');
+}
+
+function renderLeaders(apps){
+  const b=document.getElementById('leadersBody');
+  if(!apps.length){b.innerHTML='<tr><td colspan="7" style="text-align:center;padding:40px;color:rgba(255,255,255,0.2);">No approved leaders yet.</td></tr>';return;}
+  b.innerHTML=apps.map(a=>`<tr>
+    <td><strong>${a.full_name}</strong></td>
+    <td>${a.position_title||'—'}</td>
+    <td>${a.state||'—'}</td>
+    <td style="color:#D4AF37;font-weight:700;">${a.screening_score||0}</td>
+    <td>—</td><td>—</td>
+    <td><span class="admin-badge green">Active</span></td>
+  </tr>`).join('');
+}
+
+function renderProjects(projects){
+  const b=document.getElementById('projectsBody');
+  if(!projects.length){b.innerHTML='<tr><td colspan="5" style="text-align:center;padding:40px;color:rgba(255,255,255,0.2);">No projects submitted yet.</td></tr>';return;}
+  b.innerHTML=projects.map(p=>`<tr>
+    <td><strong>${p.title}</strong><br><span style="color:rgba(255,255,255,0.4);font-size:0.72rem;">${(p.description||'').substring(0,60)}...</span></td>
+    <td>—</td>
+    <td>${p.beneficiaries_count||0}</td>
+    <td>${p.impact_score||0}</td>
+    <td><span class="admin-badge ${p.status==='Completed'?'green':p.status==='Ongoing'?'gold':'gray'}">${p.status}</span></td>
+  </tr>`).join('');
+}
+
+function renderParliament(motions){
+  const b=document.getElementById('parliamentBody');
+  if(!motions.length){b.innerHTML='<tr><td colspan="6" style="text-align:center;padding:40px;color:rgba(255,255,255,0.2);">No motions submitted yet.</td></tr>';return;}
+  b.innerHTML=motions.map(m=>`<tr>
+    <td><strong>${m.title}</strong></td>
+    <td><span class="admin-badge blue">${m.type||'Motion'}</span></td>
+    <td>—</td>
+    <td style="color:#5EB87A;font-weight:700;">${m.votes_for||0}</td>
+    <td style="color:#F87171;font-weight:700;">${m.votes_against||0}</td>
+    <td><span class="admin-badge ${m.status==='Passed'?'green':m.status==='Rejected'?'red':'gold'}">${m.status}</span></td>
+  </tr>`).join('');
+}
+
+async function updateStatus(id,status){
+  try{
+    if(db)await db.from('ygi_applications').update({status}).eq('id',id);
+    showToast(`Application ${status.toLowerCase()}!`);
+    loadAllData();
+  }catch(e){showToast('Error updating status.');}
+}
+
+function filterApps(){
+  const q=document.getElementById('searchApps').value.toLowerCase();
+  const st=document.getElementById('filterStatus').value;
+  const state=document.getElementById('filterState').value;
+  let filtered=allApps;
+  if(q)filtered=filtered.filter(a=>(a.full_name||'').toLowerCase().includes(q)||(a.email||'').toLowerCase().includes(q));
+  if(st)filtered=filtered.filter(a=>a.status===st);
+  if(state)filtered=filtered.filter(a=>(a.state||'').includes(state));
+  renderAppsTable(filtered);
+  document.getElementById('appCount').textContent=filtered.length;
+}
+
+function exportCSV(){
+  if(!allApps.length){showToast('No data to export.');return;}
+  const headers=['Name','Email','Phone','State','LGA','School','Position','Score','Status','Date'];
+  const rows=allApps.map(a=>[a.full_name,a.email,a.phone,a.state,a.lga,a.school,a.position_title,a.screening_score,a.status,new Date(a.created_at).toLocaleDateString()]);
+  const csv=[headers,...rows].map(r=>r.map(c=>`"${(c||'').toString().replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob=new Blob([csv],{type:'text/csv'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download='ygi_applications.csv';a.click();
+  showToast('CSV exported!');
+}
+
+async function scheduleInterview(){
+  showToast('Interview scheduled successfully! Notification sent.');
+}
+
+async function createElection(){
+  const title=document.getElementById('elec-title').value;
+  const start=document.getElementById('elec-start').value;
+  const end=document.getElementById('elec-end').value;
+  if(!title||!start||!end){showToast('Fill in all election fields.');return;}
+  try{
+    if(db)await db.from('ygi_elections').insert([{title,start_time:start,end_time:end,status:'Upcoming'}]);
+    showToast('Election created!');loadAllData();
+  }catch(e){showToast('Error creating election.');}
+}
+
+loadAllData();
+</script>
+</body>
+</html>

@@ -919,6 +919,11 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
+  window.onerror = function(msg, url, line, col, error) {
+    alert("JS Error: " + msg + "\nLine: " + line + "\nURL: " + url);
+    return false;
+  };
+
   // === YGI Application Portal JS ===
   const SUPABASE_URL = 'https://yqnvjgxzqzqiepwmmhfy.supabase.co';
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlxbnZqZ3h6cXpxaWVwd21taGZ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzE4NTU4NzUsImV4cCI6MjA0NzQzMTg3NX0.jHxlRKJ3KHdwzlMOBpjKd_aXj1VhvJj5aRlFIovIk5g';
@@ -1020,16 +1025,24 @@
   }
 
   function navigateStep(dir) {
-    if (dir === 1 && !validateStep(currentStep)) return;
-    if (currentStep === 4 && dir === 1 && !document.getElementById('f-position').value) {
-      showToast('Please select a position to continue.');
-      return;
+    console.log("navigateStep called, dir:", dir, "currentStep:", currentStep);
+    try {
+      if (dir === 1 && !validateStep(currentStep)) {
+        console.log("Validation failed for step:", currentStep);
+        return;
+      }
+      if (currentStep === 4 && dir === 1 && !document.getElementById('f-position').value) {
+        showToast('Please select a position to continue.');
+        return;
+      }
+      if (dir === 1 && currentStep === totalSteps - 1) buildReview();
+      currentStep = Math.max(1, Math.min(totalSteps, currentStep + dir));
+      document.querySelectorAll('.apply-step').forEach((s, i) => s.classList.toggle('active', i + 1 === currentStep));
+      updateStepper();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (err) {
+      alert("Error in navigateStep: " + err.message);
     }
-    if (dir === 1 && currentStep === totalSteps - 1) buildReview();
-    currentStep = Math.max(1, Math.min(totalSteps, currentStep + dir));
-    document.querySelectorAll('.apply-step').forEach((s, i) => s.classList.toggle('active', i + 1 === currentStep));
-    updateStepper();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function buildReview() {

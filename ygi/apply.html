@@ -845,15 +845,15 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
   // === YGI Application Portal JS ===
-  const SUPABASE_URL = 'https://yqnvjgxzqzqiepwmmhfy.supabase.co';
-  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlxbnZqZ3h6cXpxaWVwd21taGZ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzE4NTU4NzUsImV4cCI6MjA0NzQzMTg3NX0.jHxlRKJ3KHdwzlMOBpjKd_aXj1VhvJj5aRlFIovIk5g';
-  const supabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+  var SUPABASE_URL = 'https://yqnvjgxzqzqiepwmmhfy.supabase.co';
+  var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlxbnZqZ3h6cXpxaWVwd21taGZ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzE4NTU4NzUsImV4cCI6MjA0NzQzMTg3NX0.jHxlRKJ3KHdwzlMOBpjKd_aXj1VhvJj5aRlFIovIk5g';
+  var supabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
 
-  let currentStep = 1;
-  const totalSteps = 6;
+  var currentStep = 1;
+  var totalSteps = 6;
 
   // Explicit required fields per step (avoids querySelectorAll bug on hidden steps)
-  const stepFields = {
+  var stepFields = {
     1: ['f-name','f-dob','f-gender','f-school','f-level','f-guardian','f-guardian-phone','f-guardian-rel'],
     2: ['f-phone','f-email','f-whatsapp','f-state','f-lga','f-city'],
     3: ['f-leadership','f-statement'],
@@ -863,28 +863,34 @@
   };
 
   // Pre-select position from URL param
-  const urlParams = new URLSearchParams(window.location.search);
-  const preselectedPos = urlParams.get('position');
+  var urlParams = new URLSearchParams(window.location.search);
+  var preselectedPos = urlParams.get('position');
 
   // Position card selection
-  document.querySelectorAll('.position-select-card').forEach(card => {
-    card.addEventListener('click', () => {
-      document.querySelectorAll('.position-select-card').forEach(c => c.classList.remove('selected'));
-      card.classList.add('selected');
-      document.getElementById('f-position').value = card.dataset.pos;
-    });
+  var cards = document.querySelectorAll('.position-select-card');
+  for (var i = 0; i < cards.length; i++) {
+    (function(card) {
+      card.addEventListener('click', function() {
+        var allCards = document.querySelectorAll('.position-select-card');
+        for (var j = 0; j < allCards.length; j++) {
+          allCards[j].classList.remove('selected');
+        }
+        card.classList.add('selected');
+        document.getElementById('f-position').value = card.getAttribute('data-pos');
+      });
 
-    // Auto-select if preselected via URL
-    if (preselectedPos && card.dataset.pos === preselectedPos) {
-      setTimeout(() => card.click(), 300);
-    }
-  });
+      // Auto-select if preselected via URL
+      if (preselectedPos && card.getAttribute('data-pos') === preselectedPos) {
+        setTimeout(function() { card.click(); }, 300);
+      }
+    })(cards[i]);
+  }
 
   // File upload areas
   ['passport', 'id', 'rec'].forEach(function(key) {
-    const input = document.getElementById(key + '-input');
-    const drop = document.getElementById(key + '-drop');
-    const status = document.getElementById(key + '-status');
+    var input = document.getElementById(key + '-input');
+    var drop = document.getElementById(key + '-drop');
+    var status = document.getElementById(key + '-status');
 
     if (input) {
       input.addEventListener('change', function() {
@@ -904,8 +910,8 @@
       drop.addEventListener('drop', function(e) {
         e.preventDefault();
         if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]) {
-          const file = e.dataTransfer.files[0];
-          const dt = new DataTransfer();
+          var file = e.dataTransfer.files[0];
+          var dt = new DataTransfer();
           dt.items.add(file);
           if (input) {
             input.files = dt.files;
@@ -922,7 +928,9 @@
       var firstInvalid = null;
 
       var allInputs = document.querySelectorAll('input, select, textarea');
-      allInputs.forEach(function(el) { el.style.borderColor = ''; });
+      for (var k = 0; k < allInputs.length; k++) {
+        allInputs[k].style.borderColor = '';
+      }
 
       for (var step = 1; step <= 5; step++) {
         var fields = stepFields[step] || [];
@@ -960,11 +968,11 @@
     }
   }
 
-  async function submitApplication() {
+  function submitApplication() {
     try {
       if (!validateAll()) return;
-      const declaration = document.getElementById('f-declaration');
-      const declarationLabel = document.querySelector('label[for="f-declaration"]');
+      var declaration = document.getElementById('f-declaration');
+      var declarationLabel = document.querySelector('label[for="f-declaration"]');
       
       if (!declaration.checked) { 
         declarationLabel.style.color = '#ff4444';
@@ -975,14 +983,16 @@
         declarationLabel.style.color = 'rgba(255,255,255,0.75)';
       }
 
-      const btn = document.getElementById('submitBtn');
+      var btn = document.getElementById('submitBtn');
       btn.disabled = true;
       btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
 
-      const score = calculateScore();
-      const refCode = 'YGI-' + Date.now().toString(36).toUpperCase();
+      var score = calculateScore();
+      var refCode = 'YGI-' + Date.now().toString(36).toUpperCase();
 
-      const payload = {
+      var parentInfo = document.getElementById('f-guardian').value + ' | ' + document.getElementById('f-guardian-phone').value;
+
+      var payload = {
         id: refCode,
         full_name: document.getElementById('f-name').value,
         dob: document.getElementById('f-dob').value,
@@ -993,7 +1003,7 @@
         lga: document.getElementById('f-lga').value,
         school: document.getElementById('f-school').value,
         class_level: document.getElementById('f-level').value,
-        parent_info: `${document.getElementById('f-guardian').value} | ${document.getElementById('f-guardian-phone').value}`,
+        parent_info: parentInfo,
         leadership_experience: document.getElementById('f-leadership').value,
         community_experience: document.getElementById('f-community').value,
         personal_statement: document.getElementById('f-statement').value,
@@ -1003,10 +1013,18 @@
 
       try {
         if (typeof supabase !== 'undefined' && supabase) {
-          const { error } = await supabase.from('ygi_applications').insert([payload]);
-          if (error) throw error;
+          supabase.from('ygi_applications').insert([payload]).then(function(res) {
+            if (res.error) {
+              console.warn('Supabase error:', res.error);
+            }
+            showSuccess(refCode);
+          }).catch(function(err) {
+            console.warn('Supabase error:', err);
+            showSuccess(refCode);
+          });
+        } else {
+          showSuccess(refCode);
         }
-        showSuccess(refCode);
       } catch(err) {
         console.warn('Supabase error:', err);
         showSuccess(refCode);
@@ -1014,7 +1032,7 @@
     } catch (globalErr) {
       alert('An unexpected error occurred during submission: ' + globalErr.message);
       console.error(globalErr);
-      const btn = document.getElementById('submitBtn');
+      var btn = document.getElementById('submitBtn');
       if (btn) {
         btn.disabled = false;
         btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Application';
@@ -1023,19 +1041,19 @@
   }
 
   function calculateScore() {
-    let score = 0;
-    const statement = document.getElementById('f-statement').value || '';
-    const leadership = document.getElementById('f-leadership').value || '';
-    const community = document.getElementById('f-community').value || '';
+    var score = 0;
+    var statement = document.getElementById('f-statement').value || '';
+    var leadership = document.getElementById('f-leadership').value || '';
+    var community = document.getElementById('f-community').value || '';
     
-    const recInput = document.getElementById('rec-input');
-    const rec = recInput && recInput.files && recInput.files.length > 0;
+    var recInput = document.getElementById('rec-input');
+    var rec = recInput && recInput.files && recInput.files.length > 0;
     
-    const passportInput = document.getElementById('passport-input');
-    const passport = passportInput && passportInput.files && passportInput.files.length > 0;
+    var passportInput = document.getElementById('passport-input');
+    var passport = passportInput && passportInput.files && passportInput.files.length > 0;
     
-    const idInput = document.getElementById('id-input');
-    const idDoc = idInput && idInput.files && idInput.files.length > 0;
+    var idInput = document.getElementById('id-input');
+    var idDoc = idInput && idInput.files && idInput.files.length > 0;
 
     // Completeness
     if (statement.split(' ').length >= 200) score += 30;
@@ -1064,11 +1082,11 @@
   }
 
   function showToast(msg) {
-    let t = document.getElementById('ygi-toast');
+    var t = document.getElementById('ygi-toast');
     if (!t) { t = document.createElement('div'); t.id = 'ygi-toast'; t.className = 'ygi-toast'; document.body.appendChild(t); }
     t.textContent = msg;
     t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3500);
+    setTimeout(function() { t.classList.remove('show'); }, 3500);
   }
 
   // Mobile nav

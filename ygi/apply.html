@@ -524,56 +524,6 @@
         <p>Complete all steps carefully. Your application will be automatically screened and scored.</p>
       </div>
 
-      <!-- Progress Bar -->
-      <div class="progress-bar-wrap">
-        <div class="progress-bar-fill" id="progressBar" style="width: 16.6%"></div>
-      </div>
-
-      <!-- Stepper -->
-      <div class="stepper" id="stepper">
-        <div class="step-item">
-          <div class="step-wrapper">
-            <div class="step-circle active" id="sc-1">1</div>
-            <div class="step-label active" id="sl-1">Personal</div>
-          </div>
-          <div class="step-connector" id="con-1"></div>
-        </div>
-        <div class="step-item">
-          <div class="step-wrapper">
-            <div class="step-circle" id="sc-2">2</div>
-            <div class="step-label" id="sl-2">Contact</div>
-          </div>
-          <div class="step-connector" id="con-2"></div>
-        </div>
-        <div class="step-item">
-          <div class="step-wrapper">
-            <div class="step-circle" id="sc-3">3</div>
-            <div class="step-label" id="sl-3">Background</div>
-          </div>
-          <div class="step-connector" id="con-3"></div>
-        </div>
-        <div class="step-item">
-          <div class="step-wrapper">
-            <div class="step-circle" id="sc-4">4</div>
-            <div class="step-label" id="sl-4">Position</div>
-          </div>
-          <div class="step-connector" id="con-4"></div>
-        </div>
-        <div class="step-item">
-          <div class="step-wrapper">
-            <div class="step-circle" id="sc-5">5</div>
-            <div class="step-label" id="sl-5">Documents</div>
-          </div>
-          <div class="step-connector" id="con-5"></div>
-        </div>
-        <div class="step-item">
-          <div class="step-wrapper">
-            <div class="step-circle" id="sc-6">6</div>
-            <div class="step-label" id="sl-6">Review</div>
-          </div>
-        </div>
-      </div>
-
       <!-- Form Card -->
       <div class="apply-form-card" id="applyFormCard">
 
@@ -856,21 +806,7 @@
           </div>
         </div>
 
-        <!-- STEP 6: Review & Submit -->
-        <div class="apply-step" id="step-6" hidden>
-          <div class="step-heading">
-            <div class="step-heading-icon"><i class="fas fa-check-double"></i></div>
-            <div>
-              <h2>Review & Submit</h2>
-              <p>Please review your information before submitting</p>
-            </div>
-          </div>
-
-          <div class="review-grid" id="reviewGrid">
-            <!-- Filled by JS -->
-          </div>
-
-          <div style="background:rgba(212,175,55,0.06); border:1px solid rgba(212,175,55,0.2); border-radius:12px; padding:20px; margin-top:24px;">
+          <div style="background:rgba(212,175,55,0.06); border:1px solid rgba(212,175,55,0.2); border-radius:12px; padding:20px; margin-top:40px;">
             <h4 style="color:var(--ygi-gold); font-family:var(--ygi-font-accent); font-size:0.88rem; margin-bottom:12px; letter-spacing:1px; text-transform:uppercase;"><i class="fas fa-shield-alt"></i> Declaration</h4>
             <p style="color:rgba(255,255,255,0.65); font-size:0.88rem; line-height:1.7;">I hereby declare that all information provided in this application is true, accurate, and complete to the best of my knowledge. I understand that any false information will result in immediate disqualification. I consent to my data being processed for the YGI selection process.</p>
             <div style="display:flex; align-items:center; gap:10px; margin-top:14px;">
@@ -880,41 +816,29 @@
           </div>
         </div>
 
-        <!-- SUCCESS SCREEN (hidden initially) -->
-        <div id="successScreen" style="display:none;">
-          <div class="success-screen">
-            <div class="success-icon"><i class="fas fa-check"></i></div>
-            <h2>Application Submitted!</h2>
-            <p>Your application for the <strong id="success-position" style="color:var(--ygi-gold);"></strong> position has been successfully submitted.</p>
-            <p>Your application reference code is:</p>
-            <div class="app-ref-code" id="refCode"></div>
-            <p style="margin-top:8px;">A confirmation email has been sent to <strong id="success-email" style="color:var(--ygi-gold);"></strong></p>
-            <p style="margin-top:4px; color:rgba(255,255,255,0.4); font-size:0.85rem;">Our screening system will evaluate your application automatically. You will be notified within 7 business days.</p>
-            <div style="display:flex; gap:12px; justify-content:center; margin-top:32px; flex-wrap:wrap;">
-              <a href="/ygi/index.html" class="ygi-btn ygi-btn-outline">← Back to YGI Home</a>
-              <a href="/ygi/dashboard.html" class="ygi-btn ygi-btn-gold"><i class="fas fa-tachometer-alt"></i> Track Application</a>
-            </div>
-          </div>
-        </div>
-
         <!-- Navigation Buttons -->
-        <div class="step-nav" id="stepNav">
-          <div class="step-nav-left">
-            <button class="btn-prev" id="prevBtn" style="display:none;" onclick="navigateStep(-1)">
-              <i class="fas fa-arrow-left"></i> Previous
-            </button>
-          </div>
-          <div style="color:rgba(255,255,255,0.35); font-size:0.8rem;" id="stepCounter">Step 1 of 6</div>
-          <div class="step-nav-right">
-            <button class="btn-next" id="nextBtn" onclick="navigateStep(1)">
-              Next <i class="fas fa-arrow-right"></i>
-            </button>
-            <button class="btn-submit" id="submitBtn" style="display:none;" onclick="submitApplication()" id="final-submit-btn">
-              <i class="fas fa-paper-plane"></i> Submit Application
-            </button>
-          </div>
+        <div class="step-nav" id="stepNav" style="justify-content:center; margin-top: 40px; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.1);">
+          <button class="btn-submit" id="submitBtn" onclick="submitApplication()" style="display:flex; width:100%; max-width:400px; justify-content:center; padding:16px;">
+            <i class="fas fa-paper-plane"></i> Submit Application
+          </button>
         </div>
       </div>
+
+      <!-- SUCCESS SCREEN (hidden initially) -->
+      <div id="successScreen" style="display:none; text-align:center; padding: 60px 20px;">
+        <div class="success-icon" style="width:100px; height:100px; background:linear-gradient(135deg, var(--ygi-green), var(--ygi-green-dark)); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:3rem; color:white; margin:0 auto 28px; box-shadow:0 8px 40px rgba(26,107,60,0.4);"><i class="fas fa-check"></i></div>
+        <h2 style="font-family:var(--ygi-font-heading); font-size:2.5rem; color:var(--ygi-white); margin-bottom:12px;">Application Submitted!</h2>
+        <p style="color:rgba(255,255,255,0.65); font-size:1.1rem; line-height:1.7; margin-bottom:8px;">Your application for the <strong id="success-position" style="color:var(--ygi-gold);"></strong> position has been successfully submitted.</p>
+        <p style="color:rgba(255,255,255,0.65); font-size:1.1rem; line-height:1.7; margin-bottom:8px;">Your application reference code is:</p>
+        <div class="app-ref-code" id="refCode" style="display:inline-block; background:rgba(212,175,55,0.1); border:1px solid rgba(212,175,55,0.3); color:var(--ygi-gold); padding:10px 24px; border-radius:8px; font-family:monospace; font-size:1.4rem; font-weight:700; margin:16px 0; letter-spacing:2px;"></div>
+        <p style="color:rgba(255,255,255,0.65); font-size:1rem; line-height:1.7; margin-top:8px;">A confirmation email has been sent to <strong id="success-email" style="color:var(--ygi-gold);"></strong></p>
+        <p style="margin-top:8px; color:rgba(255,255,255,0.4); font-size:0.9rem;">Our screening system will evaluate your application automatically. You will be notified within 7 business days.</p>
+        <div style="display:flex; gap:16px; justify-content:center; margin-top:40px; flex-wrap:wrap;">
+          <a href="/ygi/index.html" class="ygi-btn ygi-btn-outline" style="padding:14px 28px; border-radius:8px; text-decoration:none; color:white; border:1px solid rgba(255,255,255,0.2);">← Back to YGI Home</a>
+          <a href="/ygi/dashboard.html" class="ygi-btn ygi-btn-gold" style="padding:14px 28px; border-radius:8px; text-decoration:none; background:var(--ygi-gold); color:var(--ygi-navy); font-weight:600;"><i class="fas fa-tachometer-alt"></i> Track Application</a>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -984,112 +908,45 @@
     });
   });
 
-  function updateStepper() {
-    const pct = (currentStep / totalSteps) * 100;
-    document.getElementById('progressBar').style.width = pct + '%';
-    document.getElementById('stepCounter').textContent = `Step ${currentStep} of ${totalSteps}`;
-
-    for (let i = 1; i <= totalSteps; i++) {
-      const circle = document.getElementById(`sc-${i}`);
-      const label = document.getElementById(`sl-${i}`);
-      const connector = document.getElementById(`con-${i}`);
-
-      if (circle) {
-        circle.classList.remove('active', 'done');
-        label?.classList.remove('active', 'done');
-        if (i < currentStep) { circle.classList.add('done'); circle.innerHTML = '<i class="fas fa-check" style="font-size:0.8rem;"></i>'; label?.classList.add('done'); }
-        else if (i === currentStep) { circle.classList.add('active'); circle.textContent = i; label?.classList.add('active'); }
-        else { circle.textContent = i; }
-      }
-      if (connector) { connector.classList.toggle('done', i < currentStep); }
-    }
-
-    document.getElementById('prevBtn').style.display = currentStep > 1 ? 'block' : 'none';
-    document.getElementById('nextBtn').style.display = currentStep < totalSteps ? 'flex' : 'none';
-    document.getElementById('submitBtn').style.display = currentStep === totalSteps ? 'flex' : 'none';
-  }
-
-  function validateStep(step) {
-    var fields = stepFields[step] || [];
+  function validateAll() {
     var valid = true;
     var firstInvalid = null;
 
-    // Reset all borders for current step
-    var allStepInputs = document.querySelectorAll('#step-' + step + ' input, #step-' + step + ' select, #step-' + step + ' textarea');
-    allStepInputs.forEach(function(el) { el.style.borderColor = ''; });
+    var allInputs = document.querySelectorAll('input, select, textarea');
+    allInputs.forEach(function(el) { el.style.borderColor = ''; });
 
-    // Validate only the explicit required fields
-    for (var i = 0; i < fields.length; i++) {
-      var el = document.getElementById(fields[i]);
-      if (!el) continue;
-      var val = (el.value || '').toString().trim();
-      if (!val) {
-        el.style.borderColor = '#ff4444';
-        valid = false;
-        if (!firstInvalid) firstInvalid = el;
+    for (var step = 1; step <= 5; step++) {
+      var fields = stepFields[step] || [];
+      for (var i = 0; i < fields.length; i++) {
+        var el = document.getElementById(fields[i]);
+        if (!el) continue;
+        var val = (el.value || '').toString().trim();
+        if (!val) {
+          el.style.borderColor = '#ff4444';
+          valid = false;
+          if (!firstInvalid) firstInvalid = el;
+        }
       }
+    }
+
+    if (!document.getElementById('f-position').value) {
+      showToast('Please select a position.');
+      valid = false;
+      if (!firstInvalid) firstInvalid = document.getElementById('step-4');
     }
 
     if (!valid) {
       showToast('Please fill in all required fields.');
       if (firstInvalid) {
         firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        firstInvalid.focus();
+        if (firstInvalid.focus) firstInvalid.focus();
       }
     }
     return valid;
   }
 
-  function navigateStep(dir) {
-    if (dir === 1 && !validateStep(currentStep)) return;
-    if (currentStep === 4 && dir === 1 && !document.getElementById('f-position').value) {
-      showToast('Please select a position to continue.');
-      return;
-    }
-    if (dir === 1 && currentStep === totalSteps - 1) buildReview();
-    currentStep = Math.max(1, Math.min(totalSteps, currentStep + dir));
-    // Use hidden attribute — browser UA stylesheet sets display:none !important, bulletproof
-    for (var i = 1; i <= totalSteps; i++) {
-      var stepEl = document.getElementById('step-' + i);
-      if (stepEl) {
-        if (i === currentStep) {
-          stepEl.removeAttribute('hidden');
-          stepEl.classList.add('active');
-        } else {
-          stepEl.setAttribute('hidden', '');
-          stepEl.classList.remove('active');
-        }
-      }
-    }
-    updateStepper();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  function buildReview() {
-    const data = {
-      'Full Name': document.getElementById('f-name').value,
-      'Date of Birth': document.getElementById('f-dob').value,
-      'Gender': document.getElementById('f-gender').value,
-      'School / Institution': document.getElementById('f-school').value,
-      'Class / Level': document.getElementById('f-level').value,
-      'Parent / Guardian': document.getElementById('f-guardian').value,
-      'Phone Number': document.getElementById('f-phone').value,
-      'Email Address': document.getElementById('f-email').value,
-      'State': document.getElementById('f-state').value,
-      'LGA': document.getElementById('f-lga').value,
-      'Position Applied': document.getElementById('f-position').value,
-    };
-
-    const grid = document.getElementById('reviewGrid');
-    grid.innerHTML = Object.entries(data).map(([k, v]) =>
-      `<div class="review-item${k === 'Position Applied' ? ' full' : ''}">
-        <div class="review-label">${k}</div>
-        <div class="review-value">${v || '<span style="color:rgba(255,255,255,0.25);">Not provided</span>'}</div>
-      </div>`
-    ).join('');
-  }
-
   async function submitApplication() {
+    if (!validateAll()) return;
     const declaration = document.getElementById('f-declaration');
     if (!declaration.checked) { showToast('Please accept the declaration to proceed.'); return; }
 
@@ -1158,8 +1015,7 @@
   }
 
   function showSuccess(refCode) {
-    document.getElementById('applyFormCard').querySelector('.step-nav').style.display = 'none';
-    document.querySelectorAll('.apply-step').forEach(s => s.style.display = 'none');
+    document.getElementById('applyFormCard').style.display = 'none';
     document.getElementById('successScreen').style.display = 'block';
     document.getElementById('refCode').textContent = refCode;
     document.getElementById('success-position').textContent = document.getElementById('f-position').value || 'Selected Position';
@@ -1180,8 +1036,7 @@
     document.querySelector('.ygi-mobile-nav')?.classList.add('open');
   });
 
-  // Init
-  updateStepper();
+  // Init not needed for single page form
   </script>
 </body>
 </html>

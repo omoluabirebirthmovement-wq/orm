@@ -139,3 +139,68 @@ INSERT INTO public.events (id, title, date, time, location, "desc", status) VALU
 ('event-1', 'Lagos High School Integrity Summit', '2026-06-15', '09:00 AM', 'National Theatre, Iganmu, Lagos', 'A massive gathering of 2,000+ secondary school students focusing on moral orientation, digital skills pathways, and anti-vice campaigns.', 'Upcoming'),
 ('event-2', 'Ibadan Youth Leadership Assembly', '2026-07-10', '10:00 AM', 'Mapo Hall, Ibadan, Oyo State', 'An orientation program for university undergraduates and community youths on ethics, community leadership, and social entrepreneurship.', 'Upcoming')
 ON CONFLICT (id) DO NOTHING;
+
+-- 9. MEMBERS TABLE (100 Future Leaders)
+CREATE TABLE IF NOT EXISTS public.members (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name TEXT NOT NULL,
+    phone TEXT NOT NULL UNIQUE,
+    email TEXT UNIQUE,
+    referral_code TEXT UNIQUE NOT NULL,
+    referred_by_id UUID REFERENCES public.members(id),
+    points INT DEFAULT 0,
+    rank TEXT DEFAULT 'Beginner',
+    status TEXT DEFAULT 'Active',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- 10. COURSE PROGRESS TABLE
+CREATE TABLE IF NOT EXISTS public.course_progress (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    member_id UUID REFERENCES public.members(id) ON DELETE CASCADE,
+    module_id TEXT NOT NULL,
+    completion_status TEXT DEFAULT 'Pending',
+    quiz_score INT DEFAULT 0,
+    completed_at TIMESTAMP WITH TIME ZONE
+);
+
+-- 11. CONTENT CALENDAR TABLE (NINUOYO TV)
+CREATE TABLE IF NOT EXISTS public.content_calendar (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    date_to_publish DATE NOT NULL,
+    platform TEXT NOT NULL,
+    content_type TEXT NOT NULL,
+    text_prompt TEXT NOT NULL,
+    status TEXT DEFAULT 'Draft',
+    media_url TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- 12. SPONSORSHIP CRM TABLE
+CREATE TABLE IF NOT EXISTS public.sponsorship_crm (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    company TEXT NOT NULL,
+    contact_name TEXT,
+    status TEXT DEFAULT 'Lead',
+    last_outreach DATE,
+    notes TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- 13. LEADERBOARD VIEW
+CREATE OR REPLACE VIEW public.leaderboard AS
+SELECT id, name, points, rank,
+       RANK() OVER (ORDER BY points DESC) as leaderboard_rank
+FROM public.members
+WHERE status = 'Active';
+
+-- Enable RLS for new tables
+ALTER TABLE public.members ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.course_progress ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.content_calendar ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.sponsorship_crm ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Allow public read-write access to members" ON public.members FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Allow public read-write access to course_progress" ON public.course_progress FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Allow public read-write access to content_calendar" ON public.content_calendar FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Allow public read-write access to sponsorship_crm" ON public.sponsorship_crm FOR ALL USING (true) WITH CHECK (true);

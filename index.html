@@ -128,6 +128,7 @@
         <a href="#home" class="active" data-translate="nav-home">Home</a>
         <a href="#about" data-translate="nav-about">About ORM</a>
         <a href="#join" data-translate="nav-join">Join</a>
+        <a href="#100-leaders" style="color: var(--accent); font-weight: bold;">100 Future Leaders</a>
         <a href="#stories" data-translate="nav-stories">Stories</a>
         <a href="#events" data-translate="nav-events">Outreach & Events</a>
         <a href="#media" data-translate="nav-media">Media</a>
@@ -178,6 +179,7 @@
     <a href="#home" class="active" data-translate="nav-home"><i class="fas fa-home"></i> Home</a>
     <a href="#about" data-translate="nav-about"><i class="fas fa-info-circle"></i> About ORM</a>
     <a href="#join" data-translate="nav-join"><i class="fas fa-hand-holding-heart"></i> Join</a>
+    <a href="#100-leaders" style="color: var(--accent); font-weight: bold;"><i class="fas fa-star"></i> 100 Future Leaders</a>
     <a href="#stories" data-translate="nav-stories"><i class="fas fa-book-open"></i> Stories</a>
     <a href="#events" data-translate="nav-events"><i class="fas fa-calendar-alt"></i> Outreach & Events</a>
     <a href="#media" data-translate="nav-media"><i class="fas fa-photo-video"></i> Media</a>
@@ -533,6 +535,42 @@
             
             <div id="captcha-volunteer" class="captcha-container" style="margin-top:15px;"></div>
             <button type="submit" class="btn btn-primary" style="width:100%; margin-top:20px;" data-translate="btn-submit-join">Submit Application</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================== -->
+  <!-- 100 FUTURE LEADERS VIEW                              -->
+  <!-- ==================================================== -->
+  <section id="100-leaders-view" class="view-section">
+    <div class="section-padding container" style="max-width: 900px;">
+      <div class="text-center">
+        <h1 data-translate="leaders-title">100 Future Leaders Campaign</h1>
+        <p class="section-subtitle" data-translate="leaders-subtitle">Become part of the elite core of 100 leaders to rebuild this generation. Receive free digital skills training, mentorship, and certification.</p>
+      </div>
+
+      <div class="form-card">
+        <form id="leaders-registration-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="leader-name">Full Name</label>
+              <input type="text" id="leader-name" required placeholder="Adejoke Alao">
+            </div>
+            <div class="form-group">
+              <label for="leader-phone">WhatsApp Number</label>
+              <input type="tel" id="leader-phone" required placeholder="09049656467">
+            </div>
+            <div class="form-group">
+              <label for="leader-email">Email Address</label>
+              <input type="email" id="leader-email" required placeholder="adejoke@example.com">
+            </div>
+            <div class="form-group">
+              <label for="leader-ref">Referral Code (Optional)</label>
+              <input type="text" id="leader-ref" placeholder="Leave empty if none">
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%; margin-top:20px;">Apply for 100 Future Leaders</button>
         </form>
       </div>
     </div>

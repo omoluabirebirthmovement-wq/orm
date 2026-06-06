@@ -537,6 +537,23 @@ function initFormBindings() {
     });
   });
 
+  // 100 Future Leaders Form Submit
+  const leadersForm = document.getElementById("leaders-registration-form");
+  if (leadersForm) {
+    leadersForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const name = document.getElementById("leader-name").value;
+      const phone = document.getElementById("leader-phone").value;
+      const email = document.getElementById("leader-email").value;
+      const ref = document.getElementById("leader-ref").value;
+
+      // In a real implementation this would go to Supabase.
+      showToast("Application received! You are on your way to becoming one of the 100 Future Leaders.");
+      leadersForm.reset();
+      window.router("home-view");
+    });
+  }
+
   // Volunteer form submit
   const volForm = document.getElementById("volunteer-registration-form");
   if (volForm) {

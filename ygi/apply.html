@@ -847,7 +847,7 @@
   // === YGI Application Portal JS ===
   const SUPABASE_URL = 'https://yqnvjgxzqzqiepwmmhfy.supabase.co';
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlxbnZqZ3h6cXpxaWVwd21taGZ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzE4NTU4NzUsImV4cCI6MjA0NzQzMTg3NX0.jHxlRKJ3KHdwzlMOBpjKd_aXj1VhvJj5aRlFIovIk5g';
-  const supabase = window.supabase?.createClient(SUPABASE_URL, SUPABASE_KEY);
+  const supabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
 
   let currentStep = 1;
   const totalSteps = 6;
@@ -881,31 +881,39 @@
   });
 
   // File upload areas
-  ['passport', 'id', 'rec'].forEach(key => {
-    const input = document.getElementById(`${key}-input`);
-    const drop = document.getElementById(`${key}-drop`);
-    const status = document.getElementById(`${key}-status`);
+  ['passport', 'id', 'rec'].forEach(function(key) {
+    const input = document.getElementById(key + '-input');
+    const drop = document.getElementById(key + '-drop');
+    const status = document.getElementById(key + '-status');
 
-    input?.addEventListener('change', () => {
-      if (input.files.length > 0) {
-        drop.classList.add('has-file');
-        status.textContent = `✅ ${input.files[0].name}`;
-        status.style.display = 'block';
-      }
-    });
+    if (input) {
+      input.addEventListener('change', function() {
+        if (input.files && input.files.length > 0) {
+          if (drop) drop.classList.add('has-file');
+          if (status) {
+            status.textContent = '✅ ' + input.files[0].name;
+            status.style.display = 'block';
+          }
+        }
+      });
+    }
 
-    drop?.addEventListener('dragover', (e) => { e.preventDefault(); drop.style.borderColor = 'var(--ygi-gold)'; });
-    drop?.addEventListener('dragleave', () => { drop.style.borderColor = ''; });
-    drop?.addEventListener('drop', (e) => {
-      e.preventDefault();
-      const file = e.dataTransfer.files[0];
-      if (file) {
-        const dt = new DataTransfer();
-        dt.items.add(file);
-        input.files = dt.files;
-        input.dispatchEvent(new Event('change'));
-      }
-    });
+    if (drop) {
+      drop.addEventListener('dragover', function(e) { e.preventDefault(); drop.style.borderColor = 'var(--ygi-gold)'; });
+      drop.addEventListener('dragleave', function() { drop.style.borderColor = ''; });
+      drop.addEventListener('drop', function(e) {
+        e.preventDefault();
+        if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]) {
+          const file = e.dataTransfer.files[0];
+          const dt = new DataTransfer();
+          dt.items.add(file);
+          if (input) {
+            input.files = dt.files;
+            input.dispatchEvent(new Event('change'));
+          }
+        }
+      });
+    }
   });
 
   function validateAll() {
@@ -1019,9 +1027,15 @@
     const statement = document.getElementById('f-statement').value || '';
     const leadership = document.getElementById('f-leadership').value || '';
     const community = document.getElementById('f-community').value || '';
-    const rec = document.getElementById('rec-input').files?.length > 0;
-    const passport = document.getElementById('passport-input').files?.length > 0;
-    const idDoc = document.getElementById('id-input').files?.length > 0;
+    
+    const recInput = document.getElementById('rec-input');
+    const rec = recInput && recInput.files && recInput.files.length > 0;
+    
+    const passportInput = document.getElementById('passport-input');
+    const passport = passportInput && passportInput.files && passportInput.files.length > 0;
+    
+    const idInput = document.getElementById('id-input');
+    const idDoc = idInput && idInput.files && idInput.files.length > 0;
 
     // Completeness
     if (statement.split(' ').length >= 200) score += 30;
@@ -1058,9 +1072,13 @@
   }
 
   // Mobile nav
-  document.getElementById('ygi-hamburger')?.addEventListener('click', () => {
-    document.querySelector('.ygi-mobile-nav')?.classList.add('open');
-  });
+  var hamburger = document.getElementById('ygi-hamburger');
+  if (hamburger) {
+    hamburger.addEventListener('click', function() {
+      var nav = document.querySelector('.ygi-mobile-nav');
+      if (nav) nav.classList.add('open');
+    });
+  }
 
   // Init not needed for single page form
   </script>

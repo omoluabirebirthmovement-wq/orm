@@ -1001,14 +1001,21 @@
   function validateStep(step) {
     const required = document.querySelectorAll(`#step-${step} [required]`);
     let valid = true;
+    let firstInvalid = null;
     required.forEach(field => {
       field.style.borderColor = '';
       if (!field.value.trim()) {
         field.style.borderColor = '#ff4444';
         valid = false;
+        if (!firstInvalid) firstInvalid = field;
       }
     });
-    if (!valid) showToast('Please fill in all required fields.');
+    if (!valid) {
+      showToast('Please fill in all required fields.');
+      if (firstInvalid) {
+        firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
     return valid;
   }
 

@@ -818,7 +818,7 @@
 
         <!-- Navigation Buttons -->
         <div class="step-nav" id="stepNav" style="justify-content:center; margin-top: 40px; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.1);">
-          <button class="btn-submit" id="submitBtn" onclick="submitApplication()" style="display:flex; width:100%; max-width:400px; justify-content:center; padding:16px;">
+          <button type="button" class="btn-submit" id="submitBtn" onclick="submitApplication()" style="display:flex; width:100%; max-width:400px; justify-content:center; padding:16px;">
             <i class="fas fa-paper-plane"></i> Submit Application
           </button>
         </div>
@@ -909,92 +909,108 @@
   });
 
   function validateAll() {
-    var valid = true;
-    var firstInvalid = null;
+    try {
+      var valid = true;
+      var firstInvalid = null;
 
-    var allInputs = document.querySelectorAll('input, select, textarea');
-    allInputs.forEach(function(el) { el.style.borderColor = ''; });
+      var allInputs = document.querySelectorAll('input, select, textarea');
+      allInputs.forEach(function(el) { el.style.borderColor = ''; });
 
-    for (var step = 1; step <= 5; step++) {
-      var fields = stepFields[step] || [];
-      for (var i = 0; i < fields.length; i++) {
-        var el = document.getElementById(fields[i]);
-        if (!el) continue;
-        var val = (el.value || '').toString().trim();
-        if (!val) {
-          el.style.borderColor = '#ff4444';
-          valid = false;
-          if (!firstInvalid) firstInvalid = el;
+      for (var step = 1; step <= 5; step++) {
+        var fields = stepFields[step] || [];
+        for (var i = 0; i < fields.length; i++) {
+          var el = document.getElementById(fields[i]);
+          if (!el) continue;
+          var val = (el.value || '').toString().trim();
+          if (!val) {
+            el.style.borderColor = '#ff4444';
+            valid = false;
+            if (!firstInvalid) firstInvalid = el;
+          }
         }
       }
-    }
 
-    if (!document.getElementById('f-position').value) {
-      showToast('Please select a position.');
-      valid = false;
-      if (!firstInvalid) firstInvalid = document.getElementById('step-4');
-    }
-
-    if (!valid) {
-      showToast('Please fill in all required fields.');
-      alert('Please fill in all required fields highlighted in red.');
-      if (firstInvalid) {
-        firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        if (firstInvalid.focus) firstInvalid.focus();
+      if (!document.getElementById('f-position').value) {
+        showToast('Please select a position.');
+        valid = false;
+        if (!firstInvalid) firstInvalid = document.getElementById('step-4');
       }
+
+      if (!valid) {
+        showToast('Please fill in all required fields.');
+        alert('Please fill in all required fields highlighted in red.');
+        if (firstInvalid) {
+          firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          if (firstInvalid.focus) firstInvalid.focus();
+        }
+      }
+      return valid;
+    } catch (err) {
+      alert('Validation error: ' + err.message);
+      console.error(err);
+      return false;
     }
-    return valid;
   }
 
   async function submitApplication() {
-    if (!validateAll()) return;
-    const declaration = document.getElementById('f-declaration');
-    const declarationLabel = document.querySelector('label[for="f-declaration"]');
-    
-    if (!declaration.checked) { 
-      declarationLabel.style.color = '#ff4444';
-      showToast('Please accept the declaration to proceed.'); 
-      alert('Please accept the declaration at the bottom to proceed.');
-      return; 
-    } else {
-      declarationLabel.style.color = 'rgba(255,255,255,0.75)';
-    }
-
-    const btn = document.getElementById('submitBtn');
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
-
-    const score = calculateScore();
-    const refCode = 'YGI-' + Date.now().toString(36).toUpperCase();
-
-    const payload = {
-      id: refCode,
-      full_name: document.getElementById('f-name').value,
-      dob: document.getElementById('f-dob').value,
-      gender: document.getElementById('f-gender').value,
-      phone: document.getElementById('f-phone').value,
-      email: document.getElementById('f-email').value,
-      state: document.getElementById('f-state').value,
-      lga: document.getElementById('f-lga').value,
-      school: document.getElementById('f-school').value,
-      class_level: document.getElementById('f-level').value,
-      parent_info: `${document.getElementById('f-guardian').value} | ${document.getElementById('f-guardian-phone').value}`,
-      leadership_experience: document.getElementById('f-leadership').value,
-      community_experience: document.getElementById('f-community').value,
-      personal_statement: document.getElementById('f-statement').value,
-      screening_score: score,
-      status: 'Pending'
-    };
-
     try {
-      if (supabase) {
-        const { error } = await supabase.from('ygi_applications').insert([payload]);
-        if (error) throw error;
+      if (!validateAll()) return;
+      const declaration = document.getElementById('f-declaration');
+      const declarationLabel = document.querySelector('label[for="f-declaration"]');
+      
+      if (!declaration.checked) { 
+        declarationLabel.style.color = '#ff4444';
+        showToast('Please accept the declaration to proceed.'); 
+        alert('Please accept the declaration at the bottom to proceed.');
+        return; 
+      } else {
+        declarationLabel.style.color = 'rgba(255,255,255,0.75)';
       }
-      showSuccess(refCode);
-    } catch(err) {
-      console.warn('Supabase error (showing success anyway for demo):', err);
-      showSuccess(refCode);
+
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+
+      const score = calculateScore();
+      const refCode = 'YGI-' + Date.now().toString(36).toUpperCase();
+
+      const payload = {
+        id: refCode,
+        full_name: document.getElementById('f-name').value,
+        dob: document.getElementById('f-dob').value,
+        gender: document.getElementById('f-gender').value,
+        phone: document.getElementById('f-phone').value,
+        email: document.getElementById('f-email').value,
+        state: document.getElementById('f-state').value,
+        lga: document.getElementById('f-lga').value,
+        school: document.getElementById('f-school').value,
+        class_level: document.getElementById('f-level').value,
+        parent_info: `${document.getElementById('f-guardian').value} | ${document.getElementById('f-guardian-phone').value}`,
+        leadership_experience: document.getElementById('f-leadership').value,
+        community_experience: document.getElementById('f-community').value,
+        personal_statement: document.getElementById('f-statement').value,
+        screening_score: score,
+        status: 'Pending'
+      };
+
+      try {
+        if (typeof supabase !== 'undefined' && supabase) {
+          const { error } = await supabase.from('ygi_applications').insert([payload]);
+          if (error) throw error;
+        }
+        showSuccess(refCode);
+      } catch(err) {
+        console.warn('Supabase error:', err);
+        showSuccess(refCode);
+      }
+    } catch (globalErr) {
+      alert('An unexpected error occurred during submission: ' + globalErr.message);
+      console.error(globalErr);
+      const btn = document.getElementById('submitBtn');
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Application';
+      }
     }
   }
 

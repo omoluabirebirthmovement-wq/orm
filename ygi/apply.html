@@ -132,8 +132,9 @@
       backdrop-filter: blur(20px);
     }
 
-    .apply-step { display: none; }
-    .apply-step.active { display: block; }
+    /* Steps hidden via HTML hidden attribute for bulletproof cross-browser support */
+    .apply-step[hidden] { display: none; }
+    .apply-step { display: block; }
 
     .step-heading {
       display: flex;
@@ -645,7 +646,7 @@
         </div>
 
         <!-- STEP 2: Contact & Location -->
-        <div class="apply-step" id="step-2">
+        <div class="apply-step" id="step-2" hidden>
           <div class="step-heading">
             <div class="step-heading-icon"><i class="fas fa-map-marker-alt"></i></div>
             <div>
@@ -697,7 +698,7 @@
         </div>
 
         <!-- STEP 3: Experience & Background -->
-        <div class="apply-step" id="step-3">
+        <div class="apply-step" id="step-3" hidden>
           <div class="step-heading">
             <div class="step-heading-icon"><i class="fas fa-briefcase"></i></div>
             <div>
@@ -722,7 +723,7 @@
         </div>
 
         <!-- STEP 4: Position Selection -->
-        <div class="apply-step" id="step-4">
+        <div class="apply-step" id="step-4" hidden>
           <div class="step-heading">
             <div class="step-heading-icon"><i class="fas fa-landmark"></i></div>
             <div>
@@ -807,7 +808,7 @@
         </div>
 
         <!-- STEP 5: Document Uploads -->
-        <div class="apply-step" id="step-5">
+        <div class="apply-step" id="step-5" hidden>
           <div class="step-heading">
             <div class="step-heading-icon"><i class="fas fa-upload"></i></div>
             <div>
@@ -856,7 +857,7 @@
         </div>
 
         <!-- STEP 6: Review & Submit -->
-        <div class="apply-step" id="step-6">
+        <div class="apply-step" id="step-6" hidden>
           <div class="step-heading">
             <div class="step-heading-icon"><i class="fas fa-check-double"></i></div>
             <div>
@@ -1047,12 +1048,17 @@
     }
     if (dir === 1 && currentStep === totalSteps - 1) buildReview();
     currentStep = Math.max(1, Math.min(totalSteps, currentStep + dir));
-    // Show/hide steps explicitly
+    // Use hidden attribute — browser UA stylesheet sets display:none !important, bulletproof
     for (var i = 1; i <= totalSteps; i++) {
       var stepEl = document.getElementById('step-' + i);
       if (stepEl) {
-        stepEl.style.display = (i === currentStep) ? 'block' : 'none';
-        stepEl.classList.toggle('active', i === currentStep);
+        if (i === currentStep) {
+          stepEl.removeAttribute('hidden');
+          stepEl.classList.add('active');
+        } else {
+          stepEl.setAttribute('hidden', '');
+          stepEl.classList.remove('active');
+        }
       }
     }
     updateStepper();

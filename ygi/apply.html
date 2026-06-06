@@ -937,6 +937,7 @@
 
     if (!valid) {
       showToast('Please fill in all required fields.');
+      alert('Please fill in all required fields highlighted in red.');
       if (firstInvalid) {
         firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
         if (firstInvalid.focus) firstInvalid.focus();
@@ -948,7 +949,16 @@
   async function submitApplication() {
     if (!validateAll()) return;
     const declaration = document.getElementById('f-declaration');
-    if (!declaration.checked) { showToast('Please accept the declaration to proceed.'); return; }
+    const declarationLabel = document.querySelector('label[for="f-declaration"]');
+    
+    if (!declaration.checked) { 
+      declarationLabel.style.color = '#ff4444';
+      showToast('Please accept the declaration to proceed.'); 
+      alert('Please accept the declaration at the bottom to proceed.');
+      return; 
+    } else {
+      declarationLabel.style.color = 'rgba(255,255,255,0.75)';
+    }
 
     const btn = document.getElementById('submitBtn');
     btn.disabled = true;

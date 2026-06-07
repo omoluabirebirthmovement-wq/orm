@@ -310,6 +310,7 @@
       <div class="db-nav-label">Learning</div>
       <button class="db-nav-link" data-panel="training"><i class="fas fa-graduation-cap"></i> Training</button>
       <button class="db-nav-link" data-panel="certificates"><i class="fas fa-certificate"></i> Certificates</button>
+      <button class="db-nav-link" data-panel="campaigns"><i class="fas fa-bullhorn"></i> Campaigns</button>
       <div class="db-nav-label">Platform</div>
       <a class="db-nav-link" href="/ygi/index.html"><i class="fas fa-landmark"></i> YGI Home</a>
       <a class="db-nav-link" href="/index.html"><i class="fas fa-arrow-left"></i> ORM Platform</a>
@@ -531,6 +532,79 @@
         </div>
       </div>
 
+      <!-- =========== CAMPAIGNS =========== -->
+      <div class="db-panel" id="panel-campaigns">
+        <div class="db-card">
+          <div class="db-card-header">
+            <div class="db-card-title"><i class="fas fa-bullhorn"></i> ORM Campaigns (Phase 1: Anti-Fraud & Rebirth)</div>
+          </div>
+          <div style="padding:20px; color:rgba(255,255,255,0.8);">
+            <p style="margin-bottom:20px;">Use these materials to promote the Omoluabi Rebirth Movement. Copy the texts to use on WhatsApp or Social Media.</p>
+            
+            <div style="background:rgba(255,255,255,0.05); padding:20px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); margin-bottom:20px;">
+              <h4 style="color:var(--ygi-gold); margin-bottom:10px;">Variation 1 — The Hard Truth about Fraud (Youth Focus)</h4>
+              <textarea id="camp-text-1" style="width:100%; height:180px; background:rgba(0,0,0,0.5); color:#fff; border:1px solid rgba(255,255,255,0.2); padding:15px; border-radius:6px; font-family:monospace; margin-bottom:10px;" readonly>🚨 THE FAST LANE IS A DEAD END!
+They tell you "Yahoo" is the only way out.
+They tell you everyone is doing it.
+They lied to you.
+
+Internet fraud does not bring peace. It brings paranoia, police harassment, and destroys your family's name.
+
+True wealth is built, not stolen.
+Join the Omoluabi Rebirth Movement (ORM) today.
+Let us show you how to build legitimate digital skills, secure your future, and sleep with peace of mind.
+
+🛑 Say NO to Cybercrime.
+🟢 Say YES to the Omoluabi way.
+
+Join the movement: omoluabi.goldengenerationcdc.org
+#OmoluabiRebirth #SayNoToFraud #GoldenGeneration</textarea>
+              <button class="db-btn" onclick="copyCampaign('camp-text-1')"><i class="fas fa-copy"></i> Copy to Clipboard</button>
+              <a href="#" class="db-btn db-btn-outline" style="margin-left:10px;" onclick="showToast('Media links will be available when images are generated.')"><i class="fas fa-image"></i> Download Image 1</a>
+            </div>
+
+            <div style="background:rgba(255,255,255,0.05); padding:20px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); margin-bottom:20px;">
+              <h4 style="color:var(--ygi-gold); margin-bottom:10px;">Variation 2 — Anti-Cultism / Brotherhood (University Focus)</h4>
+              <textarea id="camp-text-2" style="width:100%; height:180px; background:rgba(0,0,0,0.5); color:#fff; border:1px solid rgba(255,255,255,0.2); padding:15px; border-radius:6px; font-family:monospace; margin-bottom:10px;" readonly>🩸 TRUE BROTHERHOOD DOES NOT DEMAND YOUR BLOOD.
+Are you being pressured to join a cult on campus?
+Are they promising you "protection" and "power"?
+
+Listen: The only thing cultism guarantees is a life of fear, violence, and a shortened destiny. You do not need to shed blood to be a man. 
+
+The Omoluabi Rebirth Movement (ORM) is building a network of true future leaders. We offer legitimate mentorship, career guidance, and a community of excellence.
+
+Drop the colors. Pick up your future.
+You are meant to be a LEADER, not a thug.
+
+Reach out to us confidentially today:
+👉 omoluabi.goldengenerationcdc.org</textarea>
+              <button class="db-btn" onclick="copyCampaign('camp-text-2')"><i class="fas fa-copy"></i> Copy to Clipboard</button>
+              <a href="#" class="db-btn db-btn-outline" style="margin-left:10px;" onclick="showToast('Media links will be available when images are generated.')"><i class="fas fa-image"></i> Download Image 2</a>
+            </div>
+
+            <div style="background:rgba(255,255,255,0.05); padding:20px; border-radius:8px; border:1px solid rgba(255,255,255,0.1);">
+              <h4 style="color:var(--ygi-gold); margin-bottom:10px;">Video Ad Script (60 Seconds) - "The Mirror"</h4>
+              <textarea id="camp-text-3" style="width:100%; height:180px; background:rgba(0,0,0,0.5); color:#fff; border:1px solid rgba(255,255,255,0.2); padding:15px; border-radius:6px; font-family:monospace; margin-bottom:10px;" readonly>[SCENE 1] (Dim lighting. Young boy looking stressed in mirror)
+VOICEOVER: "Look at yourself. Is this the life you dreamed of? Running from shadows. Hiding your screen."
+
+[SCENE 2] (Mother crying with police report, boys looking nervous)
+VOICEOVER: "They sold you a lie. They told you fraud was 'hustle'. They told you cultism was 'brotherhood'."
+
+[SCENE 3] (Uplifting music. Boy steps into sunlight, shakes hands with mentor)
+VOICEOVER: "It is time to return to your roots. You are a Nigerian. You are born for greatness. You are an OMOLUABI."
+
+[SCENE 4] (Youths learning coding, tailoring, laughing)
+VOICEOVER: "The Omoluabi Rebirth Movement is raising a Golden Generation. We build wealth through legitimate skills. We build power through intellect and peace."
+
+[SCENE 5] (ORM Logo and website)
+VOICEOVER: "Rebuild your identity. Secure your future. Join the movement today at omoluabi.goldengenerationcdc.org."</textarea>
+              <button class="db-btn" onclick="copyCampaign('camp-text-3')"><i class="fas fa-copy"></i> Copy to Clipboard</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
     </div>
   </main>
 </div>
@@ -557,6 +631,14 @@ function showToast(m){var t=document.getElementById('ygi-toast');t.textContent=m
 function adminLogout(){
   sessionStorage.removeItem('ygi_admin_auth');
   window.location.replace('/ygi/admin-login.html');
+}
+
+function copyCampaign(id){
+  const copyText = document.getElementById(id);
+  copyText.select();
+  copyText.setSelectionRange(0, 99999);
+  navigator.clipboard.writeText(copyText.value);
+  showToast("Copied to clipboard!");
 }
 
 async function loadProfile(){

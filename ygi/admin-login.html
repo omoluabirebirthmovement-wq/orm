@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login — Young Government Initiative (YGI)</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold: #D4AF37;
+      --gold-dark: #B8960C;
+      --navy: #0D1B40;
+      --green: #1A6B3C;
+      --white: #ffffff;
+    }
+
+    body {
+      background: #080E20;
+      font-family: 'Montserrat', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Animated background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(ellipse at 30% 40%, rgba(26,107,60,0.15) 0%, transparent 50%),
+                  radial-gradient(ellipse at 70% 60%, rgba(212,175,55,0.1) 0%, transparent 50%),
+                  radial-gradient(ellipse at 50% 50%, rgba(13,27,64,0.8) 0%, #080E20 70%);
+      animation: bgPulse 8s ease-in-out infinite alternate;
+      z-index: 0;
+    }
+
+    @keyframes bgPulse {
+      0% { transform: scale(1) rotate(0deg); }
+      100% { transform: scale(1.05) rotate(1deg); }
+    }
+
+    .login-wrapper {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 460px;
+    }
+
+    /* Logo */
+    .login-logo {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .logo-icon {
+      width: 72px; height: 72px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      border-radius: 20px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--navy);
+      margin-bottom: 16px;
+      box-shadow: 0 8px 32px rgba(212,175,55,0.35);
+      animation: logoFloat 3s ease-in-out infinite;
+    }
+
+    @keyframes logoFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    .login-logo h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      color: white;
+      margin-bottom: 4px;
+    }
+
+    .login-logo h1 span { color: var(--gold); }
+
+    .login-logo p {
+      color: rgba(255,255,255,0.4);
+      font-size: 0.82rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    /* Card */
+    .login-card {
+      background: rgba(13, 22, 48, 0.9);
+      border: 1px solid rgba(212,175,55,0.2);
+      border-radius: 20px;
+      padding: 40px 36px;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.03);
+      backdrop-filter: blur(20px);
+    }
+
+    .login-card-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.7);
+      text-align: center;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .login-card-title i { color: var(--gold); }
+
+    /* Form */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.45);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .input-wrap i {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255,255,255,0.3);
+      font-size: 0.95rem;
+      pointer-events: none;
+    }
+
+    .input-wrap input {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 14px 14px 14px 42px;
+      color: white;
+      font-size: 0.95rem;
+      font-family: 'Montserrat', sans-serif;
+      outline: none;
+      transition: all 0.25s ease;
+    }
+
+    .input-wrap input:focus {
+      border-color: var(--gold);
+      background: rgba(212,175,55,0.05);
+      box-shadow: 0 0 0 3px rgba(212,175,55,0.12);
+    }
+
+    .input-wrap input::placeholder {
+      color: rgba(255,255,255,0.2);
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.3);
+      cursor: pointer;
+      font-size: 0.9rem;
+      padding: 4px;
+      transition: color 0.2s;
+    }
+
+    .toggle-password:hover { color: var(--gold); }
+
+    /* Error message */
+    .error-msg {
+      display: none;
+      background: rgba(248,113,113,0.1);
+      border: 1px solid rgba(248,113,113,0.3);
+      border-radius: 10px;
+      padding: 12px 14px;
+      color: #F87171;
+      font-size: 0.85rem;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .error-msg.show { display: block; animation: shake 0.4s ease; }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-8px); }
+      75% { transform: translateX(8px); }
+    }
+
+    /* Submit button */
+    .btn-login {
+      width: 100%;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: var(--navy);
+      border: none;
+      border-radius: 12px;
+      padding: 15px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      font-family: 'Montserrat', sans-serif;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 24px rgba(212,175,55,0.35);
+      margin-top: 8px;
+    }
+
+    .btn-login:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(212,175,55,0.5);
+    }
+
+    .btn-login:active { transform: translateY(0); }
+
+    .btn-login:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Footer */
+    .login-footer {
+      text-align: center;
+      margin-top: 24px;
+      color: rgba(255,255,255,0.25);
+      font-size: 0.78rem;
+    }
+
+    .login-footer a {
+      color: rgba(212,175,55,0.6);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .login-footer a:hover { color: var(--gold); }
+
+    /* Security badge */
+    .security-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 20px;
+      color: rgba(255,255,255,0.2);
+      font-size: 0.72rem;
+      letter-spacing: 0.5px;
+    }
+
+    .security-badge i { color: var(--green); font-size: 0.8rem; }
+  </style>
+</head>
+<body>
+
+  <div class="login-wrapper">
+    <!-- Logo -->
+    <div class="login-logo">
+      <div class="logo-icon">YGI</div>
+      <h1>Young <span>Government</span> Initiative</h1>
+      <p>Admin Control Panel</p>
+    </div>
+
+    <!-- Login Card -->
+    <div class="login-card">
+      <div class="login-card-title">
+        <i class="fas fa-shield-alt"></i>
+        Administrator Login
+      </div>
+
+      <div class="error-msg" id="errorMsg">
+        <i class="fas fa-exclamation-circle"></i> Invalid email or password. Please try again.
+      </div>
+
+      <div class="form-group">
+        <label>Admin Email</label>
+        <div class="input-wrap">
+          <i class="fas fa-envelope"></i>
+          <input type="email" id="adminEmail" placeholder="admin@yourdomain.com" autocomplete="email">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <div class="input-wrap">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="adminPassword" placeholder="••••••••••" autocomplete="current-password">
+          <button class="toggle-password" type="button" onclick="togglePwd()" id="toggleBtn">
+            <i class="fas fa-eye" id="eyeIcon"></i>
+          </button>
+        </div>
+      </div>
+
+      <button class="btn-login" id="loginBtn" onclick="doLogin()">
+        <i class="fas fa-sign-in-alt"></i> Sign In to Dashboard
+      </button>
+
+      <div class="security-badge">
+        <i class="fas fa-lock"></i>
+        Secure Admin Area — Unauthorized access is prohibited
+      </div>
+    </div>
+
+    <div class="login-footer">
+      <a href="/ygi/index.html">← Back to YGI Home</a>
+      &nbsp;·&nbsp;
+      <a href="/ygi/apply">Apply Now</a>
+    </div>
+  </div>
+
+  <script>
+    // Admin credentials
+    var ADMIN_EMAIL    = 'akinkanjuoyo@gmail.com';
+    var ADMIN_PASSWORD = 'Covid-19@#';
+    var SESSION_KEY    = 'ygi_admin_auth';
+
+    // If already logged in, redirect immediately
+    if (sessionStorage.getItem(SESSION_KEY) === 'true') {
+      window.location.replace('/ygi/dashboard.html');
+    }
+
+    function doLogin() {
+      var email    = document.getElementById('adminEmail').value.trim();
+      var password = document.getElementById('adminPassword').value;
+      var errMsg   = document.getElementById('errorMsg');
+      var btn      = document.getElementById('loginBtn');
+
+      errMsg.classList.remove('show');
+
+      if (!email || !password) {
+        errMsg.textContent = 'Please enter both email and password.';
+        errMsg.classList.add('show');
+        return;
+      }
+
+      // Simulate brief loading
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying...';
+
+      setTimeout(function() {
+        if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+          sessionStorage.setItem(SESSION_KEY, 'true');
+          btn.innerHTML = '<i class="fas fa-check"></i> Access Granted!';
+          setTimeout(function() {
+            window.location.replace('/ygi/dashboard.html');
+          }, 600);
+        } else {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign In to Dashboard';
+          errMsg.textContent = 'Invalid email or password. Please try again.';
+          errMsg.classList.add('show');
+          document.getElementById('adminPassword').value = '';
+          document.getElementById('adminPassword').focus();
+        }
+      }, 900);
+    }
+
+    function togglePwd() {
+      var input = document.getElementById('adminPassword');
+      var icon  = document.getElementById('eyeIcon');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.className = 'fas fa-eye-slash';
+      } else {
+        input.type = 'password';
+        icon.className = 'fas fa-eye';
+      }
+    }
+
+    // Allow Enter key to submit
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') doLogin();
+    });
+  </script>
+</body>
+</html>

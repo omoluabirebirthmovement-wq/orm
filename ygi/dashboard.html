@@ -277,6 +277,14 @@
   </style>
 </head>
 <body class="ygi-page">
+<script>
+// AUTH GUARD — redirect to login if not authenticated
+(function() {
+  if (sessionStorage.getItem('ygi_admin_auth') !== 'true') {
+    window.location.replace('/ygi/admin-login.html');
+  }
+})();
+</script>
 <div id="ygi-toast" class="ygi-toast"></div>
 <button class="db-sidebar-toggle" id="sidebarToggle"><i class="fas fa-bars"></i></button>
 
@@ -305,6 +313,7 @@
       <div class="db-nav-label">Platform</div>
       <a class="db-nav-link" href="/ygi/index.html"><i class="fas fa-landmark"></i> YGI Home</a>
       <a class="db-nav-link" href="/index.html"><i class="fas fa-arrow-left"></i> ORM Platform</a>
+      <button class="db-nav-link" onclick="adminLogout()" style="color:#F87171;"><i class="fas fa-sign-out-alt"></i> Logout</button>
     </nav>
     <div class="db-sidebar-footer">
       <div class="db-user-card">
@@ -322,6 +331,7 @@
         <a href="/ygi/index.html" class="db-icon-btn" title="YGI Home"><i class="fas fa-home"></i></a>
         <button class="db-icon-btn" title="Notifications" onclick="showToast('You have 2 new notifications.')"><i class="fas fa-bell"></i></button>
         <button class="db-icon-btn" title="Refresh" onclick="location.reload()"><i class="fas fa-sync-alt"></i></button>
+        <button class="db-icon-btn" title="Logout" onclick="adminLogout()" style="color:#F87171; border-color:rgba(248,113,113,0.2);"><i class="fas fa-sign-out-alt"></i></button>
       </div>
     </div>
 
@@ -542,7 +552,12 @@ function switchPanel(name){
 document.querySelectorAll('.db-nav-link[data-panel]').forEach(l=>l.addEventListener('click',()=>switchPanel(l.dataset.panel)));
 document.getElementById('sidebarToggle')?.addEventListener('click',()=>document.getElementById('dbSidebar').classList.toggle('open'));
 
-function showToast(m){const t=document.getElementById('ygi-toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3500);}
+function showToast(m){var t=document.getElementById('ygi-toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},3500);}
+
+function adminLogout(){
+  sessionStorage.removeItem('ygi_admin_auth');
+  window.location.replace('/ygi/admin-login.html');
+}
 
 async function loadProfile(){
   const code=document.getElementById('refCodeInput').value.trim().toUpperCase();

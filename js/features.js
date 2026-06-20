@@ -74,7 +74,17 @@ function initEventCountdown() {
     }
 
     const next = upcoming[0];
-    const target = new Date(next.date + "T" + (next.time || "09:00"));
+    let timeStr = next.time || "09:00";
+    const match = timeStr.match(/(\d+):(\d+)\s*(AM|PM)?/i);
+    if (match) {
+      let h = parseInt(match[1]);
+      let m = match[2];
+      let p = match[3] ? match[3].toUpperCase() : "";
+      if (p === "PM" && h !== 12) h += 12;
+      if (p === "AM" && h === 12) h = 0;
+      timeStr = String(h).padStart(2, "0") + ":" + m + ":00";
+    }
+    const target = new Date(next.date + "T" + timeStr);
     const diff = target - now;
 
     if (diff <= 0) {
